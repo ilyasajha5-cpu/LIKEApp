@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App LIKENET Broadcast - Generator Pesan Premium</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- html2canvas library for high-quality screenshot generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+        }
+        /* Style khusus untuk highlight teks tebal biasa di preview (Biru Premium) */
+        .highlight-bold {
+            color: #2563eb; 
+            font-weight: 800; 
+        }
+        /* Style khusus untuk highlight teks Wilayah/Lokasi di preview (Merah Terang) */
+        .highlight-red {
+            color: #e11d48; 
+            font-weight: 800; 
+        }
+        /* Kustom scrollbar untuk estetika preview box */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5);
+            border-radius: 20px;
+        }
+        /* Desain efek glassmorphic tipis pada border */
+        .glow-border:focus-within {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        
+        /* INVOICE STYLES */
+        .invoice-container {
+            width: 800px;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            color: #000;
+        }
+        .paid-banner {
+            position: absolute;
+            top: 20px;
+            right: -60px;
+            background-color: #008000;
+            color: white;
+            padding: 5px 60px;
+            transform: rotate(45deg);
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        .table-header-inv {
+            background-color: #002060;
+            color: white;
+        }
+        .table-cell-border {
+            border: 1px solid #c4d1e6;
+        }
+        .table-row-light {
+            background-color: white;
+        }
+        .table-row-blue {
+            background-color: #eef2fb;
+        }
+        #invoiceCanvas {
+            width: 800px;
+            min-width: 800px;
+            min-height: max-content;
+            padding-bottom: 2rem;
+        }
+        .inv-preview-wrapper {
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+    <header class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white shadow-lg border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="bg-blue-500/10 p-2.5 rounded-2xl border border-blue-500/20 shadow-inner">
+                    <i class="fa-solid fa-tower-broadcast text-xl text-blue-400 animate-pulse"></i>
+                </div>
+                <div class="text-center sm:text-left">
+                    <h1 class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-blue-300">LIKENET Broadcast</h1>
+                    <p class="text-[11px] text-slate-400 font-semibold uppercase tracking-widest mt-0.5">WhatsApp Customer Message Generator</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5 bg-slate-800/50 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/50">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping absolute"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 relative"></span>
+                <span class="text-xs font-bold text-slate-200">Sistem Siap Kirim</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        
+        <!-- PANEL KONFIGURASI (KIRI) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 flex flex-col h-full justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                        <div class="bg-indigo-50 p-2 rounded-xl text-indigo-600">
+                            <i class="fa-solid fa-sliders text-lg"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-extrabold text-slate-800">Konfigurasi Penyiaran</h2>
+                            <p class="text-[11px] text-slate-400 font-medium">Pilih kategori dan lengkapi detail pesan di bawah ini.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-5">
+                        <!-- KATEGORI UTAMA -->
+                        <div class="glow-border rounded-xl">
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Kategori Utama</label>
+                            <div class="relative">
+                                <select id="category-select" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white appearance-none cursor-pointer transition-all duration-200">
+                                    <!-- Diisi dinamis oleh JS -->
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DETAIL KEJADIAN / AKSI -->
+                        <div id="wa-action-container" class="glow-border rounded-xl">
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Pilih Detail Kejadian / Aksi</label>
+                            <div class="relative">
+                                <select id="action-select" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white appearance-none cursor-pointer transition-all duration-200">
+                                    <!-- Diisi dinamis oleh JS -->
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TEXTBOX INPUT DINAMIS -->
+                        <div id="dynamic-inputs-container" class="flex flex-col gap-4"></div>
+
+                        <!-- PILIHAN STATUS -->
+                        <div id="status-toggle-container" class="hidden">
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Status Laporan Jaringan</label>
+                            <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200/50">
+                                <button id="btn-status-initial" onclick="setStatus('initial')" class="py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2">
+                                    ⚠️ Gangguan Baru
+                                </button>
+                                <button id="btn-status-resolved" onclick="setStatus('resolved')" class="py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2">
+                                    ✅ Selesai / Pulih
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- INVOICE FORM CONTAINER (BARU) -->
+                        <div id="invoice-form-container" class="hidden flex-col gap-5 mt-2">
+                            <!-- Nomor Invoice -->
+                            <div class="glow-border rounded-xl">
+                                <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Nomor Invoice</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="invoiceNumberInput" readonly class="w-full p-3 bg-slate-100 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 focus:outline-none" placeholder="#LKJDN...">
+                                    <button onclick="generateInvoiceNumber()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-all shadow-sm">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                                <p class="text-[10px] text-slate-400 mt-1">Format: #LKJDN + DDMMYYYYHHMMSS</p>
+                            </div>
+
+                            <!-- Tanggal -->
+                            <div class="glow-border rounded-xl">
+                                <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Tanggal (Invoice, Due, Payment)</label>
+                                <input type="date" id="globalDateInput" onchange="updateDates()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <!-- Nama Pelanggan -->
+                            <div class="glow-border rounded-xl">
+                                <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Nama Pelanggan (TO)</label>
+                                <input type="text" id="customerNameInput" oninput="updateCustomerName()" placeholder="Masukkan Nama Pelanggan" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase">
+                            </div>
+
+                            <!-- Pilih Paket -->
+                            <div class="glow-border rounded-xl">
+                                <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Pilih Paket Layanan</label>
+                                <div class="relative">
+                                    <select id="packageSelect" onchange="updatePackageDetails()" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer">
+                                        <option value="" disabled selected>-- Pilih Paket --</option>
+                                        <option value="4" data-price="75000">Paket 4Mbps/ Bulan - Rp 75.000</option>
+                                        <option value="25" data-price="100000">Paket 25Mbps/ Bulan - Rp 100.000</option>
+                                        <option value="35" data-price="150000">Paket 35Mbps/ Bulan - Rp 150.000</option>
+                                        <option value="50" data-price="200000">Paket 50Mbps/ Bulan - Rp 200.000</option>
+                                        <option value="75" data-price="250000">Paket 75Mbps/ Bulan - Rp 250.000</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Override Manual -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="glow-border rounded-xl">
+                                    <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Detail (Manual)</label>
+                                    <input type="text" id="detailInput" oninput="updatePreviewFromManual()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Detail paket">
+                                </div>
+                                <div class="glow-border rounded-xl">
+                                    <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Amount (Manual)</label>
+                                    <input type="text" id="amountInput" oninput="updatePreviewFromManual()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-right" placeholder="0">
+                                </div>
+                            </div>
+
+                            <!-- Tombol Download Invoice -->
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <button onclick="downloadInvoice()" id="btn-download-invoice" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                    <i class="fas fa-download text-lg"></i> Download Invoice (JPG)
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
+                    <span>LIKENET Broadcast v1.2</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-code"></i> Developed for efficiency</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL PREVIEW (KANAN) -->
+        <section class="lg:col-span-7 flex flex-col overflow-hidden">
+            <!-- Header Aksi & Tooltip -->
+            <div id="wa-preview-header" class="flex items-center justify-between mb-4 px-1 gap-2 flex-wrap">
+                <div class="flex items-center gap-2 text-slate-800 font-extrabold text-sm">
+                    <div class="bg-emerald-50 text-emerald-600 p-1.5 rounded-lg">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> 
+                    </div>
+                    <span>Pratinjau Format WhatsApp</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <!-- Tombol Simpan Gambar -->
+                    <button id="btn-save-image" onclick="saveAsImage()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-file-image text-sm"></i> Simpan Gambar
+                    </button>
+                    <!-- Tombol Salin Teks -->
+                    <button onclick="copyToClipboard()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-copy text-sm"></i> Salin Teks
+                    </button>
+                </div>
+            </div>
+
+            <!-- Petunjuk Pengeditan Langsung -->
+            <div id="wa-preview-tips" class="bg-blue-50 border border-blue-100 text-blue-800 rounded-2xl p-3 mb-3 text-xs flex items-start gap-2.5">
+                <i class="fa-solid fa-lightbulb text-blue-600 mt-0.5"></i>
+                <span><strong>Tips:</strong> Anda dapat mengubah atau menambahkan detail teks secara langsung pada kotak putih di bawah ini sebelum menyalin atau menyimpannya.</span>
+            </div>
+
+            <!-- Container Capture dengan background gelap elegan -->
+            <div id="capture-target" class="bg-gradient-to-br from-[#0c2454] to-[#061430] rounded-3xl p-6 lg:p-8 shadow-xl flex-grow flex items-center justify-center border border-slate-800">
+                <!-- Kotak Pesan WA Putih Bersih -->
+                <div class="bg-white rounded-2xl p-6 lg:p-8 w-full border border-slate-200/50 shadow-lg leading-relaxed whitespace-pre-wrap font-medium text-slate-950 text-sm overflow-y-auto max-h-[580px] custom-scrollbar focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" 
+                     id="whatsapp-text-output" 
+                     contenteditable="true" 
+                     spellcheck="false"
+                     title="Klik di sini untuk mengedit teks pratinjau secara langsung.">
+                    <!-- Isi teks ter-render dinamis oleh script -->
+                </div>
+            </div>
+
+            <!-- CONTAINER PREVIEW INVOICE (BARU) -->
+            <div id="invoice-preview-container" class="hidden flex-grow bg-slate-200/50 rounded-3xl overflow-hidden border border-slate-300 inv-preview-wrapper relative p-4 items-start justify-center shadow-inner">
+                
+                <div id="invoiceCanvas" class="invoice-container flex flex-col p-8 font-sans">
+                    <!-- Paid Banner -->
+                    <div class="paid-banner text-center shadow-md">PAID</div>
+
+                    <!-- Header Section -->
+                    <div class="flex justify-between items-center mb-6 relative">
+                        <div class="flex items-center z-10">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9YxZmExUSVPn9ISpASTlwnst_DoTJaN0trYHdd29jtQ&s=10" crossorigin="anonymous" alt="Java Digital Nusantara Logo" class="h-16 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/160x50/002060/ffffff?text=JDN+Logo';">
+                        </div>
+                        <div class="text-right pr-20 z-10 mt-6">
+                            <h1 class="text-xl font-bold text-black mb-1">PT. JAVA DIGITAL NUSANTARA</h1>
+                            <p class="text-sm text-gray-800 font-medium">Network Operations Center (NOC) & POP</p>
+                            <p class="text-sm text-gray-800 font-medium">Jember-Kalisat</p>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Info Box -->
+                    <div class="border border-blue-900 rounded-sm p-4 mb-8 flex items-start bg-white">
+                        <div class="mr-6 text-blue-900">
+                            <i class="fas fa-file-invoice fa-4x relative">
+                                <i class="fas fa-check-circle absolute -bottom-1 -right-2 bg-white rounded-full text-2xl border-2 border-white"></i>
+                            </i>
+                        </div>
+                        <div class="flex flex-col flex-grow pt-1">
+                            <div class="flex items-center mb-2">
+                                <span class="text-xl font-extrabold text-blue-900 mr-2 tracking-wide">INVOICE</span>
+                                <span id="previewInvoiceNumber" class="text-xl font-bold text-red-600">#LKJDN...</span>
+                            </div>
+                            <div class="w-64">
+                                <div class="flex justify-between border-t border-gray-300 py-1">
+                                    <div class="flex items-center text-sm"><i class="far fa-calendar-alt mr-2 text-blue-900"></i> Invoice Date</div>
+                                    <div class="text-sm">: <span id="previewInvoiceDate">...</span></div>
+                                </div>
+                                <div class="flex justify-between border-t border-gray-300 py-1">
+                                    <div class="flex items-center text-sm"><i class="far fa-calendar-alt mr-2 text-blue-900"></i> Due Date</div>
+                                    <div class="text-sm">: <span id="previewDueDate">...</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Info -->
+                    <div class="mb-4">
+                        <h2 class="text-xl font-bold text-black mb-1">TO</h2>
+                        <div id="previewCustomerName" class="text-2xl font-bold text-blue-900 uppercase">NAMA PELANGGAN</div>
+                    </div>
+
+                    <!-- Details Table -->
+                    <table class="w-full mb-8 border-collapse">
+                        <thead>
+                            <tr class="table-header-inv">
+                                <th class="w-16 py-3 px-2 text-center border-r border-white font-semibold">No.</th>
+                                <th class="py-3 px-4 text-center border-r border-white font-semibold">Detail</th>
+                                <th class="w-48 py-3 px-4 text-center font-semibold">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-row-light text-black">
+                                <td class="table-cell-border py-4 px-2 text-center font-bold">1</td>
+                                <td class="table-cell-border py-4 px-4 text-lg"><span id="previewDetail">Pilih paket...</span></td>
+                                <td class="table-cell-border py-4 px-6 text-right font-bold text-xl"><span id="previewAmount1">0</span></td>
+                            </tr>
+                            <tr class="table-row-blue text-black">
+                                <td class="table-cell-border py-3 px-4" colspan="2">
+                                    <div class="text-right font-extrabold text-lg mr-4">TOTAL</div>
+                                </td>
+                                <td class="table-cell-border py-3 px-6 text-right font-bold text-xl text-blue-900"><span id="previewTotal1">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Transaction Table -->
+                    <div class="mb-2">
+                        <h3 class="text-md font-bold text-blue-900 uppercase">TRANSACTION</h3>
+                    </div>
+                    <table class="w-full mb-6 border-collapse">
+                        <thead>
+                            <tr class="table-row-light border-y border-blue-200">
+                                <th class="py-2 px-4 text-center text-blue-900 font-bold border-r border-blue-200 w-1/3">Payment Date</th>
+                                <th class="py-2 px-4 text-center text-blue-900 font-bold border-r border-blue-200 w-1/3">Payment Method</th>
+                                <th class="py-2 px-4 text-center text-blue-900 font-bold w-1/3">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-row-light text-black border-b border-blue-200">
+                                <td class="table-cell-border py-3 px-4 text-center"><span id="previewPaymentDate">...</span></td>
+                                <td class="table-cell-border py-3 px-4 text-center">-</td>
+                                <td class="table-cell-border py-3 px-6 text-right text-lg"><span id="previewAmount2">0</span></td>
+                            </tr>
+                            <tr class="table-row-blue text-black">
+                                <td class="table-cell-border py-3 px-4" colspan="2">
+                                    <div class="text-right font-extrabold text-lg mr-4">TOTAL</div>
+                                </td>
+                                <td class="table-cell-border py-3 px-6 text-right font-bold text-xl text-blue-900"><span id="previewTotal2">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Footer / Note Section -->
+                    <div class="mt-4 pt-4 border-t border-gray-300">
+                        <div class="flex items-start mb-4">
+                            <div class="mr-4 text-blue-900 relative">
+                                <i class="fas fa-file-invoice text-4xl"></i>
+                                <i class="fas fa-check-circle absolute -bottom-1 -right-1 text-sm bg-white rounded-full text-blue-900 border border-white"></i>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="font-bold text-sm text-blue-900 uppercase">NOTE:</div>
+                                <div class="text-sm text-black">Invoice ini sebagai bukti pembayaran pelanggan telah Lunas</div>
+                            </div>
+                        </div>
+                        <div class="border-b-2 border-blue-900 w-full mb-4"></div>
+                        <div class="flex items-center text-sm text-black font-medium pb-4">
+                            <i class="fas fa-map-marker-alt mr-2 text-blue-900 text-lg"></i>
+                            Jember, Jawa Timur
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const configTemplates = {
+            "GANGGUAN ISP": {
+                "Koneksi tidak stabil/ intermittent": {
+                    fields: [],
+                    statusSupport: true,
+                    initial: `Kami informasikan bahwa saat ini koneksi internet sedang mengalami *ketidakstabilan (intermittent)* yang berasal dari penyedia layanan pusat (ISP).\n\nTim terkait saat ini sedang melakukan pengecekan lebih lanjut untuk mengidentifikasi penyebab kendala tersebut.\n\nKami akan menyampaikan pembaruan informasi setelah menerima update dari pihak penyedia layanan pusat.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa gangguan koneksi internet sebelumnya *(intermittent)* telah teratasi dan saat ini layanan sudah kembali normal/stabil.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                },
+                "Fo cut/ kabel putus": {
+                    fields: [
+                        { key: "lokasi", label: "Input Lokasi Titik Putus", default: "Mayang – Kalisat" }
+                    ],
+                    statusSupport: true,
+                    initial: `Kami informasikan bahwa telah terjadi gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}*, berdasarkan informasi dari pusat ISP.\n\nSaat ini pihak terkait sedang melakukan penanganan untuk perbaikan jaringan tersebut.\n\nKami akan menyampaikan update kembali setelah proses perbaikan selesai atau terdapat informasi terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}* telah selesai diperbaiki oleh tim terkait.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nKami mengucapkan terima kasih atas kesabaran dan pengertian Anda selama proses penanganan berlangsung.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`
+                },
+                "Koneksi Link Backup": {
+                    fields: [],
+                    statusSupport: true,
+                    initial: `Kami informasikan bahwa untuk sementara koneksi internet saat ini sudah kembali normal menggunakan koneksi via *Backup Link* dari Pusat ISP kami.\n\nSaat ini tim terkait masih melalukan pengecekan lebih lanjut terkait kendala yang terjadi.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa perbaikan pada jalur utama dari Pusat ISP telah selesai dilakukan.\n\nSaat ini koneksi internet telah sepenuhnya kembali normal dan stabil menggunakan jalur utama.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                },
+                "Koneksi Terputus dari Pusat ISP": {
+                    fields: [],
+                    statusSupport: true,
+                    initial: `Kami informasikan bahwa saat ini layanan internet sedang mengalami *koneksi terputus dari pusat ISP* kami secara tiba-tiba.\n\nUntuk saat ini, kami masih menanyakan ke bagian *NOC Pusat* terkait kendala yang terjadi saat ini.\n\nKami akan menyampaikan pembaruan informasi setelah menerima update lebih lanjut.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa kendala *koneksi terputus dari pusat ISP* telah selesai ditangani dan koneksi saat ini sudah kembali normal.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                }
+            },
+            "GANGGUAN SERVER LOKAL": {
+                "Fo cut/ kabel putus": {
+                    fields: [],
+                    statusSupport: true,
+                    initial: `Kami informasikan bahwa terjadi gangguan layanan internet akibat *kabel fiber optic (FO) putus* pada jalur yang menuju server lokal kami.\n\nSaat ini penanganan sedang dilakukan oleh tim teknisi kami untuk proses perbaikan.\n\nUpdate informasi akan kami sampaikan kembali setelah perbaikan selesai.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* telah selesai diperbaiki oleh teknisi kami.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nKami mengucapkan terima kasih atas kesabaran dan pengertian Anda selama proses penanganan berlangsung.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`
+                },
+                "Gangguan kelistrikan": {
+                    fields: [],
+                    statusSupport: true,
+                    initial: `Kami informasikan bahwa saat ini terjadi gangguan pada server lokal kami yang disebabkan oleh *kendala kelistrikan*.\n\nTim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *kendala kelistrikan* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                },
+                "Backup Battery": {
+                    fields: [],
+                    statusSupport: true,
+                    initial: `Kami informasikan bahwa terjadi gangguan pada server lokal kami yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                },
+                "Update Perangkat/ Firmware": {
+                    fields: [
+                        { key: "jadwal", label: "Jadwal Kegiatan", default: "Senin, 8 Januari 2026" }
+                    ],
+                    statusSupport: true,
+                    initial: `Kami informasikan akan dilakukan urgent maintenance/ perbaikan pada server lokal kami guna meningkatkan kualitas layanan dan kestabilan koneksi internet.\n\nDetail kegiatan:\nJadwal : *{jadwal}*\nProses : *Update perangkat/firmware server lokal*\nEstimasi : *± 1–2 jam atau hingga proses selesai*\n\nSelama proses berlangsung, koneksi internet akan mengalami terputus atau intermittent.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\n\nMohon maaf atas ketidaknyamanan yang terjadi.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa kegiatan maintenance/perbaikan pada server lokal telah selesai dilaksanakan.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.\n\nMohon maaf atas ketidaknyamanan yang terjadi.`
+                }
+            },
+            "GANGGUAN PELANGGAN": {
+                "Fo cut/ putus Jalur Utama": {
+                    fields: [
+                        { key: "wilayah", label: "Input Wilayah", default: "Sumbermalang, Karangpaton" },
+                        { 
+                            key: "eksekusi", 
+                            label: "EKSEKUSI PROGRES/ AKSI", 
+                            type: "select", 
+                            options: [
+                                { value: "sekarang", label: "Progres sekarang" },
+                                { value: "besok", label: "Progres besok" }
+                            ],
+                            default: "sekarang" 
+                        }
+                    ],
+                    statusSupport: true,
+                    initial: `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa gangguan layanan internet di wilayah *{wilayah}* dan sekitarnya akibat *kabel fiber optic (FO) putus* telah selesai diperbaiki.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                },
+                "Fo cut/ putus Jalur Sebagian": {
+                    fields: [
+                        { key: "wilayah", label: "Input Wilayah", default: "Karangpaton" },
+                        { 
+                            key: "eksekusi", 
+                            label: "EKSEKUSI PROGRES/ AKSI", 
+                            type: "select", 
+                            options: [
+                                { value: "sekarang", label: "Progres sekarang" },
+                                { value: "besok", label: "Progres besok" }
+                            ],
+                            default: "sekarang" 
+                        }
+                    ],
+                    statusSupport: true,
+                    initial: `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa perbaikan *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}* telah selesai dilakukan.\n\nSaat ini layanan internet untuk *beberapa Pelanggan Aktif* yang sebelumnya terdampak telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                },
+                "Pelanggan Terdeteksi Offline": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: `Kami mendeteksi bahwa perangkat *modem/router Wi-Fi* ditempat Anda saat ini dalam keadaan *Offline* atau tidak menyala.\n\nApakah ada kendala pada perangkat modem/ router-nya, atau memang sedang Anda matikan?\n\nMohon konfirmasinya agar Teknisi kami dapat melakukan pengecekan lebih lanjut.\n\nTerima kasih.`
+                },
+                "Jalur Pelanggan Putus": {
+                    fields: [],
+                    statusSupport: true,
+                    initial: `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nProses perbaikan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul *08.30 – 16.00 WIB*.\n\nJika di luar jam tersebut, maka perbaikan akan dilakukan keesokan harinya saat jam kerja teknisi.\n\nMohon menunggu, tim kami akan segera menangani.\n\nTerima kasih atas pengertiannya.`,
+                    resolved: `Kami informasikan bahwa perbaikan *kabel putus* yang menuju ke rumah Bapak/ Ibu telah selesai.\n\nSaat ini koneksi sudah kembali normal dan dapat digunakan kembali.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                }
+            },
+            "TAGIHAN PELANGGAN": {
+                "Info Tagihan": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: `PEMBERITAHUAN TAGIHAN WI-FI\n\nYth. Pelanggan Wi-Fi\n\nKami mengingatkan bahwa batas akhir pembayaran tagihan adalah setiap *tanggal 5*.\n\nPembayaran dapat dilakukan melalui :\n\n*Via Transfer Bank*\n- BCA : *3340297287*\na.n. Mohamad Ilyasi\n- DANA : *085236378731*\na.n. Mohamad Ilyasi\n\nKirim bukti transfer ke Whatsapp Admin:\n*0852-3637-8731*\n\n*Datang langsung ke kantor kami*\n\n*Dijemput oleh petugas pada tanggal 1-5 setiap bulan*\n\n*Perhatian:*\nApabila terjadi keterlambatan pembayaran tanpa konfirmasi ke Admin, maka layanan internet di rumah Anda akan otomatis *terisolir/ dimatikan sementara* oleh sistem.\n\nBagi pelanggan yang sudah membayar, atau baru aktif bergabung bulan ini, silahkan abaikan pesan ini.\n\nTerima kasih atas kerja samanya.`
+                },
+                "Tagihan Khusus Pelanggan": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: `Mohon konfirmasinya, karena hingga saat ini pembayaran tagihan Wi-Fi Anda *belum kami terima*.\nMohon segera melakukan pembayaran dan mengirimkan konfirmasi pembayaran agar layanan Wi-Fi di rumah Anda tetap berjalan dengan lancar serta *terhindar dari sistem isolir (penonaktifan sementara) secara otomatis* akibat keterlambatan pembayaran.\n\nPembayaran dapat dilakukan melalui:\n💳 *Transfer Bank BCA*\nNo. Rekening: *3340297287*\na.n. Mohamad Ilyasi\n📱 *DANA*\nNo. DANA: *085236378731*\na.n. Mohamad Ilyasi\n\nSetelah melakukan pembayaran, mohon kirimkan bukti transfer ke WhatsApp Admin:\n📞 *0852-3637-8731*\n\nTerima kasih atas perhatian dan kerja samanya.`
+                },
+                "Pelanggan Isolir": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: `Kami informasikan bahwa Layanan Wi-Fi Anda saat ini *terisolir atau di matikan sementara* secara otomatis oleh sistem kami.\n\nMohon untuk melakukan Pembayaran Tagihan agar Wi-Fi Anda Kembali normal.\n\nUntuk menghindari ketidanyamanan ini dikemudian hari, mohon untuk melakukan Pembayaran tepat waktu *sebelum tanggal 5* setiap bulannya.\n\nMohon kerja samanya,\nTerima kasih.\n\nHormat kami,\n*Admin Layanan Wi-Fi*\n\nJika Anda sudah melakukan pembayaran, kirim bukti transfer ke WhatsApp Admin: *0852-3637-8731*.`
+                },
+                "Pelanggan Telat": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: `Bagi Bapak/Ibu yang melakukan pembayaran tagihan Wi-Fi *melewati batas jatuh tempo ( setelah tanggal 5 )*, kami mohon kesediaannya untuk mengantarkan pembayaran langsung ke kantor kami.\n\n📍 *Alamat Kantor*\nDesa Ajung, masuk gang barat jalan sebelah utara minimarket Delma Mart atau depan SDN Ajung 04.\n🗺️ *Lokasi Maps:* https://maps.app.goo.gl/UDYpbpaGhuPNYNMo7\n\nApabila tidak dapat datang ke kantor, pembayaran juga dapat dilakukan melalui transfer ke rekening berikut:\n🏦 *BCA*\nNo. Rekening: *3340297287*\na.n. *Mohamad Ilyasi*\n💳 *DANA*\nNo. *085236378731*\na.n. *Mohamad Ilyasi*\n📲 Setelah melakukan transfer, mohon kirimkan bukti pembayaran ke Admin:\n*085236378731*\n\nTerima kasih atas perhatian dan kerja samanya.`
+                },
+                "Isolir Tanpa Informasi": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: `Assalamuk'alaikum,\nSaat ini layanan WiFi Anda terisolir sementara karena *Tagihan Belum dibayar.*\n\n*Mohon konfirmasi, apakah ingin melanjutkan Berlangganan atau Berhenti?*,\n\nJika tidak ingin melanjutkan,\nperangkat modem dirumah Anda akan kami tarik kembali dan akan dilakukan pemutusan kabel oleh Teknisi sebagai prosedur penghentian layanan.\n\n_Kami tunggu informasi secepatnya_\n\nTerima kasih atas perhatian dan kerja samanya.`
+                },
+                "Pengingat Tagihan": {
+                    fields: [
+                        { key: "tanggal", label: "Pilih Tanggal Jatuh Tempo", type: "date", default: "" }
+                    ],
+                    statusSupport: false,
+                    initial: `🔔 PENGINGAT TAGIHAN WI-FI\n\nMohon diperhatikan, *Tagihan Wi-Fi Anda akan jatuh tempo pada tanggal {tanggal}.*\n\nKami mengingatkan agar pembayaran dapat dilakukan sebelum atau paling lambat pada tanggal jatuh tempo, sehingga layanan Wi-Fi di rumah Anda tetap berjalan dengan lancar dan terhindar dari *sistem isolir (penonaktifan sementara) secara otomatis* akibat keterlambatan pembayaran.\n\n💰 *Pembayaran dapat dilakukan melalui:*\n\n💳 *TRANSFER BANK BCA*\nNo. Rekening: 3340297287\na.n. Mohamad Ilyasi\n\n📱 *DANA*\nNo. DANA: 085236378731\na.n. Mohamad Ilyasi\n\n_Setelah melakukan pembayaran, mohon kirimkan bukti pembayaran ke WhatsApp Admin:_\n\n📞 0852-3637-8731\n\n*Mohon kerja sama dan perhatiannya.*\nTerima kasih telah menggunakan layanan Wi-Fi kami. 🙏`
+                }
+            },
+            "USER GET USER": {
+                "Informasi Bonus": {
+                    fields: [
+                        { key: "nama_penerima", label: "Input User Dapat Bonus", default: "Maikel Hoplahop" },
+                        { 
+                            key: "jumlah_user", 
+                            label: "Input Jumlah Get User", 
+                            type: "select", 
+                            options: (function() {
+                                let opts = [];
+                                for(let i=1; i<=20; i++) {
+                                    opts.push({ value: i.toString(), label: `${i} Pelanggan x Rp 25.000` });
+                                }
+                                return opts;
+                            })(),
+                            default: "3" 
+                        },
+                        { key: "data_user", label: "Input Data User Yang Diperoleh (Pisahkan dgn koma/baris baru)", type: "textarea", default: "Mak Laep, Pak Laep, Buk Laep" }
+                    ],
+                    statusSupport: false,
+                    initial: `📢 INFORMASI BONUS REFERAL USER GET USER\n\nKepada Yth.\n*{nama_penerima}*\n\nTerima kasih telah merekomendasikan layanan WiFi kami kepada pelanggan baru.\nBerdasarkan Program User Get User, Anda berhak memperoleh Bonus Referal sebesar *{total_bonus}*, dengan rincian sebagai berikut:\n\nPelanggan yang berhasil direferensikan:\n{list_pelanggan}\n\n💰 Perhitungan Bonus:\n*{jumlah_user} Pelanggan × Rp 25.000 = {total_bonus}*\n\n📝 Ketentuan Pemberian Bonus:\nBonus referal akan dikreditkan sebagai potongan tagihan WiFi pada bulan ini, sehingga jumlah tagihan Anda akan otomatis berkurang sesuai total bonus yang diperoleh.\n\nTerima kasih atas kepercayaan dan dukungan Anda terhadap layanan WiFi kami. 🙏\n\n🎉 Ajak keluarga, teman, atau tetangga untuk berlangganan WiFi kami, dan dapatkan Bonus Referal Rp25.000 untuk setiap pelanggan baru yang berhasil melakukan pemasangan.`
+                }
+            },
+            "BUAT INVOICE PELANGGAN": {
+                "Formulir Invoice": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: ""
+                }
+            }
+        };
+
+        let currentCategory = "GANGGUAN ISP";
+        let currentAction = "";
+        let currentStatus = "initial";
+        let inputsValues = {};
+        let isUserEditingManually = false;
+
+        function setStatus(status) {
+            currentStatus = status;
+            isUserEditingManually = false;
+
+            const btnInitial = document.getElementById("btn-status-initial");
+            const btnResolved = document.getElementById("btn-status-resolved");
+
+            if (status === 'initial') {
+                btnInitial.classList.add("bg-amber-100", "text-amber-700", "shadow-sm");
+                btnInitial.classList.remove("text-slate-500", "hover:bg-slate-200");
+                
+                btnResolved.classList.add("text-slate-500", "hover:bg-slate-200");
+                btnResolved.classList.remove("bg-emerald-100", "text-emerald-700", "shadow-sm");
+            } else {
+                btnResolved.classList.add("bg-emerald-100", "text-emerald-700", "shadow-sm");
+                btnResolved.classList.remove("text-slate-500", "hover:bg-slate-200");
+                
+                btnInitial.classList.add("text-slate-500", "hover:bg-slate-200");
+                btnInitial.classList.remove("bg-amber-100", "text-amber-700", "shadow-sm");
+            }
+
+            // Memperbarui preview text setelah status diubah
+            generateOutput();
+        }
+
+        // Inisialisasi Kategori Utama pada Dropdown
+        function initCategoryDropdown() {
+            const catSelect = document.getElementById("category-select");
+            catSelect.innerHTML = Object.keys(configTemplates).map(c => `<option value="${c}">${c}</option>`).join('');
+            
+            catSelect.onchange = (e) => {
+                currentCategory = e.target.value;
+                isUserEditingManually = false; // Reset status pengeditan manual
+                updateActionDropdown();
+            };
+            
+            updateActionDropdown();
+        }
+
+        // Memperbarui Opsi Aksi dari Kategori yang sedang aktif
+        function updateActionDropdown() {
+            const isInvoice = currentCategory === "BUAT INVOICE PELANGGAN";
+            
+            // Toggle element visibilities
+            document.getElementById('wa-action-container').classList.toggle('hidden', isInvoice);
+            document.getElementById('dynamic-inputs-container').classList.toggle('hidden', isInvoice);
+            document.getElementById('invoice-form-container').classList.toggle('hidden', !isInvoice);
+            document.getElementById('invoice-form-container').classList.toggle('flex', isInvoice);
+            
+            document.getElementById('wa-preview-header').classList.toggle('hidden', isInvoice);
+            document.getElementById('wa-preview-tips').classList.toggle('hidden', isInvoice);
+            document.getElementById('capture-target').classList.toggle('hidden', isInvoice);
+            document.getElementById('invoice-preview-container').classList.toggle('hidden', !isInvoice);
+            document.getElementById('invoice-preview-container').classList.toggle('flex', isInvoice);
+
+            const actSelect = document.getElementById("action-select");
+            const actions = Object.keys(configTemplates[currentCategory]);
+            
+            actSelect.innerHTML = actions.map(a => `<option value="${a}">${a}</option>`).join('');
+            currentAction = actions[0];
+            
+            actSelect.onchange = (e) => {
+                currentAction = e.target.value;
+                isUserEditingManually = false; // Reset status pengeditan manual
+                updateDynamicInputs();
+            };
+
+            updateDynamicInputs();
+        }
+
+        function updateDynamicInputs() {
+            const container = document.getElementById("dynamic-inputs-container");
+            container.innerHTML = "";
+            inputsValues = {};
+            
+            // Sembunyikan status toggle jika mode invoice
+            if (currentCategory === "BUAT INVOICE PELANGGAN") {
+                document.getElementById("status-toggle-container").classList.add("hidden");
+                return;
+            }
+
+            const actionData = configTemplates[currentCategory][currentAction];
+
+            // Tampilkan / Sembunyikan Tombol Toggle Status Jaringan
+            const statusContainer = document.getElementById("status-toggle-container");
+            if (actionData.statusSupport) {
+                statusContainer.classList.remove("hidden");
+                setStatus(currentStatus);
+            } else {
+                statusContainer.classList.add("hidden");
+                currentStatus = "initial";
+            }
+
+            // Buat Input Box Dinamis / Dropdown untuk Setiap Field
+            if (actionData.fields && actionData.fields.length > 0) {
+                actionData.fields.forEach(f => {
+                    inputsValues[f.key] = f.default;
+                    
+                    const fieldId = `field-${f.key}`;
+                    const inputDiv = document.createElement("div");
+                    inputDiv.className = "flex flex-col gap-1.5 glow-border rounded-xl";
+                    
+                    if (f.type === "select") {
+                        const optionsHtml = f.options.map(opt => 
+                            `<option value="${opt.value}">${opt.label}</option>`
+                        ).join('');
+                        
+                        inputDiv.innerHTML = `
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">${f.label}</label>
+                            <div class="relative">
+                                <select id="${fieldId}" 
+                                    class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white appearance-none cursor-pointer transition-all duration-200"
+                                    onchange="inputsValues['${f.key}'] = this.value; isUserEditingManually = false; generateOutput();">
+                                    ${optionsHtml}
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        `;
+                    } else if (f.type === "date") {
+                        inputDiv.innerHTML = `
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">${f.label}</label>
+                            <input type="date" id="${fieldId}" value="${f.default}" 
+                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all"
+                                onchange="inputsValues['${f.key}'] = this.value; isUserEditingManually = false; generateOutput();"
+                            />
+                        `;
+                    } else if (f.type === "textarea") {
+                        inputDiv.innerHTML = `
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">${f.label}</label>
+                            <textarea id="${fieldId}" rows="3"
+                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all resize-none"
+                                oninput="inputsValues['${f.key}'] = this.value; isUserEditingManually = false; generateOutput();"
+                            >${f.default}</textarea>
+                        `;
+                    } else {
+                        inputDiv.innerHTML = `
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">${f.label}</label>
+                            <input type="text" id="${fieldId}" value="${f.default}" 
+                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all"
+                                oninput="inputsValues['${f.key}'] = this.value; isUserEditingManually = false; generateOutput();"
+                            />
+                        `;
+                    }
+                    container.appendChild(inputDiv);
+                });
+            }
+
+            generateOutput();
+        }
+
+        // Helper: Format Tanggal ke Bahasa Indonesia
+        function formatDateIndo(dateStr) {
+            if (!dateStr) return "";
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            const year = parts[0];
+            const monthNum = parseInt(parts[1], 10);
+            const day = parseInt(parts[2], 10);
+            
+            const bulanList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            return `${day} ${bulanList[monthNum - 1]} ${year}`;
+        }
+
+        function getProcessedText() {
+            const actionData = configTemplates[currentCategory][currentAction];
+            let rawText = "";
+
+            if (actionData.statusSupport) {
+                rawText = actionData[currentStatus];
+            } else {
+                rawText = actionData.initial;
+            }
+
+            // Custom Logic untuk kalkulasi kategori USER GET USER
+            if (currentCategory === "USER GET USER" && currentAction === "Informasi Bonus") {
+                let jumlah = parseInt(inputsValues["jumlah_user"]) || 0;
+                let totalBonus = jumlah * 25000;
+                let totalBonusStr = "Rp " + totalBonus.toLocaleString('id-ID');
+
+                let listUserStr = "";
+                if (inputsValues["data_user"]) {
+                    let users = inputsValues["data_user"].split(/[\n,]+/).map(s => s.trim()).filter(s => s !== "");
+                    listUserStr = users.map((u, i) => `${i + 1}. ${u}`).join('\n');
+                }
+
+                rawText = rawText.replaceAll("{total_bonus}", totalBonusStr);
+                rawText = rawText.replaceAll("{list_pelanggan}", listUserStr);
+            }
+
+            // Ganti placeholder {key} dengan data input
+            for (let k in inputsValues) {
+                let replacementValue = inputsValues[k];
+                
+                // Format tanggal jika tipenya date
+                if (actionData.fields) {
+                    const fieldDef = actionData.fields.find(f => f.key === k);
+                    if (fieldDef && fieldDef.type === 'date') {
+                        replacementValue = formatDateIndo(replacementValue);
+                    }
+                }
+                
+                // Ubah format teks menjadi KAPITAL SEMUA khusus untuk Wilayah / Lokasi
+                if (k === 'wilayah' || k === 'lokasi') {
+                    replacementValue = replacementValue.toUpperCase();
+                }
+                
+                rawText = rawText.replaceAll(`{${k}}`, replacementValue);
+            }
+
+            // Kondisional penggantian kalimat untuk Progres Besok di Menu "Fo cut/ putus Jalur Utama" & "Fo cut/ putus Jalur Sebagian"
+            if (currentCategory === "GANGGUAN PELANGGAN" && 
+                (currentAction === "Fo cut/ putus Jalur Utama" || currentAction === "Fo cut/ putus Jalur Sebagian") && 
+                inputsValues["eksekusi"] === "besok") {
+                
+                rawText = rawText.replace(
+                    "Saat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.",
+                    "Untuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani."
+                );
+            }
+
+            return rawText;
+        }
+
+        // Memproses penulisan pesan teks WhatsApp dan visualisasinya di layar
+        function generateOutput() {
+            // Jika pengguna baru saja mengedit secara manual, jangan timpah teks mereka dengan regenerasi otomatis
+            if (isUserEditingManually) return;
+
+            const rawText = getProcessedText();
+
+            // Ambil dan konversi ke uppercase untuk proses pencocokan warna merah
+            const valWilayah = inputsValues['wilayah'] ? inputsValues['wilayah'].trim().toUpperCase() : "";
+            const valLokasi = inputsValues['lokasi'] ? inputsValues['lokasi'].trim().toUpperCase() : "";
+
+            // Ganti format *teks* menjadi markup visual bold
+            const boldFormattedHtml = rawText.replace(/\*(.*?)\*/g, (match, p1) => {
+                const textTrimmed = p1.trim().toUpperCase();
+                let isRed = false;
+
+                // Cek apakah isi teks tebal ini mengandung input Wilayah atau Lokasi
+                if (valWilayah !== "" && textTrimmed === valWilayah) isRed = true;
+                if (valLokasi !== "" && textTrimmed === valLokasi) isRed = true;
+
+                if (isRed) {
+                    return `<span class="highlight-red">${p1}</span>`;
+                } else {
+                    return `<span class="highlight-bold">${p1}</span>`;
+                }
+            });
+
+            // Render ke preview container
+            document.getElementById("whatsapp-text-output").innerHTML = boldFormattedHtml;
+        }
+
+        // Pantau perubahan manual dari user di kotak contenteditable
+        document.getElementById("whatsapp-text-output").addEventListener("input", () => {
+            isUserEditingManually = true;
+        });
+
+        // Menghasilkan teks murni (plain text) dari elemen contenteditable untuk disalin (menjaga format baris baru)
+        function getRawTextFromEditable() {
+            const element = document.getElementById("whatsapp-text-output");
+            
+            // Clone elemen agar bisa dimanipulasi tanpa merusak UI asli
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = element.innerHTML;
+
+            // Kembalikan tag pembungkus custom style menjadi format *teks* asli WhatsApp
+            const highlights = tempDiv.querySelectorAll(".highlight-bold, .highlight-red");
+            highlights.forEach(h => {
+                const text = h.textContent;
+                h.replaceWith(`*${text}*`);
+            });
+
+            // Ganti elemen <br> dengan newline, dan tag div penutup dengan newline jika diperlukan
+            let text = tempDiv.innerHTML
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<\/div>/gi, '\n')
+                .replace(/<div[^>]*>/gi, '')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&');
+
+            // Hapus tag HTML yang tersisa jika ada
+            const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
+            return cleanText.trim();
+        }
+
+        // Fungsi Salin Teks ke Clipboard
+        function copyToClipboard() {
+            const rawText = getRawTextFromEditable();
+
+            const tempTextarea = document.createElement("textarea");
+            tempTextarea.value = rawText;
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            
+            try {
+                // Gunakan document.execCommand untuk kompatibilitas lingkungan iframe sandbox
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast("Teks WhatsApp disalin ke clipboard!");
+                } else {
+                    showToast("Gagal menyalin teks.");
+                }
+            } catch (err) {
+                showToast("Terjadi kesalahan saat menyalin.");
+            }
+            
+            document.body.removeChild(tempTextarea);
+        }
+
+        // Menyimpan preview sebagai gambar PNG berkualitas tinggi
+        async function saveAsImage() {
+            const button = document.getElementById("btn-save-image");
+            const originalContent = button.innerHTML;
+            
+            // Atur status loading pada tombol
+            button.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Memproses...`;
+            button.disabled = true;
+
+            // Pastikan font google inter telah dimuat sepenuhnya sebelum mengambil screenshot
+            await document.fonts.ready;
+
+            const targetElement = document.getElementById("capture-target");
+            const outputBox = document.getElementById("whatsapp-text-output");
+
+            // Simpan status overflow & max height asli untuk dipulihkan nanti
+            const originalMaxHeight = outputBox.style.maxHeight;
+            const originalOverflow = outputBox.style.overflow;
+
+            // Hilangkan scrollbar dan batasan tinggi sementara agar seluruh isi pesan terpotret penuh dengan rapi
+            outputBox.style.maxHeight = "none";
+            outputBox.style.overflow = "visible";
+
+            // Eksekusi html2canvas dengan konfigurasi resolusi tinggi (scale: 3) untuk hasil super tajam
+            html2canvas(targetElement, {
+                scale: 3, 
+                useCORS: true,
+                backgroundColor: "#0c2454", 
+                logging: false,
+                scrollX: 0,
+                scrollY: -window.scrollY // Menghindari offset kosong akibat halaman yang sedang di-scroll
+            }).then(canvas => {
+                // Kembalikan ke tampilan default semula setelah capture selesai
+                outputBox.style.maxHeight = originalMaxHeight;
+                outputBox.style.overflow = originalOverflow;
+
+                // Mempersiapkan link download hasil konversi gambar
+                const link = document.createElement("a");
+                const cleanCategory = currentCategory.toLowerCase().replace(/[^a-z0-9]/g, "-");
+                const cleanAction = currentAction.toLowerCase().replace(/[^a-z0-9]/g, "-");
+                
+                link.download = `likenet-${cleanCategory}-${cleanAction}.png`;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+
+                // Kembalikan tombol ke keadaan semula
+                button.innerHTML = originalContent;
+                button.disabled = false;
+                showToast("Gambar pesan berhasil disimpan!");
+            }).catch(err => {
+                console.error("Gagal melakukan penangkapan gambar:", err);
+                outputBox.style.maxHeight = originalMaxHeight;
+                outputBox.style.overflow = originalOverflow;
+                
+                button.innerHTML = originalContent;
+                button.disabled = false;
+                showToast("Gagal menyimpan gambar.");
+            });
+        }
+
+        // Tampilkan Toast Notifikasi Kustom Tanpa Alert bawaan browser
+        function showToast(message) {
+            let toast = document.getElementById("custom-toast");
+            if (!toast) {
+                toast = document.createElement("div");
+                toast.id = "custom-toast";
+                toast.className = "fixed bottom-5 right-5 bg-slate-900 text-white font-semibold text-xs py-3 px-6 rounded-2xl shadow-xl border border-slate-700/50 transition-all duration-300 transform translate-y-10 opacity-0 z-50 flex items-center gap-2.5";
+                document.body.appendChild(toast);
+            }
+
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-sm animate-bounce"></i> <span>${message}</span>`;
+            toast.classList.remove("translate-y-10", "opacity-0");
+            toast.classList.add("translate-y-0", "opacity-100");
+
+            setTimeout(() => {
+                toast.classList.remove("translate-y-0", "opacity-100");
+                toast.classList.add("translate-y-10", "opacity-0");
+            }, 3000);
+        }
+
+        // ==========================================
+        // FUNGSI KHUSUS GENERATOR INVOICE
+        // ==========================================
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID').format(number);
+        }
+
+        const bulanIndoList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        function generateInvoiceNumber() {
+            const now = new Date();
+            const dRaw = now.getDate();
+            const mRaw = now.getMonth() + 1;
+            const y = now.getFullYear();
+            const h = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            
+            const invNumber = `#LKJDN${dRaw}${mRaw}${y}${h}${min}${s}`;
+            
+            document.getElementById('invoiceNumberInput').value = invNumber;
+            document.getElementById('previewInvoiceNumber').innerText = invNumber;
+        }
+
+        function updateDates() {
+            const dateInput = document.getElementById('globalDateInput').value;
+            if (!dateInput) return;
+
+            const dateObj = new Date(dateInput);
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            const m = bulanIndoList[dateObj.getMonth()];
+            const y = dateObj.getFullYear();
+            
+            const formattedDate = `${d} ${m} ${y}`;
+
+            document.getElementById('previewInvoiceDate').innerText = formattedDate;
+            document.getElementById('previewDueDate').innerText = formattedDate;
+            document.getElementById('previewPaymentDate').innerText = formattedDate;
+        }
+
+        function updateCustomerName() {
+            const name = document.getElementById('customerNameInput').value;
+            document.getElementById('previewCustomerName').innerText = name || 'NAMA PELANGGAN';
+        }
+
+        function updatePackageDetails() {
+            const select = document.getElementById('packageSelect');
+            if (select.selectedIndex <= 0) return;
+            const option = select.options[select.selectedIndex];
+            
+            const detailText = option.text.split(' - ')[0]; 
+            const price = parseInt(option.getAttribute('data-price'));
+
+            document.getElementById('detailInput').value = detailText;
+            document.getElementById('amountInput').value = formatRupiah(price);
+
+            applyToPreview(detailText, price);
+        }
+
+        function updatePreviewFromManual() {
+            const detailText = document.getElementById('detailInput').value;
+            const rawAmount = document.getElementById('amountInput').value.replace(/[^0-9]/g, '');
+            const price = rawAmount ? parseInt(rawAmount) : 0;
+            
+            if (rawAmount) {
+                document.getElementById('amountInput').value = formatRupiah(price);
+            }
+
+            applyToPreview(detailText, price);
+        }
+
+        function applyToPreview(detail, price) {
+            const formattedPrice = formatRupiah(price);
+            
+            document.getElementById('previewDetail').innerText = detail || '-';
+            
+            document.getElementById('previewAmount1').innerText = formattedPrice;
+            document.getElementById('previewTotal1').innerText = formattedPrice;
+            
+            document.getElementById('previewAmount2').innerText = formattedPrice;
+            document.getElementById('previewTotal2').innerText = formattedPrice;
+        }
+
+        function downloadInvoice() {
+            const btn = document.getElementById("btn-download-invoice");
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Memproses...`;
+            btn.disabled = true;
+
+            const invoiceElement = document.getElementById('invoiceCanvas');
+            
+            html2canvas(invoiceElement, {
+                scale: 3, // Kualitas HD
+                useCORS: true,
+                backgroundColor: "#ffffff",
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement("a");
+                const invNumber = document.getElementById("previewInvoiceNumber").innerText.replace(/[^a-zA-Z0-9]/g, "");
+                link.download = `Invoice-${invNumber || 'Baru'}.jpg`;
+                link.href = canvas.toDataURL("image/jpeg", 0.95);
+                link.click();
+                
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                showToast("Invoice berhasil diunduh!");
+            }).catch(err => {
+                console.error("Gagal generate invoice:", err);
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                showToast("Gagal menyimpan invoice.");
+            });
+        }
+
+        // Jalankan saat halaman web sepenuhnya dimuat
+        window.onload = () => {
+            initCategoryDropdown();
+            // Inisialisasi nomor tagihan otomatis untuk menu invoice saat web dimuat
+            generateInvoiceNumber(); 
+        };
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('PWA ServiceWorker terdaftar dengan scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('PWA ServiceWorker gagal terdaftar: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
