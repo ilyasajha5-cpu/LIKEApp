@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App LIKENET Broadcast - Generator Pesan Premium</title>
-    
+    <title>App LIKENET Broadcast - Generator Pesan & Layanan</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <link rel="apple-touch-icon" href="icon-192.png">
-
+    <meta name="theme-color" content="#0c2454">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -118,7 +115,6 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         
         <!-- PANEL KONFIGURASI (KIRI) -->
@@ -178,7 +174,20 @@
                             </div>
                         </div>
 
-                        <!-- INVOICE FORM CONTAINER (BARU) -->
+                        <!-- ROUTER & LAYANAN LAINNYA FORM CONTAINER -->
+                        <div id="router-form-container" class="hidden flex-col gap-5 mt-2">
+                            <div class="bg-blue-50 border border-blue-100 text-blue-800 rounded-2xl p-4 text-xs leading-relaxed">
+                                <i class="fa-solid fa-info-circle text-blue-600 mb-2 text-lg block"></i>
+                                Panduan/Informasi bergambar untuk <strong><span id="router-name-label">Panduan</span></strong>. Anda dapat melihat pratinjau di layar sebelah kanan atau mengunduh gambar aslinya.
+                            </div>
+                            <div class="mt-2">
+                                <button onclick="downloadRouterImage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                                    <i class="fas fa-download text-lg"></i> Simpan / Download Gambar Panduan
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- INVOICE FORM CONTAINER -->
                         <div id="invoice-form-container" class="hidden flex-col gap-5 mt-2">
                             <!-- Nomor Invoice -->
                             <div class="glow-border rounded-xl">
@@ -246,7 +255,7 @@
                 </div>
 
                 <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
-                    <span>LIKENET Broadcast v1.2</span>
+                    <span>LIKENET Broadcast v1.3</span>
                     <span class="flex items-center gap-1"><i class="fa-solid fa-code"></i> Developed for efficiency</span>
                 </div>
             </div>
@@ -292,7 +301,7 @@
                 </div>
             </div>
 
-            <!-- CONTAINER PREVIEW INVOICE (BARU) -->
+            <!-- CONTAINER PREVIEW INVOICE -->
             <div id="invoice-preview-container" class="hidden flex-grow bg-slate-200/50 rounded-3xl overflow-hidden border border-slate-300 inv-preview-wrapper relative p-4 items-start justify-center shadow-inner">
                 
                 <div id="invoiceCanvas" class="invoice-container flex flex-col p-8 font-sans">
@@ -414,12 +423,25 @@
                 </div>
 
             </div>
+
+            <!-- CONTAINER PREVIEW ROUTER & LAYANAN LAINNYA -->
+            <div id="router-preview-container" class="hidden flex-grow bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 relative p-6 items-center justify-center shadow-inner min-h-[500px]">
+                <img id="router-image-preview" src="" crossorigin="anonymous" alt="Panduan Gambar" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl transition-all duration-300" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0c2454/ffffff?text=Gagal+Memuat+Gambar';">
+            </div>
         </section>
     </main>
 
     <script>
         const configTemplates = {
             "GANGGUAN ISP": {
+                "Jadwal Maintenance": {
+                    fields: [
+                        { key: "tanggal", label: "Pilih Tanggal Maintenance", type: "date", default: new Date().toISOString().split('T')[0] },
+                        { key: "jam", label: "Input Jam Maintenance", default: "08:50" }
+                    ],
+                    statusSupport: false,
+                    initial: `Kami informasikan pada tanggal *{tanggal}* pukul *{jam} WIB*, koneksi internet akan mengalami *ketidakstabilan (intermittent)* dari penyedia layanan pusat (ISP) kami, karena ada Progres Penambahan Hardware dan Konfigurasi pada Server.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`
+                },
                 "Koneksi tidak stabil/ intermittent": {
                     fields: [],
                     statusSupport: true,
@@ -525,32 +547,32 @@
                 }
             },
             "TAGIHAN PELANGGAN": {
-                "Info Tagihan": {
+                "Informasi Tagihan": {
                     fields: [],
                     statusSupport: false,
                     initial: `PEMBERITAHUAN TAGIHAN WI-FI\n\nYth. Pelanggan Wi-Fi\n\nKami mengingatkan bahwa batas akhir pembayaran tagihan adalah setiap *tanggal 5*.\n\nPembayaran dapat dilakukan melalui :\n\n*Via Transfer Bank*\n- BCA : *3340297287*\na.n. Mohamad Ilyasi\n- DANA : *085236378731*\na.n. Mohamad Ilyasi\n\nKirim bukti transfer ke Whatsapp Admin:\n*0852-3637-8731*\n\n*Datang langsung ke kantor kami*\n\n*Dijemput oleh petugas pada tanggal 1-5 setiap bulan*\n\n*Perhatian:*\nApabila terjadi keterlambatan pembayaran tanpa konfirmasi ke Admin, maka layanan internet di rumah Anda akan otomatis *terisolir/ dimatikan sementara* oleh sistem.\n\nBagi pelanggan yang sudah membayar, atau baru aktif bergabung bulan ini, silahkan abaikan pesan ini.\n\nTerima kasih atas kerja samanya.`
                 },
-                "Tagihan Khusus Pelanggan": {
+                "Konfirmasi Tagihan Pelanggan": {
                     fields: [],
                     statusSupport: false,
                     initial: `Mohon konfirmasinya, karena hingga saat ini pembayaran tagihan Wi-Fi Anda *belum kami terima*.\nMohon segera melakukan pembayaran dan mengirimkan konfirmasi pembayaran agar layanan Wi-Fi di rumah Anda tetap berjalan dengan lancar serta *terhindar dari sistem isolir (penonaktifan sementara) secara otomatis* akibat keterlambatan pembayaran.\n\nPembayaran dapat dilakukan melalui:\n💳 *Transfer Bank BCA*\nNo. Rekening: *3340297287*\na.n. Mohamad Ilyasi\n📱 *DANA*\nNo. DANA: *085236378731*\na.n. Mohamad Ilyasi\n\nSetelah melakukan pembayaran, mohon kirimkan bukti transfer ke WhatsApp Admin:\n📞 *0852-3637-8731*\n\nTerima kasih atas perhatian dan kerja samanya.`
                 },
-                "Pelanggan Isolir": {
+                "ISOLIR Pelanggan": {
                     fields: [],
                     statusSupport: false,
                     initial: `Kami informasikan bahwa Layanan Wi-Fi Anda saat ini *terisolir atau di matikan sementara* secara otomatis oleh sistem kami.\n\nMohon untuk melakukan Pembayaran Tagihan agar Wi-Fi Anda Kembali normal.\n\nUntuk menghindari ketidanyamanan ini dikemudian hari, mohon untuk melakukan Pembayaran tepat waktu *sebelum tanggal 5* setiap bulannya.\n\nMohon kerja samanya,\nTerima kasih.\n\nHormat kami,\n*Admin Layanan Wi-Fi*\n\nJika Anda sudah melakukan pembayaran, kirim bukti transfer ke WhatsApp Admin: *0852-3637-8731*.`
                 },
-                "Pelanggan Telat": {
+                "Khusus Pelanggan Melewati Jatuh Tempo (Diantar)": {
                     fields: [],
                     statusSupport: false,
-                    initial: `Bagi Bapak/Ibu yang melakukan pembayaran tagihan Wi-Fi *melewati batas jatuh tempo ( setelah tanggal 5 )*, kami mohon kesediaannya untuk mengantarkan pembayaran langsung ke kantor kami.\n\n📍 *Alamat Kantor*\nDesa Ajung, masuk gang barat jalan sebelah utara minimarket Delma Mart atau depan SDN Ajung 04.\n🗺️ *Lokasi Maps:* https://maps.app.goo.gl/UDYpbpaGhuPNYNMo7\n\nApabila tidak dapat datang ke kantor, pembayaran juga dapat dilakukan melalui transfer ke rekening berikut:\n🏦 *BCA*\nNo. Rekening: *3340297287*\na.n. *Mohamad Ilyasi*\n💳 *DANA*\nNo. *085236378731*\na.n. *Mohamad Ilyasi*\n📲 Setelah melakukan transfer, mohon kirimkan bukti pembayaran ke Admin:\n*085236378731*\n\nTerima kasih atas perhatian dan kerja samanya.`
+                    initial: `Bagi Bapak/Ibu yang melakukan pembayaran tagihan Wi-Fi *melewati batas jatuh tempo ( setelah tanggal 5 )*, kami mohon kesediaannya untuk mengantarkan pembayaran langsung ke kantor kami.\n\n📍 *Alamat Kantor*\nDesa Ajung, masuk gang barat jalan sebelah utara minimarket Delma Mart atau depan SDN Ajung 04.\n🗺️ *Lokasi Maps:* https://maps.app.goo.gl/UDYpbpaGhuPNYNMo7\n\nApabila tidak dapat datang ke kantor, pembayaran juga dapat dilakukan melalui transfer ke rekening berikut:\n🏦 *BCA*\nNo. Rekening: *3340297287*\na.n. *Mohamad Ilyasi*\n💳 *DANA*\nNo. *085236378731*\na.n. *Mohamad Ilyasi*\n📲 Setelah melakukan transfer, mohon kirimkan bukti pembayaran ke Admin:\n*0852-3637-8731*\n\nTerima kasih atas perhatian dan kerja samanya.`
                 },
-                "Isolir Tanpa Informasi": {
+                "Konfirmasi Tetap Berlangganan atau Berhenti? (ISOLIR)": {
                     fields: [],
                     statusSupport: false,
                     initial: `Assalamuk'alaikum,\nSaat ini layanan WiFi Anda terisolir sementara karena *Tagihan Belum dibayar.*\n\n*Mohon konfirmasi, apakah ingin melanjutkan Berlangganan atau Berhenti?*,\n\nJika tidak ingin melanjutkan,\nperangkat modem dirumah Anda akan kami tarik kembali dan akan dilakukan pemutusan kabel oleh Teknisi sebagai prosedur penghentian layanan.\n\n_Kami tunggu informasi secepatnya_\n\nTerima kasih atas perhatian dan kerja samanya.`
                 },
-                "Pengingat Tagihan": {
+                "Pengingat Tagihan Khusus Pelanggan Sebelum Jatuh Tempo": {
                     fields: [
                         { key: "tanggal", label: "Pilih Tanggal Jatuh Tempo", type: "date", default: "" }
                     ],
@@ -581,547 +603,511 @@
                     initial: `📢 INFORMASI BONUS REFERAL USER GET USER\n\nKepada Yth.\n*{nama_penerima}*\n\nTerima kasih telah merekomendasikan layanan WiFi kami kepada pelanggan baru.\nBerdasarkan Program User Get User, Anda berhak memperoleh Bonus Referal sebesar *{total_bonus}*, dengan rincian sebagai berikut:\n\nPelanggan yang berhasil direferensikan:\n{list_pelanggan}\n\n💰 Perhitungan Bonus:\n*{jumlah_user} Pelanggan × Rp 25.000 = {total_bonus}*\n\n📝 Ketentuan Pemberian Bonus:\nBonus referal akan dikreditkan sebagai potongan tagihan WiFi pada bulan ini, sehingga jumlah tagihan Anda akan otomatis berkurang sesuai total bonus yang diperoleh.\n\nTerima kasih atas kepercayaan dan dukungan Anda terhadap layanan WiFi kami. 🙏\n\n🎉 Ajak keluarga, teman, atau tetangga untuk berlangganan WiFi kami, dan dapatkan Bonus Referal Rp25.000 untuk setiap pelanggan baru yang berhasil melakukan pemasangan.`
                 }
             },
+            "PELANGGAN BARU (INFORMASI TERKAIT LAYANAN)": {
+                "Informasi Mulai Tagihan": {
+                    fields: [
+                        { key: "tanggal_mulai", label: "Pilih Tanggal Mulai Tagihan", type: "date", default: new Date().toISOString().split('T')[0] }
+                    ],
+                    statusSupport: false,
+                    initial: `Terima kasih atas kepercayaan Anda menggunakan layanan WiFi kami.\n\nKami informasikan bahwa tanggal mulai tagihan Anda terhitung mulai tanggal *{tanggal_mulai}*, dengan periode pembayaran tagihan pertama pada tanggal 1 sampai 5 *{bulan_tagihan_upper}* sebagai batas waktu pembayaran.\n\nJika ada pertanyaan, silakan hubungi kami kapan saja.\nTerima kasih. 🙏`
+                },
+                "Informasi Layanan Lainnya": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: `Terima kasih telah bergabung menjadi pelanggan Wi-Fi kami🙏\n\nPerkenalkan, ini adalah nomor Admin Wi-Fi yang Anda gunakan.\nNomor ini digunakan untuk menyampaikan informasi penting terkait *tagihan, dan bantuan layanan pelanggan.*\n\nBerikut informasi penting terkait layanan :\n\n📅 *TAGIHAN WI-FI*\nJatuh tempo setiap tanggal 5 setiap bulannya.\n\nPembayaran dapat dilakukan dengan tiga cara:\n1️⃣ Diantar langsung ke kantor.\n2️⃣ Dijemput oleh tim setiap tanggal 1 - 5.\n3️⃣ Transfer ke rekening\n- BCA: *3340297287* (a.n. Mohamad Ilyasi)\n- DANA: *085236378731* (a.n. Mohamad Ilyas)\n(Mohon sertakan bukti transfer).\n\n\n🛠️ *JAM OPERASIONAL TEKNISI*\n🕗 *Senin – Jum'at : 08.00 – 21.00 WIB*\n🕗 *Sabtu – Minggu : 08.00 – 16.00 WIB*\nApabila terdapat gangguan atau kendala yang memerlukan kunjungan teknisi di luar jam operasional, maka penanganan akan diproses pada hari berikutnya saat jam kerja teknisi berlangsung.\n\n⚙️ *INFORMASI TEKNIS*\nServer lokal akan restart otomatis setiap hari pukul *03.45 atau 04.00 WIB* (setiap wilayah berbeda), sehingga koneksi akan terputus sementara selama *± 1–5 menit*.\n\n👥 *GRUP PELANGGAN WI-FI*\nUntuk mendapatkan informasi terkait:\n✅ Gangguan jaringan\n✅ Maintenance jaringan\n✅ Informasi tagihan\n✅ Promo pelanggan\n✅ Pengumuman penting lainnya\n\nSilakan gabung grup melalui tautan berikut = https://chat.whatsapp.com/DICILJoNgPSAUE0CPoNqd9\n\n📞 *Hubungi kami jika ada kendala atau gangguan:*\n\nADMIN/ NOC : *0852-3637-8731*\n\nTeknisi :\n- *0896-9647-0957*\n- *0897-0515-671*\n- *0896-8079-9615*\n\nℹ️ Kami juga sering membagikan update gangguan dan pengumuman penting melalui *STATUS WHATSAPP.*\nAgar selalu mendapatkan informasi terbaru, *harap simpan nomor admin ini di kontak Anda.*\n\nTerima kasih atas kepercayaannya menggunakan layanan Wi-Fi kami🙏\nSemoga koneksi internet Anda selalu lancar dan bermanfaat untuk aktivitas sehari-hari.\n\n_Admin LIKENET By PT. JAVA DIGITAL NUSANTARA_`
+                },
+                "Syarat & Ketentuan Berlangganan": {
+                    fields: [],
+                    statusSupport: false,
+                    isCustomDoc: true,
+                    initial: `<div class="text-center mb-6"><img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" alt="Logo PT Java Digital Nusantara" class="h-20 mx-auto object-contain mb-3" onerror="this.onerror=null;this.src='https://placehold.co/200x80/002060/ffffff?text=JDN+Logo';"></div>📜 <span class="highlight-bold">SYARAT DAN KETENTUAN BERLANGGANAN LAYANAN WI-FI</span>\nNIB: *1506220048174*\n\nDengan berlangganan layanan Wi-Fi Kami, pelanggan dianggap telah membaca, memahami, dan menyetujui syarat dan ketentuan berikut:\n\n📌 *PASAL 1 — BIAYA PEMASANGAN DAN INSTALASI*\n1️⃣ Biaya pemasangan awal sudah mencakup sewa modem Wi-Fi, kabel jaringan, perangkat pendukung, serta proses instalasi oleh tim teknisi kami.\n2️⃣ Setelah proses instalasi selesai, layanan internet akan diaktifkan dan dapat langsung digunakan.\n\n📌 *PASAL 2 — KETENTUAN PEMBAYARAN TAGIHAN*\n1️⃣ Pembayaran tagihan berlangganan wajib dilakukan setiap bulan pada tanggal *1 s.d. 5*, sesuai harga paket layanan yang telah disepakati.\n2️⃣ Pembayaran dapat dilakukan melalui:\n   • Pembayaran langsung di kantor kami\n   • Transfer ke rekening bank resmi (BCA / DANA)\n   • Layanan jemput tagihan oleh tim kami pada tanggal *3, 4 dan 5*\n3️⃣ Pelanggan wajib memastikan pembayaran dilakukan tepat waktu demi kelancaran layanan.\n\n📌 *PASAL 3 — KETERLAMBATAN PEMBAYARAN*\n1️⃣ Apabila pelanggan belum melakukan pembayaran hingga tanggal 5, layanan internet akan *terisolir/dinonaktifkan secara otomatis* oleh sistem pada pukul *21.00 WIB*.\n2️⃣ Khusus pelanggan yang telah berlangganan aktif lebih dari 6 bulan, layanan dapat tetap aktif apabila telah menyampaikan konfirmasi keterlambatan pembayaran sesuai ketentuan.\n3️⃣ Apabila hingga tanggal 10 pembayaran belum diterima dan tanpa konfirmasi, petugas berhak melakukan pemutusan kabel jaringan serta penarikan modem & seluruh perangkat pinjaman.\n\n📌 *PASAL 4 — PENANGGUHAN DAN PENGHENTIAN*\n1️⃣ Pengecualian penarikan perangkat dapat diberikan kepada pelanggan aktif (> 6 bulan) dengan mengonfirmasi penangguhan selama max *1 bulan*.\n2️⃣ Masa nonaktif sementara diberikan maksimal *30 hari kalender*.\n3️⃣ Apabila melebihi 30 hari, Kami berhak melakukan penarikan perangkat jaringan.\n\n📌 *PASAL 5 — PENGGANTIAN PERANGKAT*\n1️⃣ Penggantian modem Wi-Fi gratis diberikan apabila terjadi kerusakan alami (bukan kelalaian/kesengajaan) selama status berlangganan aktif.\n2️⃣ Penggantian tidak berlaku apabila kerusakan disebabkan oleh tindakan sengaja atau kelalaian penggunaan.\n\n📌 *PASAL 6 — LAYANAN GANGGUAN DAN PENGADUAN*\nApabila mengalami gangguan teknis atau kendala koneksi, pelanggan dapat langsung menghubungi Admin / NOC Pusat untuk bantuan penanganan.\n\n📌 *PASAL 7 — PERSETUJUAN PELANGGAN*\nDengan mendaftar dan menggunakan layanan internet Kami, pelanggan menyatakan telah memahami dan menyetujui seluruh ketentuan di atas.\n\n────────────────────────\n📞 *INFORMASI & CUSTOMER SERVICE*\n• WhatsApp Admin: *0852-3637-8731*\n\n_Terima kasih telah memilih Layanan WiFi Kami sebagai penyedia internet kepercayaan Anda._\n*Koneksi Andal, Layanan Terpercaya.*`
+                }
+            },
             "BUAT INVOICE PELANGGAN": {
                 "Formulir Invoice": {
                     fields: [],
                     statusSupport: false,
                     initial: ""
                 }
+            },
+            "SETTING ROUTER": {
+                "Router China Mobile F663": { fields: [], statusSupport: false, initial: "" },
+                "Router F477": { fields: [], statusSupport: false, initial: "" },
+                "Router F609": { fields: [], statusSupport: false, initial: "" },
+                "Router Zimmlink ZL-2113X": { fields: [], statusSupport: false, initial: "" }
+            },
+            "LAYANAN LAINNYA": {
+                "Layanan Teknisi": { fields: [], statusSupport: false, initial: "" },
+                "Layanan WiFi Tidak Bisa Akses/ Lemot": { fields: [], statusSupport: false, initial: "" },
+                "Daftar Rekening": { fields: [], statusSupport: false, initial: "" }
             }
         };
 
         let currentCategory = "GANGGUAN ISP";
-        let currentAction = "";
+        let currentAction = "Jadwal Maintenance";
         let currentStatus = "initial";
-        let inputsValues = {};
-        let isUserEditingManually = false;
+        let dynamicValues = {};
 
-        function setStatus(status) {
-            currentStatus = status;
-            isUserEditingManually = false;
+        // Inisialisasi awal saat halaman dimuat
+        window.onload = function() {
+            initCategoryDropdown();
+            updateActionDropdown();
+            generateInvoiceNumber();
+            setDefaultDates();
 
-            const btnInitial = document.getElementById("btn-status-initial");
-            const btnResolved = document.getElementById("btn-status-resolved");
-
-            if (status === 'initial') {
-                btnInitial.classList.add("bg-amber-100", "text-amber-700", "shadow-sm");
-                btnInitial.classList.remove("text-slate-500", "hover:bg-slate-200");
-                
-                btnResolved.classList.add("text-slate-500", "hover:bg-slate-200");
-                btnResolved.classList.remove("bg-emerald-100", "text-emerald-700", "shadow-sm");
-            } else {
-                btnResolved.classList.add("bg-emerald-100", "text-emerald-700", "shadow-sm");
-                btnResolved.classList.remove("text-slate-500", "hover:bg-slate-200");
-                
-                btnInitial.classList.add("text-slate-500", "hover:bg-slate-200");
-                btnInitial.classList.remove("bg-amber-100", "text-amber-700", "shadow-sm");
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./sw.js')
+                        .then(reg => console.log('Service Worker registered successfully. Scope:', reg.scope))
+                        .catch(err => console.log('Service Worker registration failed:', err));
+                });
             }
+        };
 
-            // Memperbarui preview text setelah status diubah
-            generateOutput();
-        }
-
-        // Inisialisasi Kategori Utama pada Dropdown
         function initCategoryDropdown() {
             const catSelect = document.getElementById("category-select");
-            catSelect.innerHTML = Object.keys(configTemplates).map(c => `<option value="${c}">${c}</option>`).join('');
-            
-            catSelect.onchange = (e) => {
+            catSelect.innerHTML = "";
+            Object.keys(configTemplates).forEach(cat => {
+                const opt = document.createElement("option");
+                opt.value = cat;
+                opt.innerText = cat;
+                if (cat === currentCategory) opt.selected = true;
+                catSelect.appendChild(opt);
+            });
+
+            catSelect.addEventListener("change", function(e) {
                 currentCategory = e.target.value;
-                isUserEditingManually = false; // Reset status pengeditan manual
+                const actions = Object.keys(configTemplates[currentCategory]);
+                currentAction = actions[0] || "";
+                dynamicValues = {};
                 updateActionDropdown();
-            };
-            
-            updateActionDropdown();
+            });
         }
 
-        // Memperbarui Opsi Aksi dari Kategori yang sedang aktif
         function updateActionDropdown() {
             const isInvoice = currentCategory === "BUAT INVOICE PELANGGAN";
+            const isRouterOrOther = currentCategory === "SETTING ROUTER" || currentCategory === "LAYANAN LAINNYA";
+            const isWA = !isInvoice && !isRouterOrOther;
             
-            // Toggle element visibilities
             document.getElementById('wa-action-container').classList.toggle('hidden', isInvoice);
-            document.getElementById('dynamic-inputs-container').classList.toggle('hidden', isInvoice);
+            document.getElementById('dynamic-inputs-container').classList.toggle('hidden', isInvoice || isRouterOrOther);
             document.getElementById('invoice-form-container').classList.toggle('hidden', !isInvoice);
             document.getElementById('invoice-form-container').classList.toggle('flex', isInvoice);
+            document.getElementById('router-form-container').classList.toggle('hidden', !isRouterOrOther);
+            document.getElementById('router-form-container').classList.toggle('flex', isRouterOrOther);
             
-            document.getElementById('wa-preview-header').classList.toggle('hidden', isInvoice);
-            document.getElementById('wa-preview-tips').classList.toggle('hidden', isInvoice);
-            document.getElementById('capture-target').classList.toggle('hidden', isInvoice);
+            document.getElementById('wa-preview-header').classList.toggle('hidden', !isWA);
+            document.getElementById('wa-preview-tips').classList.toggle('hidden', !isWA);
+            document.getElementById('capture-target').classList.toggle('hidden', !isWA);
+            
             document.getElementById('invoice-preview-container').classList.toggle('hidden', !isInvoice);
             document.getElementById('invoice-preview-container').classList.toggle('flex', isInvoice);
 
+            document.getElementById('router-preview-container').classList.toggle('hidden', !isRouterOrOther);
+            document.getElementById('router-preview-container').classList.toggle('flex', isRouterOrOther);
+
+            const actionLabel = document.querySelector('#wa-action-container label');
+            if (currentCategory === "SETTING ROUTER") {
+                actionLabel.innerText = "PILIH JENIS ROUTER";
+            } else if (currentCategory === "LAYANAN LAINNYA") {
+                actionLabel.innerText = "PILIH LAYANAN LAINNYA";
+            } else {
+                actionLabel.innerText = "PILIH DETAIL KEJADIAN / AKSI";
+            }
+
             const actSelect = document.getElementById("action-select");
-            const actions = Object.keys(configTemplates[currentCategory]);
+            actSelect.innerHTML = "";
+            const actions = Object.keys(configTemplates[currentCategory] || {});
             
-            actSelect.innerHTML = actions.map(a => `<option value="${a}">${a}</option>`).join('');
-            currentAction = actions[0];
-            
-            actSelect.onchange = (e) => {
+            actions.forEach(act => {
+                const opt = document.createElement("option");
+                opt.value = act;
+                opt.innerText = act;
+                if (act === currentAction) opt.selected = true;
+                actSelect.appendChild(opt);
+            });
+
+            actSelect.onchange = function(e) {
                 currentAction = e.target.value;
-                isUserEditingManually = false; // Reset status pengeditan manual
-                updateDynamicInputs();
+                dynamicValues = {};
+                if (isRouterOrOther) {
+                    updateRouterPreview();
+                } else {
+                    renderDynamicInputs();
+                    renderWhatsAppText();
+                }
             };
 
-            updateDynamicInputs();
+            if (isRouterOrOther) {
+                updateRouterPreview();
+            } else if (isInvoice) {
+                // Invoice view initialized
+            } else {
+                renderDynamicInputs();
+                renderWhatsAppText();
+            }
         }
 
-        function updateDynamicInputs() {
+        // Mapping gambar router dan layanan lainnya
+        const routerImages = {
+            "Router China Mobile F663": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20F663%20China%20Mobile.jpeg",
+            "Router F477": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20F477.jpeg",
+            "Router F609": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20F609.jpeg",
+            "Router Zimmlink ZL-2113X": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20Zimmlink.jpeg",
+            "Layanan Teknisi": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Layanan%20Teknisi.png",
+            "Layanan WiFi Tidak Bisa Akses/ Lemot": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Wifi%20Tidak%20bisa%20di%20Akses%20atau%20Lemot.jpeg",
+            "Daftar Rekening": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Daftar%20Nomor%20Rekening.jpeg"
+        };
+
+        function updateRouterPreview() {
+            const imgEl = document.getElementById("router-image-preview");
+            const labelEl = document.getElementById("router-name-label");
+            labelEl.innerText = currentAction;
+            const imgUrl = routerImages[currentAction] || "https://placehold.co/600x400/0c2454/ffffff?text=Panduan+Tidak+Tersedia";
+            imgEl.src = imgUrl;
+        }
+
+        function downloadRouterImage() {
+            const container = document.getElementById("router-preview-container");
+            html2canvas(container, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: "#0f172a"
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = currentAction.replace(/\s+/g, '_') + '.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.95);
+                link.click();
+                showNotification("Gambar panduan berhasil diunduh!", "success");
+            }).catch(err => {
+                const imgUrl = routerImages[currentAction];
+                if (!imgUrl) {
+                    showNotification("Gambar tidak ditemukan!", "error");
+                    return;
+                }
+                fetch(imgUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const blobUrl = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = blobUrl;
+                        a.download = currentAction.replace(/\s+/g, '_') + '.jpeg';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(blobUrl);
+                        showNotification("Gambar berhasil diunduh!", "success");
+                    })
+                    .catch(e => {
+                        showNotification("Gagal mengunduh gambar", "error");
+                    });
+            });
+        }
+
+        function renderDynamicInputs() {
             const container = document.getElementById("dynamic-inputs-container");
             container.innerHTML = "";
-            inputsValues = {};
-            
-            // Sembunyikan status toggle jika mode invoice
-            if (currentCategory === "BUAT INVOICE PELANGGAN") {
-                document.getElementById("status-toggle-container").classList.add("hidden");
-                return;
-            }
 
-            const actionData = configTemplates[currentCategory][currentAction];
+            const actionConfig = configTemplates[currentCategory]?.[currentAction];
+            if (!actionConfig) return;
 
-            // Tampilkan / Sembunyikan Tombol Toggle Status Jaringan
+            // Status toggle check
             const statusContainer = document.getElementById("status-toggle-container");
-            if (actionData.statusSupport) {
+            if (actionConfig.statusSupport) {
                 statusContainer.classList.remove("hidden");
-                setStatus(currentStatus);
+                updateStatusButtonsUI();
             } else {
                 statusContainer.classList.add("hidden");
-                currentStatus = "initial";
             }
 
-            // Buat Input Box Dinamis / Dropdown untuk Setiap Field
-            if (actionData.fields && actionData.fields.length > 0) {
-                actionData.fields.forEach(f => {
-                    inputsValues[f.key] = f.default;
+            const fields = actionConfig.fields || [];
+            fields.forEach(field => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "glow-border rounded-xl";
+
+                const label = document.createElement("label");
+                label.className = "text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5";
+                label.innerText = field.label;
+                wrapper.appendChild(label);
+
+                if (field.type === "select") {
+                    const select = document.createElement("select");
+                    select.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer";
                     
-                    const fieldId = `field-${f.key}`;
-                    const inputDiv = document.createElement("div");
-                    inputDiv.className = "flex flex-col gap-1.5 glow-border rounded-xl";
-                    
-                    if (f.type === "select") {
-                        const optionsHtml = f.options.map(opt => 
-                            `<option value="${opt.value}">${opt.label}</option>`
-                        ).join('');
-                        
-                        inputDiv.innerHTML = `
-                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">${f.label}</label>
-                            <div class="relative">
-                                <select id="${fieldId}" 
-                                    class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white appearance-none cursor-pointer transition-all duration-200"
-                                    onchange="inputsValues['${f.key}'] = this.value; isUserEditingManually = false; generateOutput();">
-                                    ${optionsHtml}
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
-                                    <i class="fa-solid fa-chevron-down text-xs"></i>
-                                </div>
-                            </div>
-                        `;
-                    } else if (f.type === "date") {
-                        inputDiv.innerHTML = `
-                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">${f.label}</label>
-                            <input type="date" id="${fieldId}" value="${f.default}" 
-                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all"
-                                onchange="inputsValues['${f.key}'] = this.value; isUserEditingManually = false; generateOutput();"
-                            />
-                        `;
-                    } else if (f.type === "textarea") {
-                        inputDiv.innerHTML = `
-                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">${f.label}</label>
-                            <textarea id="${fieldId}" rows="3"
-                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all resize-none"
-                                oninput="inputsValues['${f.key}'] = this.value; isUserEditingManually = false; generateOutput();"
-                            >${f.default}</textarea>
-                        `;
-                    } else {
-                        inputDiv.innerHTML = `
-                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">${f.label}</label>
-                            <input type="text" id="${fieldId}" value="${f.default}" 
-                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all"
-                                oninput="inputsValues['${f.key}'] = this.value; isUserEditingManually = false; generateOutput();"
-                            />
-                        `;
+                    if (dynamicValues[field.key] === undefined) {
+                        dynamicValues[field.key] = field.default;
                     }
-                    container.appendChild(inputDiv);
+
+                    field.options.forEach(opt => {
+                        const optEl = document.createElement("option");
+                        optEl.value = opt.value;
+                        optEl.innerText = opt.label;
+                        if (opt.value === dynamicValues[field.key]) optEl.selected = true;
+                        select.appendChild(optEl);
+                    });
+
+                    select.onchange = function(e) {
+                        dynamicValues[field.key] = e.target.value;
+                        renderWhatsAppText();
+                    };
+                    wrapper.appendChild(select);
+                } else if (field.type === "textarea") {
+                    const textarea = document.createElement("textarea");
+                    textarea.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500";
+                    textarea.rows = 3;
+                    if (dynamicValues[field.key] === undefined) {
+                        dynamicValues[field.key] = field.default;
+                    }
+                    textarea.value = dynamicValues[field.key];
+                    textarea.oninput = function(e) {
+                        dynamicValues[field.key] = e.target.value;
+                        renderWhatsAppText();
+                    };
+                    wrapper.appendChild(textarea);
+                } else {
+                    const input = document.createElement("input");
+                    input.type = field.type || "text";
+                    input.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500";
+                    if (dynamicValues[field.key] === undefined) {
+                        dynamicValues[field.key] = field.default;
+                    }
+                    input.value = dynamicValues[field.key];
+                    input.oninput = function(e) {
+                        dynamicValues[field.key] = e.target.value;
+                        renderWhatsAppText();
+                    };
+                    wrapper.appendChild(input);
+                }
+
+                container.appendChild(wrapper);
+            });
+        }
+
+        function setStatus(status) {
+            currentStatus = status;
+            updateStatusButtonsUI();
+            renderWhatsAppText();
+        }
+
+        function updateStatusButtonsUI() {
+            const btnInit = document.getElementById("btn-status-initial");
+            const btnRes = document.getElementById("btn-status-resolved");
+            
+            if (currentStatus === "initial") {
+                btnInit.className = "py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 bg-amber-500 text-white shadow-md";
+                btnRes.className = "py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300";
+            } else {
+                btnInit.className = "py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300";
+                btnRes.className = "py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 bg-emerald-600 text-white shadow-md";
+            }
+        }
+
+        function renderWhatsAppText() {
+            const actionConfig = configTemplates[currentCategory]?.[currentAction];
+            if (!actionConfig) return;
+
+            let template = "";
+            if (actionConfig.isCustomDoc) {
+                template = actionConfig.initial;
+            } else if (actionConfig.statusSupport && currentStatus === "resolved" && actionConfig.resolved) {
+                template = actionConfig.resolved;
+            } else {
+                template = actionConfig.initial;
+            }
+
+            // Replace dynamic placeholders
+            if (actionConfig.fields) {
+                actionConfig.fields.forEach(field => {
+                    let val = dynamicValues[field.key] !== undefined ? dynamicValues[field.key] : field.default;
+                    
+                    if (field.key === "jumlah_user") {
+                        let countNum = parseInt(val) || 1;
+                        let bonusTotal = countNum * 25000;
+                        template = template.replace(/{jumlah_user}/g, countNum);
+                        template = template.replace(/{total_bonus}/g, formatIDR(bonusTotal));
+                    }
+
+                    if (field.key === "data_user") {
+                        let rawList = val.split(/,|\n/).map(s => s.trim()).filter(s => s.length > 0);
+                        let formattedList = rawList.map((item, idx) => `${idx + 1}. *${item}*`).join('\n');
+                        template = template.replace(/{list_pelanggan}/g, formattedList);
+                    }
+
+                    if (field.key === "tanggal_mulai" && val) {
+                        let monthName = getMonthNameUpperFromDate(val);
+                        template = template.replace(/{bulan_tagihan_upper}/g, monthName);
+                    }
+
+                    template = template.replace(new RegExp(`{${field.key}}`, 'g'), val);
                 });
             }
 
-            generateOutput();
+            // Fallback jika placeholder bulan_tagihan_upper masih ada
+            if (template.includes("{bulan_tagihan_upper}")) {
+                let defaultDate = dynamicValues["tanggal_mulai"] || new Date().toISOString().split('T')[0];
+                let monthName = getMonthNameUpperFromDate(defaultDate);
+                template = template.replace(/{bulan_tagihan_upper}/g, monthName);
+            }
+
+            // Mengonversi format asterisk *teks* menjadi <span class="highlight-bold">teks</span> agar bintang tidak muncul di layar preview
+            let formattedDisplay = template.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
+
+            const outputDiv = document.getElementById("whatsapp-text-output");
+            outputDiv.innerHTML = formattedDisplay;
         }
 
-        // Helper: Format Tanggal ke Bahasa Indonesia
-        function formatDateIndo(dateStr) {
+        function getMonthNameUpperFromDate(dateStr) {
+            const months = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
             if (!dateStr) return "";
-            const parts = dateStr.split('-');
-            if (parts.length !== 3) return dateStr;
-            const year = parts[0];
-            const monthNum = parseInt(parts[1], 10);
-            const day = parseInt(parts[2], 10);
-            
-            const bulanList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            return `${day} ${bulanList[monthNum - 1]} ${year}`;
+            let d = new Date(dateStr);
+            if (isNaN(d.getTime())) return "";
+            return months[d.getMonth()];
         }
 
-        function getProcessedText() {
-            const actionData = configTemplates[currentCategory][currentAction];
-            let rawText = "";
-
-            if (actionData.statusSupport) {
-                rawText = actionData[currentStatus];
-            } else {
-                rawText = actionData.initial;
-            }
-
-            // Custom Logic untuk kalkulasi kategori USER GET USER
-            if (currentCategory === "USER GET USER" && currentAction === "Informasi Bonus") {
-                let jumlah = parseInt(inputsValues["jumlah_user"]) || 0;
-                let totalBonus = jumlah * 25000;
-                let totalBonusStr = "Rp " + totalBonus.toLocaleString('id-ID');
-
-                let listUserStr = "";
-                if (inputsValues["data_user"]) {
-                    let users = inputsValues["data_user"].split(/[\n,]+/).map(s => s.trim()).filter(s => s !== "");
-                    listUserStr = users.map((u, i) => `${i + 1}. ${u}`).join('\n');
-                }
-
-                rawText = rawText.replaceAll("{total_bonus}", totalBonusStr);
-                rawText = rawText.replaceAll("{list_pelanggan}", listUserStr);
-            }
-
-            // Ganti placeholder {key} dengan data input
-            for (let k in inputsValues) {
-                let replacementValue = inputsValues[k];
-                
-                // Format tanggal jika tipenya date
-                if (actionData.fields) {
-                    const fieldDef = actionData.fields.find(f => f.key === k);
-                    if (fieldDef && fieldDef.type === 'date') {
-                        replacementValue = formatDateIndo(replacementValue);
-                    }
-                }
-                
-                // Ubah format teks menjadi KAPITAL SEMUA khusus untuk Wilayah / Lokasi
-                if (k === 'wilayah' || k === 'lokasi') {
-                    replacementValue = replacementValue.toUpperCase();
-                }
-                
-                rawText = rawText.replaceAll(`{${k}}`, replacementValue);
-            }
-
-            // Kondisional penggantian kalimat untuk Progres Besok di Menu "Fo cut/ putus Jalur Utama" & "Fo cut/ putus Jalur Sebagian"
-            if (currentCategory === "GANGGUAN PELANGGAN" && 
-                (currentAction === "Fo cut/ putus Jalur Utama" || currentAction === "Fo cut/ putus Jalur Sebagian") && 
-                inputsValues["eksekusi"] === "besok") {
-                
-                rawText = rawText.replace(
-                    "Saat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.",
-                    "Untuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani."
-                );
-            }
-
-            return rawText;
+        function formatIDR(num) {
+            return "Rp " + num.toLocaleString('id-ID');
         }
 
-        // Memproses penulisan pesan teks WhatsApp dan visualisasinya di layar
-        function generateOutput() {
-            // Jika pengguna baru saja mengedit secara manual, jangan timpah teks mereka dengan regenerasi otomatis
-            if (isUserEditingManually) return;
-
-            const rawText = getProcessedText();
-
-            // Ambil dan konversi ke uppercase untuk proses pencocokan warna merah
-            const valWilayah = inputsValues['wilayah'] ? inputsValues['wilayah'].trim().toUpperCase() : "";
-            const valLokasi = inputsValues['lokasi'] ? inputsValues['lokasi'].trim().toUpperCase() : "";
-
-            // Ganti format *teks* menjadi markup visual bold
-            const boldFormattedHtml = rawText.replace(/\*(.*?)\*/g, (match, p1) => {
-                const textTrimmed = p1.trim().toUpperCase();
-                let isRed = false;
-
-                // Cek apakah isi teks tebal ini mengandung input Wilayah atau Lokasi
-                if (valWilayah !== "" && textTrimmed === valWilayah) isRed = true;
-                if (valLokasi !== "" && textTrimmed === valLokasi) isRed = true;
-
-                if (isRed) {
-                    return `<span class="highlight-red">${p1}</span>`;
-                } else {
-                    return `<span class="highlight-bold">${p1}</span>`;
-                }
-            });
-
-            // Render ke preview container
-            document.getElementById("whatsapp-text-output").innerHTML = boldFormattedHtml;
-        }
-
-        // Pantau perubahan manual dari user di kotak contenteditable
-        document.getElementById("whatsapp-text-output").addEventListener("input", () => {
-            isUserEditingManually = true;
-        });
-
-        // Menghasilkan teks murni (plain text) dari elemen contenteditable untuk disalin (menjaga format baris baru)
-        function getRawTextFromEditable() {
-            const element = document.getElementById("whatsapp-text-output");
-            
-            // Clone elemen agar bisa dimanipulasi tanpa merusak UI asli
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = element.innerHTML;
-
-            // Kembalikan tag pembungkus custom style menjadi format *teks* asli WhatsApp
-            const highlights = tempDiv.querySelectorAll(".highlight-bold, .highlight-red");
-            highlights.forEach(h => {
-                const text = h.textContent;
-                h.replaceWith(`*${text}*`);
-            });
-
-            // Ganti elemen <br> dengan newline, dan tag div penutup dengan newline jika diperlukan
-            let text = tempDiv.innerHTML
-                .replace(/<br\s*\/?>/gi, '\n')
-                .replace(/<\/div>/gi, '\n')
-                .replace(/<div[^>]*>/gi, '')
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&amp;/g, '&');
-
-            // Hapus tag HTML yang tersisa jika ada
-            const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
-            return cleanText.trim();
-        }
-
-        // Fungsi Salin Teks ke Clipboard
         function copyToClipboard() {
-            const rawText = getRawTextFromEditable();
+            const outputDiv = document.getElementById("whatsapp-text-output");
+            
+            // Konversi HTML span tebal kembali ke format *teks* WhatsApp saat disalin ke clipboard
+            let htmlContent = outputDiv.innerHTML;
+            let tempDiv = document.createElement("div");
+            tempDiv.innerHTML = htmlContent;
+            
+            // Ubah tag span highlight-bold menjadi format *teks*
+            tempDiv.querySelectorAll('.highlight-bold').forEach(el => {
+                el.outerHTML = `*${el.innerText}*`;
+            });
 
-            const tempTextarea = document.createElement("textarea");
-            tempTextarea.value = rawText;
-            document.body.appendChild(tempTextarea);
-            tempTextarea.select();
-            
+            let textToCopy = tempDiv.innerText;
+
+            // Menggunakan document.execCommand untuk kompatibilitas iFrame
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
             try {
-                // Gunakan document.execCommand untuk kompatibilitas lingkungan iframe sandbox
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showToast("Teks WhatsApp disalin ke clipboard!");
-                } else {
-                    showToast("Gagal menyalin teks.");
-                }
+                document.execCommand('copy');
+                showNotification("Teks berhasil disalin ke clipboard (format WhatsApp *bold* tetap dipertahankan)!", "success");
             } catch (err) {
-                showToast("Terjadi kesalahan saat menyalin.");
+                showNotification("Gagal menyalin teks", "error");
             }
-            
-            document.body.removeChild(tempTextarea);
+            document.body.removeChild(textArea);
         }
 
-        // Menyimpan preview sebagai gambar PNG berkualitas tinggi
-        async function saveAsImage() {
-            const button = document.getElementById("btn-save-image");
-            const originalContent = button.innerHTML;
-            
-            // Atur status loading pada tombol
-            button.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Memproses...`;
-            button.disabled = true;
-
-            // Pastikan font google inter telah dimuat sepenuhnya sebelum mengambil screenshot
-            await document.fonts.ready;
-
-            const targetElement = document.getElementById("capture-target");
-            const outputBox = document.getElementById("whatsapp-text-output");
-
-            // Simpan status overflow & max height asli untuk dipulihkan nanti
-            const originalMaxHeight = outputBox.style.maxHeight;
-            const originalOverflow = outputBox.style.overflow;
-
-            // Hilangkan scrollbar dan batasan tinggi sementara agar seluruh isi pesan terpotret penuh dengan rapi
-            outputBox.style.maxHeight = "none";
-            outputBox.style.overflow = "visible";
-
-            // Eksekusi html2canvas dengan konfigurasi resolusi tinggi (scale: 3) untuk hasil super tajam
-            html2canvas(targetElement, {
-                scale: 3, 
+        function saveAsImage() {
+            const captureTarget = document.getElementById("capture-target");
+            html2canvas(captureTarget, {
+                scale: 2,
                 useCORS: true,
-                backgroundColor: "#0c2454", 
-                logging: false,
-                scrollX: 0,
-                scrollY: -window.scrollY // Menghindari offset kosong akibat halaman yang sedang di-scroll
+                backgroundColor: null
             }).then(canvas => {
-                // Kembalikan ke tampilan default semula setelah capture selesai
-                outputBox.style.maxHeight = originalMaxHeight;
-                outputBox.style.overflow = originalOverflow;
-
-                // Mempersiapkan link download hasil konversi gambar
-                const link = document.createElement("a");
-                const cleanCategory = currentCategory.toLowerCase().replace(/[^a-z0-9]/g, "-");
-                const cleanAction = currentAction.toLowerCase().replace(/[^a-z0-9]/g, "-");
-                
-                link.download = `likenet-${cleanCategory}-${cleanAction}.png`;
-                link.href = canvas.toDataURL("image/png");
+                const link = document.createElement('a');
+                link.download = 'LIKENET_Broadcast_' + Date.now() + '.png';
+                link.href = canvas.toDataURL('image/png');
                 link.click();
-
-                // Kembalikan tombol ke keadaan semula
-                button.innerHTML = originalContent;
-                button.disabled = false;
-                showToast("Gambar pesan berhasil disimpan!");
+                showNotification("Gambar berhasil disimpan!", "success");
             }).catch(err => {
-                console.error("Gagal melakukan penangkapan gambar:", err);
-                outputBox.style.maxHeight = originalMaxHeight;
-                outputBox.style.overflow = originalOverflow;
-                
-                button.innerHTML = originalContent;
-                button.disabled = false;
-                showToast("Gagal menyimpan gambar.");
+                showNotification("Gagal menyimpan gambar", "error");
             });
         }
 
-        // Tampilkan Toast Notifikasi Kustom Tanpa Alert bawaan browser
-        function showToast(message) {
-            let toast = document.getElementById("custom-toast");
-            if (!toast) {
-                toast = document.createElement("div");
-                toast.id = "custom-toast";
-                toast.className = "fixed bottom-5 right-5 bg-slate-900 text-white font-semibold text-xs py-3 px-6 rounded-2xl shadow-xl border border-slate-700/50 transition-all duration-300 transform translate-y-10 opacity-0 z-50 flex items-center gap-2.5";
-                document.body.appendChild(toast);
-            }
-
-            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-sm animate-bounce"></i> <span>${message}</span>`;
-            toast.classList.remove("translate-y-10", "opacity-0");
-            toast.classList.add("translate-y-0", "opacity-100");
-
+        function showNotification(message, type) {
+            const notif = document.createElement("div");
+            notif.className = `fixed bottom-5 right-5 z-50 px-5 py-3 rounded-2xl shadow-xl text-white font-bold text-xs flex items-center gap-2 transition-all transform translate-y-0 ${type === 'success' ? 'bg-emerald-600' : 'bg-rose-600'}`;
+            notif.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'} text-sm"></i> ${message}`;
+            document.body.appendChild(notif);
             setTimeout(() => {
-                toast.classList.remove("translate-y-0", "opacity-100");
-                toast.classList.add("translate-y-10", "opacity-0");
+                notif.style.opacity = "0";
+                setTimeout(() => notif.remove(), 300);
             }, 3000);
         }
 
         // ==========================================
-        // FUNGSI KHUSUS GENERATOR INVOICE
+        // LOGIKA INVOICE
         // ==========================================
-
-        function formatRupiah(number) {
-            return new Intl.NumberFormat('id-ID').format(number);
-        }
-
-        const bulanIndoList = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
         function generateInvoiceNumber() {
             const now = new Date();
-            const dRaw = now.getDate();
-            const mRaw = now.getMonth() + 1;
+            const d = String(now.getDate()).padStart(2, '0');
+            const m = String(now.getMonth() + 1).padStart(2, '0');
             const y = now.getFullYear();
             const h = String(now.getHours()).padStart(2, '0');
             const min = String(now.getMinutes()).padStart(2, '0');
             const s = String(now.getSeconds()).padStart(2, '0');
             
-            const invNumber = `#LKJDN${dRaw}${mRaw}${y}${h}${min}${s}`;
-            
-            document.getElementById('invoiceNumberInput').value = invNumber;
-            document.getElementById('previewInvoiceNumber').innerText = invNumber;
+            const invNum = `#LKJDN${d}${m}${y}${h}${min}${s}`;
+            document.getElementById("invoiceNumberInput").value = invNum;
+            document.getElementById("previewInvoiceNumber").innerText = invNum;
+        }
+
+        function setDefaultDates() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("globalDateInput").value = today;
+            updateDates();
         }
 
         function updateDates() {
-            const dateInput = document.getElementById('globalDateInput').value;
-            if (!dateInput) return;
+            const val = document.getElementById("globalDateInput").value;
+            if (!val) return;
+            const formatted = formatDateNice(val);
+            document.getElementById("previewInvoiceDate").innerText = formatted;
+            document.getElementById("previewDueDate").innerText = formatted;
+            document.getElementById("previewPaymentDate").innerText = formatted;
+        }
 
-            const dateObj = new Date(dateInput);
-            const d = String(dateObj.getDate()).padStart(2, '0');
-            const m = bulanIndoList[dateObj.getMonth()];
-            const y = dateObj.getFullYear();
-            
-            const formattedDate = `${d} ${m} ${y}`;
-
-            document.getElementById('previewInvoiceDate').innerText = formattedDate;
-            document.getElementById('previewDueDate').innerText = formattedDate;
-            document.getElementById('previewPaymentDate').innerText = formattedDate;
+        function formatDateNice(dateStr) {
+            const d = new Date(dateStr);
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
         }
 
         function updateCustomerName() {
-            const name = document.getElementById('customerNameInput').value;
-            document.getElementById('previewCustomerName').innerText = name || 'NAMA PELANGGAN';
+            const name = document.getElementById("customerNameInput").value || "NAMA PELANGGAN";
+            document.getElementById("previewCustomerName").innerText = name;
         }
 
         function updatePackageDetails() {
-            const select = document.getElementById('packageSelect');
-            if (select.selectedIndex <= 0) return;
-            const option = select.options[select.selectedIndex];
+            const sel = document.getElementById("packageSelect");
+            const opt = sel.options[sel.selectedIndex];
+            const price = opt.getAttribute("data-price");
+            const text = opt.text;
+
+            document.getElementById("detailInput").value = text;
+            document.getElementById("amountInput.value") || (document.getElementById("amountInput").value = price);
             
-            const detailText = option.text.split(' - ')[0]; 
-            const price = parseInt(option.getAttribute('data-price'));
-
-            document.getElementById('detailInput').value = detailText;
-            document.getElementById('amountInput').value = formatRupiah(price);
-
-            applyToPreview(detailText, price);
+            updatePreviewFromManual();
         }
 
         function updatePreviewFromManual() {
-            const detailText = document.getElementById('detailInput').value;
-            const rawAmount = document.getElementById('amountInput').value.replace(/[^0-9]/g, '');
-            const price = rawAmount ? parseInt(rawAmount) : 0;
-            
-            if (rawAmount) {
-                document.getElementById('amountInput').value = formatRupiah(price);
-            }
+            const detail = document.getElementById("detailInput").value || "Pilih paket...";
+            let amountRaw = document.getElementById("amountInput").value.replace(/[^0-9]/g, '');
+            let amount = parseInt(amountRaw) || 0;
+            let formattedAmount = formatIDR(amount);
 
-            applyToPreview(detailText, price);
-        }
-
-        function applyToPreview(detail, price) {
-            const formattedPrice = formatRupiah(price);
-            
-            document.getElementById('previewDetail').innerText = detail || '-';
-            
-            document.getElementById('previewAmount1').innerText = formattedPrice;
-            document.getElementById('previewTotal1').innerText = formattedPrice;
-            
-            document.getElementById('previewAmount2').innerText = formattedPrice;
-            document.getElementById('previewTotal2').innerText = formattedPrice;
+            document.getElementById("previewDetail").innerText = detail;
+            document.getElementById("previewAmount1").innerText = formattedAmount;
+            document.getElementById("previewTotal1").innerText = formattedAmount;
+            document.getElementById("previewAmount2").innerText = formattedAmount;
+            document.getElementById("previewTotal2").innerText = formattedAmount;
         }
 
         function downloadInvoice() {
-            const btn = document.getElementById("btn-download-invoice");
-            const originalHtml = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Memproses...`;
-            btn.disabled = true;
-
-            const invoiceElement = document.getElementById('invoiceCanvas');
-            
-            html2canvas(invoiceElement, {
-                scale: 3, // Kualitas HD
+            const invCanvas = document.getElementById("invoiceCanvas");
+            html2canvas(invCanvas, {
+                scale: 2,
                 useCORS: true,
-                backgroundColor: "#ffffff",
-                logging: false
+                backgroundColor: "#ffffff"
             }).then(canvas => {
-                const link = document.createElement("a");
-                const invNumber = document.getElementById("previewInvoiceNumber").innerText.replace(/[^a-zA-Z0-9]/g, "");
-                link.download = `Invoice-${invNumber || 'Baru'}.jpg`;
-                link.href = canvas.toDataURL("image/jpeg", 0.95);
+                const link = document.createElement('a');
+                const invNum = document.getElementById("invoiceNumberInput").value || "Invoice";
+                link.download = invNum.replace(/#/g, '') + '.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.95);
                 link.click();
-                
-                btn.innerHTML = originalHtml;
-                btn.disabled = false;
-                showToast("Invoice berhasil diunduh!");
+                showNotification("Invoice berhasil diunduh (JPG)!", "success");
             }).catch(err => {
-                console.error("Gagal generate invoice:", err);
-                btn.innerHTML = originalHtml;
-                btn.disabled = false;
-                showToast("Gagal menyimpan invoice.");
-            });
-        }
-
-        // Jalankan saat halaman web sepenuhnya dimuat
-        window.onload = () => {
-            initCategoryDropdown();
-            // Inisialisasi nomor tagihan otomatis untuk menu invoice saat web dimuat
-            generateInvoiceNumber(); 
-        };
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('PWA ServiceWorker terdaftar dengan scope: ', registration.scope);
-                    })
-                    .catch(err => {
-                        console.log('PWA ServiceWorker gagal terdaftar: ', err);
-                    });
+                showNotification("Gagal mengunduh invoice", "error");
             });
         }
     </script>
