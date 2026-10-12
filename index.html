@@ -999,17 +999,35 @@
 
         function saveAsImage() {
             const captureTarget = document.getElementById("capture-target");
+            const textOutput = document.getElementById("whatsapp-text-output");
+            
+            // Simpan style lama
+            const oldMaxH = textOutput.style.maxHeight;
+            const oldOverflow = textOutput.style.overflowY;
+            
+            // Buka batasan tinggi agar seluruh teks render penuh tanpa terpotong
+            textOutput.style.maxHeight = 'none';
+            textOutput.style.overflowY = 'visible';
+
             html2canvas(captureTarget, {
                 scale: 2,
                 useCORS: true,
-                backgroundColor: null
+                backgroundColor: null,
+                windowWidth: captureTarget.scrollWidth,
+                windowHeight: captureTarget.scrollHeight
             }).then(canvas => {
+                // Kembalikan style lama
+                textOutput.style.maxHeight = oldMaxH;
+                textOutput.style.overflowY = oldOverflow;
+
                 const link = document.createElement('a');
                 link.download = 'LIKENET_Broadcast_' + Date.now() + '.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                showNotification("Gambar berhasil disimpan!", "success");
+                showNotification("Gambar berhasil disimpan secara penuh!", "success");
             }).catch(err => {
+                textOutput.style.maxHeight = oldMaxH;
+                textOutput.style.overflowY = oldOverflow;
                 showNotification("Gagal menyimpan gambar", "error");
             });
         }
