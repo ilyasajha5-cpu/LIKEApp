@@ -99,95 +99,38 @@
 <body class="min-h-screen flex flex-col text-slate-800">
 
     <header class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white shadow-lg border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="showHome()">
-                <img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" alt="Logo LIKENET" class="h-10 sm:h-12 w-auto object-contain drop-shadow-md">
-            </div>
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="showHome()" id="btn-nav-home" class="hidden bg-slate-800/80 hover:bg-slate-700 text-slate-200 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-700/50 flex items-center gap-2 shadow-sm">
-                    <i class="fa-solid fa-house text-blue-400"></i> <span class="hidden sm:inline">Beranda Utama</span>
-                </button>
-                <div class="flex items-center gap-2 bg-slate-800/50 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/50">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping absolute"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 relative"></span>
-                    <span class="text-[11px] sm:text-xs font-bold text-slate-200">Sistem Siap Kirim</span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="bg-blue-500/10 p-2.5 rounded-2xl border border-blue-500/20 shadow-inner">
+                    <i class="fa-solid fa-tower-broadcast text-xl text-blue-400 animate-pulse"></i>
                 </div>
+                <div class="text-center sm:text-left">
+                    <h1 class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-blue-300">LIKENET Broadcast</h1>
+                    <p class="text-[11px] text-slate-400 font-semibold uppercase tracking-widest mt-0.5">WhatsApp Customer Message Generator</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5 bg-slate-800/50 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/50">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping absolute"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 relative"></span>
+                <span class="text-xs font-bold text-slate-200">Sistem Siap Kirim</span>
             </div>
         </div>
     </header>
 
-    <div id="home-view" class="flex-grow max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 justify-center">
-        <!-- Banner Utama Beranda -->
-        <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-white shadow-2xl border border-slate-800/80 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 lg:gap-8">
-            <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -left-10 -top-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
-            
-            <div class="flex flex-col gap-4 max-w-2xl z-10 text-center md:text-left">
-                <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-400/30 px-3.5 py-1.5 rounded-full text-blue-300 text-xs font-extrabold self-center md:self-start backdrop-blur-md shadow-inner">
-                    <i class="fa-solid fa-bolt text-amber-400 animate-pulse"></i> Network Operations Center (NOC) & POP
-                </div>
-                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-                    Sistem Layanan & Generator <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300">LIKENET Broadcast</span>
-                </h2>
-                <p class="text-slate-300 text-xs sm:text-sm lg:text-base leading-relaxed font-medium">
-                    Pusat pengelolaan pesan WhatsApp otomatis, laporan jaringan, penagihan pelanggan, pembuatan invoice digital profesional, dan panduan setting router dalam satu platform terpadu.
-                </p>
-                <div class="pt-2 flex flex-col sm:flex-row gap-3 justify-center md:justify-start w-full sm:w-auto">
-                    <button onclick="openCategory('GANGGUAN ISP')" class="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center gap-2.5 text-xs sm:text-sm">
-                        <i class="fa-solid fa-paper-plane"></i> Mulai Buat Pesan
-                    </button>
-                    <button onclick="openCategory('BUAT INVOICE PELANGGAN')" class="w-full sm:w-auto justify-center bg-slate-800/90 hover:bg-slate-700 active:scale-95 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg border border-slate-700/80 transition-all flex items-center gap-2.5 text-xs sm:text-sm">
-                        <i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i> Buat Invoice
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Logo Java Digital Nusantara Utama di Banner Beranda (Tampilan Satu Logo Sahaja) -->
-            <div class="flex flex-col items-center justify-center z-10 bg-white/5 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl shrink-0 group hover:border-blue-500/30 transition-all duration-300">
-                <img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" alt="Logo Java Digital Nusantara" class="h-24 sm:h-32 md:h-36 w-auto object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null;this.src='https://placehold.co/200x80/002060/ffffff?text=LIKENET+Logo';">
-            </div>
-        </div>
-
-        <!-- Menu Grid Section Header & Category Cards -->
-        <div>
-            <div class="flex items-center justify-between mb-5 sm:mb-6">
-                <div>
-                    <h3 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
-                        <span class="w-2.5 h-6 bg-blue-600 rounded-full inline-block"></span>
-                        Pilih Menu & Layanan Utama
-                    </h3>
-                    <p class="text-xs text-slate-500 font-medium mt-1">Silakan pilih kategori operasional yang ingin Anda akses.</p>
-                </div>
-                <span class="text-xs font-extrabold bg-blue-50 text-blue-700 px-3.5 py-2 rounded-2xl border border-blue-100 shadow-sm shrink-0 flex items-center gap-1.5">
-                    <i class="fa-solid fa-layer-group text-blue-500"></i> <span id="category-count-badge">10 Kategori</span>
-                </span>
-            </div>
-
-            <div id="home-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
-                <!-- Diisi dinamis via JS dengan styling kartu yang baru -->
-            </div>
-        </div>
-    </div>
-
-    <main id="generator-view" class="hidden flex-grow max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         
         <!-- PANEL KONFIGURASI (KIRI) -->
         <section class="lg:col-span-5 flex flex-col gap-6">
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 flex flex-col h-full justify-between">
                 <div>
-                    <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-indigo-50 p-2 rounded-xl text-indigo-600">
-                                <i class="fa-solid fa-sliders text-lg"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-sm font-extrabold text-slate-800">Konfigurasi Penyiaran</h2>
-                                <p class="text-[11px] text-slate-400 font-medium">Pilih kategori dan lengkapi detail pesan.</p>
-                            </div>
+                    <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                        <div class="bg-indigo-50 p-2 rounded-xl text-indigo-600">
+                            <i class="fa-solid fa-sliders text-lg"></i>
                         </div>
-                        <button onclick="showHome()" class="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5">
-                            <i class="fa-solid fa-house"></i> Beranda
-                        </button>
+                        <div>
+                            <h2 class="text-sm font-extrabold text-slate-800">Konfigurasi Penyiaran</h2>
+                            <p class="text-[11px] text-slate-400 font-medium">Pilih kategori dan lengkapi detail pesan di bawah ini.</p>
+                        </div>
                     </div>
 
                     <div class="flex flex-col gap-5">
@@ -361,21 +304,21 @@
             </div>
 
             <!-- CONTAINER PREVIEW INVOICE -->
-            <div id="invoice-preview-container" class="hidden flex-grow bg-slate-200/50 rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-300 inv-preview-wrapper relative p-2 sm:p-4 items-start justify-center shadow-inner">
+            <div id="invoice-preview-container" class="hidden flex-grow bg-slate-200/50 rounded-3xl overflow-hidden border border-slate-300 inv-preview-wrapper relative p-4 items-start justify-center shadow-inner">
                 
-                <div id="invoiceCanvas" class="invoice-container flex flex-col p-6 sm:p-8 font-sans">
+                <div id="invoiceCanvas" class="invoice-container flex flex-col p-8 font-sans">
                     <!-- Paid Banner -->
                     <div class="paid-banner text-center shadow-md">PAID</div>
 
                     <!-- Header Section -->
                     <div class="flex justify-between items-center mb-6 relative">
                         <div class="flex items-center z-10">
-                            <img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" crossorigin="anonymous" alt="Logo LIKENET" class="h-14 sm:h-16 w-auto object-contain" onerror="this.onerror=null;this.src='https://placehold.co/160x50/002060/ffffff?text=LIKENET+Logo';">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9YxZmExUSVPn9ISpASTlwnst_DoTJaN0trYHdd29jtQ&s=10" crossorigin="anonymous" alt="Java Digital Nusantara Logo" class="h-16 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/160x50/002060/ffffff?text=JDN+Logo';">
                         </div>
                         <div class="text-right pr-20 z-10 mt-6">
-                            <h1 class="text-lg sm:text-xl font-bold text-black mb-1">PT. JAVA DIGITAL NUSANTARA</h1>
-                            <p class="text-xs sm:text-sm text-gray-800 font-medium">Network Operations Center (NOC) & POP</p>
-                            <p class="text-xs sm:text-sm text-gray-800 font-medium">Jember-Kalisat</p>
+                            <h1 class="text-xl font-bold text-black mb-1">PT. JAVA DIGITAL NUSANTARA</h1>
+                            <p class="text-sm text-gray-800 font-medium">Network Operations Center (NOC) & POP</p>
+                            <p class="text-sm text-gray-800 font-medium">Jember-Kalisat</p>
                         </div>
                     </div>
 
@@ -605,7 +548,7 @@
                     resolved: `Kami informasikan bahwa perbaikan *kabel putus* yang menuju ke rumah Bapak/ Ibu telah selesai.\n\nSaat ini koneksi sudah kembali normal dan dapat digunakan kembali.\n\nTerima kasih atas kesabaran dan pengertiannya.`
                 }
             },
-            "PENGINGAT TAGIHAN PELANGGAN": {
+            "TAGIHAN PELANGGAN (BROADCAST)": {
                 "Informasi Tagihan": {
                     fields: [],
                     statusSupport: false,
@@ -679,7 +622,7 @@
                     fields: [],
                     statusSupport: false,
                     isCustomDoc: true,
-                    initial: `<div class="text-center mb-6"><img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" alt="Logo LIKENET" class="h-16 sm:h-20 mx-auto object-contain mb-3" onerror="this.onerror=null;this.src='https://placehold.co/200x80/002060/ffffff?text=LIKENET+Logo';"></div>📜 <span class="highlight-bold">SYARAT DAN KETENTUAN BERLANGGANAN LAYANAN WI-FI</span>\nNIB: *1506220048174*\n\nDengan berlangganan layanan Wi-Fi Kami, pelanggan dianggap telah membaca, memahami, dan menyetujui syarat dan ketentuan berikut:\n\n📌 *PASAL 1 — BIAYA PEMASANGAN DAN INSTALASI*\n1️⃣ Biaya pemasangan awal sudah mencakup sewa modem Wi-Fi, kabel jaringan, perangkat pendukung, serta proses instalasi oleh tim teknisi kami.\n2️⃣ Setelah proses instalasi selesai, layanan internet akan diaktifkan dan dapat langsung digunakan.\n\n📌 *PASAL 2 — KETENTUAN PEMBAYARAN TAGIHAN*\n1️⃣ Pembayaran tagihan berlangganan wajib dilakukan setiap bulan pada tanggal *1 s.d. 5*, sesuai harga paket layanan yang telah disepakati.\n2️⃣ Pembayaran dapat dilakukan melalui:\n   • Pembayaran langsung di kantor kami\n   • Transfer ke rekening bank resmi (BCA / DANA)\n   • Layanan jemput tagihan oleh tim kami pada tanggal *3, 4 dan 5*\n3️⃣ Pelanggan wajib memastikan pembayaran dilakukan tepat waktu demi kelancaran layanan.\n\n📌 *PASAL 3 — KETERLAMBATAN PEMBAYARAN*\n1️⃣ Apabila pelanggan belum melakukan pembayaran hingga tanggal 5, layanan internet akan *terisolir/dinonaktifkan secara otomatis* oleh sistem pada pukul *21.00 WIB*.\n2️⃣ Khusus pelanggan yang telah berlangganan aktif lebih dari 6 bulan, layanan dapat tetap aktif apabila telah menyampaikan konfirmasi keterlambatan pembayaran sesuai ketentuan.\n3️⃣ Apabila hingga tanggal 10 pembayaran belum diterima dan tanpa konfirmasi, petugas berhak melakukan pemutusan kabel jaringan serta penarikan modem & seluruh perangkat pinjaman.\n\n📌 *PASAL 4 — PENANGGUHAN DAN PENGHENTIAN*\n1️⃣ Pengecualian penarikan perangkat dapat diberikan kepada pelanggan aktif (> 6 bulan) dengan mengonfirmasi penangguhan selama max *1 bulan*.\n2️⃣ Masa nonaktif sementara diberikan maksimal *30 hari kalender*.\n3️⃣ Apabila melebihi 30 hari, Kami berhak melakukan penarikan perangkat jaringan.\n\n📌 *PASAL 5 — PENGGANTIAN PERANGKAT*\n1️⃣ Penggantian modem Wi-Fi gratis diberikan apabila terjadi kerusakan alami (bukan kelalaian/kesengajaan) selama status berlangganan aktif.\n2️⃣ Penggantian tidak berlaku apabila kerusakan disebabkan oleh tindakan sengaja atau kelalaian penggunaan.\n\n📌 *PASAL 6 — LAYANAN GANGGUAN DAN PENGADUAN*\nApabila mengalami gangguan teknis atau kendala koneksi, pelanggan dapat langsung menghubungi Admin / NOC Pusat untuk bantuan penanganan.\n\n📌 *PASAL 7 — PERSETUJUAN PELANGGAN*\nDengan mendaftar dan menggunakan layanan internet Kami, pelanggan menyatakan telah memahami dan menyetujui seluruh ketentuan di atas.\n\n────────────────────────\n📞 *INFORMASI & CUSTOMER SERVICE*\n• WhatsApp Admin: *0852-3637-8731*\n\n_Terima kasih telah memilih Layanan WiFi Kami sebagai penyedia internet kepercayaan Anda._\n*Koneksi Andal, Layanan Terpercaya.*`
+                    initial: `<div class="text-center mb-6"><img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" alt="Logo PT Java Digital Nusantara" class="h-20 mx-auto object-contain mb-3" onerror="this.onerror=null;this.src='https://placehold.co/200x80/002060/ffffff?text=JDN+Logo';"></div>📜 <span class="highlight-bold">SYARAT DAN KETENTUAN BERLANGGANAN LAYANAN WI-FI</span>\nNIB: *1506220048174*\n\nDengan berlangganan layanan Wi-Fi Kami, pelanggan dianggap telah membaca, memahami, dan menyetujui syarat dan ketentuan berikut:\n\n📌 *PASAL 1 — BIAYA PEMASANGAN DAN INSTALASI*\n1️⃣ Biaya pemasangan awal sudah mencakup sewa modem Wi-Fi, kabel jaringan, perangkat pendukung, serta proses instalasi oleh tim teknisi kami.\n2️⃣ Setelah proses instalasi selesai, layanan internet akan diaktifkan dan dapat langsung digunakan.\n\n📌 *PASAL 2 — KETENTUAN PEMBAYARAN TAGIHAN*\n1️⃣ Pembayaran tagihan berlangganan wajib dilakukan setiap bulan pada tanggal *1 s.d. 5*, sesuai harga paket layanan yang telah disepakati.\n2️⃣ Pembayaran dapat dilakukan melalui:\n   • Pembayaran langsung di kantor kami\n   • Transfer ke rekening bank resmi (BCA / DANA)\n   • Layanan jemput tagihan oleh tim kami pada tanggal *3, 4 dan 5*\n3️⃣ Pelanggan wajib memastikan pembayaran dilakukan tepat waktu demi kelancaran layanan.\n\n📌 *PASAL 3 — KETERLAMBATAN PEMBAYARAN*\n1️⃣ Apabila pelanggan belum melakukan pembayaran hingga tanggal 5, layanan internet akan *terisolir/dinonaktifkan secara otomatis* oleh sistem pada pukul *21.00 WIB*.\n2️⃣ Khusus pelanggan yang telah berlangganan aktif lebih dari 6 bulan, layanan dapat tetap aktif apabila telah menyampaikan konfirmasi keterlambatan pembayaran sesuai ketentuan.\n3️⃣ Apabila hingga tanggal 10 pembayaran belum diterima dan tanpa konfirmasi, petugas berhak melakukan pemutusan kabel jaringan serta penarikan modem & seluruh perangkat pinjaman.\n\n📌 *PASAL 4 — PENANGGUHAN DAN PENGHENTIAN*\n1️⃣ Pengecualian penarikan perangkat dapat diberikan kepada pelanggan aktif (> 6 bulan) dengan mengonfirmasi penangguhan selama max *1 bulan*.\n2️⃣ Masa nonaktif sementara diberikan maksimal *30 hari kalender*.\n3️⃣ Apabila melebihi 30 hari, Kami berhak melakukan penarikan perangkat jaringan.\n\n📌 *PASAL 5 — PENGGANTIAN PERANGKAT*\n1️⃣ Penggantian modem Wi-Fi gratis diberikan apabila terjadi kerusakan alami (bukan kelalaian/kesengajaan) selama status berlangganan aktif.\n2️⃣ Penggantian tidak berlaku apabila kerusakan disebabkan oleh tindakan sengaja atau kelalaian penggunaan.\n\n📌 *PASAL 6 — LAYANAN GANGGUAN DAN PENGADUAN*\nApabila mengalami gangguan teknis atau kendala koneksi, pelanggan dapat langsung menghubungi Admin / NOC Pusat untuk bantuan penanganan.\n\n📌 *PASAL 7 — PERSETUJUAN PELANGGAN*\nDengan mendaftar dan menggunakan layanan internet Kami, pelanggan menyatakan telah memahami dan menyetujui seluruh ketentuan di atas.\n\n────────────────────────\n📞 *INFORMASI & CUSTOMER SERVICE*\n• WhatsApp Admin: *0852-3637-8731*\n\n_Terima kasih telah memilih Layanan WiFi Kami sebagai penyedia internet kepercayaan Anda._\n*Koneksi Andal, Layanan Terpercaya.*`
                 }
             },
             "LAPORAN TAGIHAN PELANGGAN": {
@@ -749,8 +692,7 @@
                 "Router China Mobile F663": { fields: [], statusSupport: false, initial: "" },
                 "Router F477": { fields: [], statusSupport: false, initial: "" },
                 "Router F609": { fields: [], statusSupport: false, initial: "" },
-                "Router Zimmlink ZL-2113X": { fields: [], statusSupport: false, initial: "" },
-                "Panduan Integrasi MikroTik & The Dude": { fields: [], statusSupport: false, initial: "" }
+                "Router Zimmlink ZL-2113X": { fields: [], statusSupport: false, initial: "" }
             },
             "LAYANAN LAINNYA": {
                 "Layanan Teknisi": { fields: [], statusSupport: false, initial: "" },
@@ -766,12 +708,10 @@
 
         // Inisialisasi awal saat halaman dimuat
         window.onload = function() {
-            initHomeCategories();
             initCategoryDropdown();
             updateActionDropdown();
             generateInvoiceNumber();
             setDefaultDates();
-            showHome();
 
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
@@ -781,80 +721,6 @@
                 });
             }
         };
-
-        function showHome() {
-            document.getElementById("home-view").classList.remove("hidden");
-            document.getElementById("generator-view").classList.add("hidden");
-            document.getElementById("btn-nav-home").classList.add("hidden");
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function openCategory(catName) {
-            currentCategory = catName;
-            const actions = Object.keys(configTemplates[currentCategory]);
-            currentAction = actions[0] || "";
-            dynamicValues = {};
-
-            document.getElementById("home-view").classList.add("hidden");
-            document.getElementById("generator-view").classList.remove("hidden");
-            document.getElementById("generator-view").classList.add("grid");
-            document.getElementById("btn-nav-home").classList.remove("hidden");
-
-            initCategoryDropdown();
-            updateActionDropdown();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        const categoryIcons = {
-            "GANGGUAN ISP": { icon: "fa-tower-cell", desc: "Pesan informasi gangguan backbone & link ISP pusat.", badge: "NOC ISP", badgeColor: "bg-red-50 text-red-600 border-red-100" },
-            "GANGGUAN SERVER LOKAL": { icon: "fa-server", desc: "Broadcast pemeliharaan, kelistrikan, dan perbaikan server.", badge: "Server", badgeColor: "bg-amber-50 text-amber-600 border-amber-100" },
-            "GANGGUAN PELANGGAN": { icon: "fa-user-slash", desc: "Informasi gangguan kabel putus & penanganan wilayah.", badge: "Teknis", badgeColor: "bg-orange-50 text-orange-600 border-orange-100" },
-            "PENGINGAT TAGIHAN PELANGGAN": { icon: "fa-file-invoice-dollar", desc: "Pemberitahuan tagihan, isolir, dan metode pembayaran.", badge: "Billing", badgeColor: "bg-blue-50 text-blue-600 border-blue-100" },
-            "USER GET USER": { icon: "fa-users", desc: "Informasi bonus referal pelanggan baru.", badge: "Promo", badgeColor: "bg-purple-50 text-purple-600 border-purple-100" },
-            "PELANGGAN BARU (INFORMASI TERKAIT LAYANAN)": { icon: "fa-user-plus", desc: "Panduan awal, syarat & ketentuan, serta konfirmasi layanan.", badge: "Onboarding", badgeColor: "bg-emerald-50 text-emerald-600 border-emerald-100" },
-            "LAPORAN TAGIHAN PELANGGAN": { icon: "fa-file-excel", desc: "Generate laporan Excel lunas, belum lunas, isolir & baru.", badge: "Laporan", badgeColor: "bg-teal-50 text-teal-600 border-teal-100" },
-            "BUAT INVOICE PELANGGAN": { icon: "fa-receipt", desc: "Buat & unduh invoice pembayaran resmi berstempel PAID.", badge: "Keuangan", badgeColor: "bg-indigo-50 text-indigo-600 border-indigo-100" },
-            "SETTING ROUTER": { icon: "fa-router", desc: "Panduan gambar setting berbagai jenis router modem.", badge: "Panduan", badgeColor: "bg-cyan-50 text-cyan-600 border-cyan-100" },
-            "LAYANAN LAINNYA": { icon: "fa-circle-info", desc: "Informasi teknisi, rekening pembayaran, dan bantuan.", badge: "Bantuan", badgeColor: "bg-slate-100 text-slate-700 border-slate-200" }
-        };
-
-        function initHomeCategories() {
-            const grid = document.getElementById("home-categories-grid");
-            grid.innerHTML = "";
-            const categories = Object.keys(configTemplates);
-
-            const countBadge = document.getElementById("category-count-badge");
-            if (countBadge) countBadge.innerText = `${categories.length} Kategori`;
-
-            categories.forEach(cat => {
-                const info = categoryIcons[cat] || { icon: "fa-folder", desc: "Kelola layanan kategori ini.", badge: "Umum", badgeColor: "bg-slate-50 text-slate-600 border-slate-100" };
-                const card = document.createElement("div");
-                card.className = "bg-white p-6 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 border border-slate-200/90 hover:border-blue-500/40 transition-all duration-300 flex flex-col justify-between group cursor-pointer relative overflow-hidden";
-                card.onclick = () => openCategory(cat);
-                card.innerHTML = `
-                    <div class="absolute top-0 left-0 w-1.5 h-full bg-transparent group-hover:bg-blue-600 transition-colors"></div>
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 rounded-2xl bg-blue-50 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center text-xl transition-all duration-300 shadow-sm">
-                                <i class="fa-solid ${info.icon}"></i>
-                            </div>
-                            <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-xl border ${info.badgeColor} tracking-wider uppercase">${info.badge}</span>
-                        </div>
-                        <h4 class="text-sm sm:text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors mb-2 leading-snug">${cat}</h4>
-                        <p class="text-xs text-slate-500 font-medium leading-relaxed">${info.desc}</p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-blue-600">
-                        <span class="flex items-center gap-1.5 group-hover:translate-x-1.5 transition-transform">
-                            Buka Layanan <i class="fa-solid fa-arrow-right text-[11px]"></i>
-                        </span>
-                        <span class="text-[11px] text-slate-400 group-hover:text-blue-500 font-semibold transition-colors">
-                            <i class="fa-regular fa-circle-check"></i> Siap
-                        </span>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
 
         function initCategoryDropdown() {
             const catSelect = document.getElementById("category-select");
@@ -867,13 +733,13 @@
                 catSelect.appendChild(opt);
             });
 
-            catSelect.onchange = function(e) {
+            catSelect.addEventListener("change", function(e) {
                 currentCategory = e.target.value;
                 const actions = Object.keys(configTemplates[currentCategory]);
                 currentAction = actions[0] || "";
                 dynamicValues = {};
                 updateActionDropdown();
-            };
+            });
         }
 
         function updateActionDropdown() {
@@ -957,7 +823,6 @@
             "Router F477": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20F477.jpeg",
             "Router F609": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20F609.jpeg",
             "Router Zimmlink ZL-2113X": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20Zimmlink.jpeg",
-            "Panduan Integrasi MikroTik & The Dude": "https://placehold.co/600x400/0c2454/ffffff?text=Panduan+Integrasi+MikroTik+%26+The+Dude",
             "Layanan Teknisi": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Layanan%20Teknisi.png",
             "Layanan WiFi Tidak Bisa Akses/ Lemot": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Wifi%20Tidak%20bisa%20di%20Akses%20atau%20Lemot.jpeg",
             "Daftar Rekening": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Daftar%20Nomor%20Rekening.jpeg"
@@ -967,22 +832,12 @@
             const imgEl = document.getElementById("router-image-preview");
             const labelEl = document.getElementById("router-name-label");
             labelEl.innerText = currentAction;
-            
-            if (currentAction === "Panduan Integrasi MikroTik & The Dude") {
-                // Tampilkan custom info card atau gambar khusus untuk integrasi
-                imgEl.src = "https://placehold.co/600x400/0c2454/ffffff?text=Integrasi+MikroTik+%26+The+Dude+Server";
-            } else {
-                const imgUrl = routerImages[currentAction] || "https://placehold.co/600x400/0c2454/ffffff?text=Panduan+Tidak+Tersedia";
-                imgEl.src = imgUrl;
-            }
+            const imgUrl = routerImages[currentAction] || "https://placehold.co/600x400/0c2454/ffffff?text=Panduan+Tidak+Tersedia";
+            imgEl.src = imgUrl;
         }
 
         function downloadRouterImage() {
             const container = document.getElementById("router-preview-container");
-            if (currentAction === "Panduan Integrasi MikroTik & The Dude") {
-                showNotification("Panduan Integrasi dapat dibaca langsung pada ringkasan teknis.", "success");
-                return;
-            }
             html2canvas(container, {
                 scale: 2,
                 useCORS: true,
@@ -1144,6 +999,7 @@
                 return;
             }
 
+            // Fungsi pembantu untuk mendeteksi key kolom secara fleksibel (case-insensitive)
             function findKey(sampleObj, keywords) {
                 const keys = Object.keys(sampleObj);
                 for (let kw of keywords) {
@@ -1153,6 +1009,7 @@
                 return null;
             }
 
+            // Fungsi untuk format nominal angka/paket dengan titik (.)
             function formatPackageValue(val) {
                 if (!val && val !== 0) return "";
                 let str = String(val);
@@ -1168,6 +1025,7 @@
             const sample = rows[0];
             const nameKey = findKey(sample, ["nama", "customer", "pelanggan"]) || Object.keys(sample)[0];
             const statusKey = findKey(sample, ["status", "keterangan_status", "ket_status", "bayar"]) || Object.keys(sample)[1];
+            // Mengutamakan pencarian kolom TOTAL untuk paket/nominal layanan
             const paketKey = findKey(sample, ["total", "paket", "layanan", "detail"]) || null;
             const telpKey = findKey(sample, ["telp", "hp", "whatsapp", "wa", "kontak"]) || null;
             const alamatKey = findKey(sample, ["alamat", "add", "lokasi", "rt", "rw"]) || null;
@@ -1214,12 +1072,6 @@
                     let val = String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase();
                     return val === "DOUBLE";
                 });
-            } else if (reportType === "pppoe_aktif") {
-                titleText = "🟢 LAPORAN PPPoE AKTIF / ONLINE (MIKROTIK)";
-                filteredRows = rows;
-            } else if (reportType === "pppoe_secret") {
-                titleText = "👥 LAPORAN PPPoE SECRET / TERDAFTAR (MIKROTIK)";
-                filteredRows = rows;
             }
 
             let reportOutput = `📋 *${titleText}*\n`;
@@ -1231,20 +1083,24 @@
                 reportOutput += `_Tidak ada data pelanggan dengan status ini._\n\n`;
             } else {
                 filteredRows.forEach((row, idx) => {
-                    let nameKeyFound = findKey(row, ["name", "nama", "customer", "pelanggan"]) || Object.keys(row)[0];
-                    let name = row[nameKeyFound] || `Pelanggan ${idx + 1}`;
+                    let name = row[nameKey] || `Pelanggan ${idx + 1}`;
+                    let alamat = alamatKey && row[alamatKey] !== undefined && row[alamatKey] !== "" ? ` | ${row[alamatKey]}` : "";
+                    let petugas = petugasKey && row[petugasKey] !== undefined && row[petugasKey] !== "" ? ` | ${row[petugasKey]}` : "";
                     
-                    let ipKey = findKey(row, ["address", "ip", "caller-id", "caller_id"]) || "";
-                    let ipInfo = ipKey && row[ipKey] !== undefined && row[ipKey] !== "" ? ` | IP/MAC: ${row[ipKey]}` : "";
+                    let rawStatus = row[statusKey];
+                    let status = rawStatus !== undefined && rawStatus !== "" ? rawStatus : "-";
                     
-                    let uptimeKey = findKey(row, ["uptime", "time", "durasi"]) || "";
-                    let uptimeInfo = uptimeKey && row[uptimeKey] !== undefined && row[uptimeKey] !== "" ? ` | Uptime: ${row[uptimeKey]}` : "";
+                    let paketVal = paketKey && row[paketKey] !== undefined ? formatPackageValue(row[paketKey]) : "";
+                    let paketInfo = paketVal ? ` | Paket: ${paketVal}` : "";
                     
-                    let statusVal = statusKey && row[statusKey] !== undefined ? row[statusKey] : "ONLINE";
-                    let statusInfo = reportType.includes("pppoe") ? `Status: <span class="highlight-bold">ONLINE</span>` : `Status: <span class="highlight-red">${statusVal}</span>`;
+                    let telpVal = telpKey && row[telpKey] !== undefined ? row[telpKey] : "";
+                    let telpInfo = telpVal ? ` | No. HP: ${telpVal}` : "";
+                    
+                    let ketVal = keteranganKey && row[keteranganKey] !== undefined && row[keteranganKey] !== "" ? row[keteranganKey] : "";
+                    let ketInfo = ketVal ? ` | ${ketVal}` : "";
 
-                    reportOutput += `${idx + 1}. *${name}*${ipInfo}${uptimeInfo}\n`;
-                    reportOutput += `   ${statusInfo}\n\n`;
+                    reportOutput += `${idx + 1}. *${name}*${alamat}${petugas}\n`;
+                    reportOutput += `   Status: <span class="highlight-red">${status}</span>${paketInfo}${telpInfo}${ketInfo}\n\n`;
                 });
             }
 
@@ -1286,6 +1142,7 @@
                 template = actionConfig.initial;
             }
 
+            // Replace dynamic placeholders
             if (actionConfig.fields) {
                 actionConfig.fields.forEach(field => {
                     let val = dynamicValues[field.key] !== undefined ? dynamicValues[field.key] : field.default;
@@ -1312,12 +1169,14 @@
                 });
             }
 
+            // Fallback jika placeholder bulan_tagihan_upper masih ada
             if (template.includes("{bulan_tagihan_upper}")) {
                 let defaultDate = dynamicValues["tanggal_mulai"] || new Date().toISOString().split('T')[0];
                 let monthName = getMonthNameUpperFromDate(defaultDate);
                 template = template.replace(/{bulan_tagihan_upper}/g, monthName);
             }
 
+            // Mengonversi format asterisk *teks* menjadi <span class="highlight-bold">teks</span> agar bintang tidak muncul di layar preview
             let formattedDisplay = template.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
 
             const outputDiv = document.getElementById("whatsapp-text-output");
@@ -1339,16 +1198,19 @@
         function copyToClipboard() {
             const outputDiv = document.getElementById("whatsapp-text-output");
             
+            // Konversi HTML span tebal kembali ke format *teks* WhatsApp saat disalin ke clipboard
             let htmlContent = outputDiv.innerHTML;
             let tempDiv = document.createElement("div");
             tempDiv.innerHTML = htmlContent;
             
+            // Ubah tag span highlight-bold menjadi format *teks*
             tempDiv.querySelectorAll('.highlight-bold').forEach(el => {
                 el.outerHTML = `*${el.innerText}*`;
             });
 
             let textToCopy = tempDiv.innerText;
 
+            // Menggunakan document.execCommand untuk kompatibilitas iFrame
             const textArea = document.createElement("textarea");
             textArea.value = textToCopy;
             document.body.appendChild(textArea);
@@ -1366,9 +1228,11 @@
             const captureTarget = document.getElementById("capture-target");
             const textOutput = document.getElementById("whatsapp-text-output");
             
+            // Simpan style lama
             const oldMaxH = textOutput.style.maxHeight;
             const oldOverflow = textOutput.style.overflowY;
             
+            // Buka batasan tinggi agar seluruh teks render penuh tanpa terpotong
             textOutput.style.maxHeight = 'none';
             textOutput.style.overflowY = 'visible';
 
@@ -1379,6 +1243,7 @@
                 windowWidth: captureTarget.scrollWidth,
                 windowHeight: captureTarget.scrollHeight
             }).then(canvas => {
+                // Kembalikan style lama
                 textOutput.style.maxHeight = oldMaxH;
                 textOutput.style.overflowY = oldOverflow;
 
@@ -1455,7 +1320,7 @@
             const text = opt.text;
 
             document.getElementById("detailInput").value = text;
-            document.getElementById("amountInput").value = price;
+            document.getElementById("amountInput.value") || (document.getElementById("amountInput").value = price);
             
             updatePreviewFromManual();
         }
