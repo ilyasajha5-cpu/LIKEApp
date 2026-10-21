@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App LIKENET Broadcast - Generator Pesan & Layanan</title>
-    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0c2454">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,10 +11,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- html2canvas library for high-quality screenshot generation -->
+    <!-- html2canvas library for screenshot generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- SheetJS (xlsx) Library for parsing Excel files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
@@ -97,7 +97,6 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
-
     <header class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white shadow-lg border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3.5">
@@ -132,7 +131,6 @@
                             <p class="text-[11px] text-slate-400 font-medium">Pilih kategori dan lengkapi detail pesan di bawah ini.</p>
                         </div>
                     </div>
-
                     <div class="flex flex-col gap-5">
                         <!-- KATEGORI UTAMA -->
                         <div class="glow-border rounded-xl">
@@ -146,7 +144,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- DETAIL KEJADIAN / AKSI -->
                         <div id="wa-action-container" class="glow-border rounded-xl">
                             <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Pilih Detail Kejadian / Aksi</label>
@@ -159,10 +156,8 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- TEXTBOX INPUT DINAMIS -->
                         <div id="dynamic-inputs-container" class="flex flex-col gap-4"></div>
-
                         <!-- PILIHAN STATUS -->
                         <div id="status-toggle-container" class="hidden">
                             <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Status Laporan Jaringan</label>
@@ -175,7 +170,6 @@
                                 </button>
                             </div>
                         </div>
-
                         <!-- ROUTER & LAYANAN LAINNYA FORM CONTAINER -->
                         <div id="router-form-container" class="hidden flex-col gap-5 mt-2">
                             <div class="bg-blue-50 border border-blue-100 text-blue-800 rounded-2xl p-4 text-xs leading-relaxed">
@@ -188,7 +182,6 @@
                                 </button>
                             </div>
                         </div>
-
                         <!-- INVOICE FORM CONTAINER -->
                         <div id="invoice-form-container" class="hidden flex-col gap-5 mt-2">
                             <!-- Nomor Invoice -->
@@ -196,25 +189,22 @@
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Nomor Invoice</label>
                                 <div class="flex gap-2">
                                     <input type="text" id="invoiceNumberInput" readonly class="w-full p-3 bg-slate-100 border border-slate-200 rounded-xl text-sm font-bold text-slate-600 focus:outline-none" placeholder="#LKJDN...">
-                                    <button onclick="generateInvoiceNumber()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-all shadow-sm">
+                                    <button onclick="generateInvoiceNumber()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-bold transition-all shadow-sm" title="Generate Ulang Nomor Invoice">
                                         <i class="fas fa-sync-alt"></i>
                                     </button>
                                 </div>
                                 <p class="text-[10px] text-slate-400 mt-1">Format: #LKJDN + DDMMYYYYHHMMSS</p>
                             </div>
-
                             <!-- Tanggal -->
                             <div class="glow-border rounded-xl">
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Tanggal (Invoice, Due, Payment)</label>
                                 <input type="date" id="globalDateInput" onchange="updateDates()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-
                             <!-- Nama Pelanggan -->
                             <div class="glow-border rounded-xl">
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Nama Pelanggan (TO)</label>
                                 <input type="text" id="customerNameInput" oninput="updateCustomerName()" placeholder="Masukkan Nama Pelanggan" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase">
                             </div>
-
                             <!-- Pilih Paket -->
                             <div class="glow-border rounded-xl">
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Pilih Paket Layanan</label>
@@ -232,7 +222,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Override Manual -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="glow-border rounded-xl">
@@ -244,7 +233,6 @@
                                     <input type="text" id="amountInput" oninput="updatePreviewFromManual()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-right" placeholder="0">
                                 </div>
                             </div>
-
                             <!-- Tombol Download Invoice -->
                             <div class="mt-4 pt-4 border-t border-slate-100">
                                 <button onclick="downloadInvoice()" id="btn-download-invoice" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
@@ -252,12 +240,10 @@
                                 </button>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
                 <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
-                    <span>LIKENET Broadcast v1.3</span>
+                    <span>LIKENET Broadcast v1.5</span>
                     <span class="flex items-center gap-1"><i class="fa-solid fa-code"></i> Developed for efficiency</span>
                 </div>
             </div>
@@ -284,13 +270,11 @@
                     </button>
                 </div>
             </div>
-
             <!-- Petunjuk Pengeditan Langsung -->
             <div id="wa-preview-tips" class="bg-blue-50 border border-blue-100 text-blue-800 rounded-2xl p-3 mb-3 text-xs flex items-start gap-2.5">
                 <i class="fa-solid fa-lightbulb text-blue-600 mt-0.5"></i>
                 <span><strong>Tips:</strong> Anda dapat mengubah atau menambahkan detail teks secara langsung pada kotak putih di bawah ini sebelum menyalin atau menyimpannya.</span>
             </div>
-
             <!-- Container Capture dengan background gelap elegan -->
             <div id="capture-target" class="bg-gradient-to-br from-[#0c2454] to-[#061430] rounded-3xl p-6 lg:p-8 shadow-xl flex-grow flex items-center justify-center border border-slate-800">
                 <!-- Kotak Pesan WA Putih Bersih -->
@@ -302,18 +286,16 @@
                     <!-- Isi teks ter-render dinamis oleh script -->
                 </div>
             </div>
-
             <!-- CONTAINER PREVIEW INVOICE -->
             <div id="invoice-preview-container" class="hidden flex-grow bg-slate-200/50 rounded-3xl overflow-hidden border border-slate-300 inv-preview-wrapper relative p-4 items-start justify-center shadow-inner">
                 
                 <div id="invoiceCanvas" class="invoice-container flex flex-col p-8 font-sans">
                     <!-- Paid Banner -->
                     <div class="paid-banner text-center shadow-md">PAID</div>
-
                     <!-- Header Section -->
                     <div class="flex justify-between items-center mb-6 relative">
                         <div class="flex items-center z-10">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9YxZmExUSVPn9ISpASTlwnst_DoTJaN0trYHdd29jtQ&s=10" crossorigin="anonymous" alt="Java Digital Nusantara Logo" class="h-16 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/160x50/002060/ffffff?text=JDN+Logo';">
+                            <img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" crossorigin="anonymous" alt="Java Digital Nusantara Logo" class="h-16 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/160x50/002060/ffffff?text=JDN+Logo';">
                         </div>
                         <div class="text-right pr-20 z-10 mt-6">
                             <h1 class="text-xl font-bold text-black mb-1">PT. JAVA DIGITAL NUSANTARA</h1>
@@ -321,7 +303,6 @@
                             <p class="text-sm text-gray-800 font-medium">Jember-Kalisat</p>
                         </div>
                     </div>
-
                     <!-- Invoice Info Box -->
                     <div class="border border-blue-900 rounded-sm p-4 mb-8 flex items-start bg-white">
                         <div class="mr-6 text-blue-900">
@@ -346,13 +327,11 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Customer Info -->
                     <div class="mb-4">
                         <h2 class="text-xl font-bold text-black mb-1">TO</h2>
                         <div id="previewCustomerName" class="text-2xl font-bold text-blue-900 uppercase">NAMA PELANGGAN</div>
                     </div>
-
                     <!-- Details Table -->
                     <table class="w-full mb-8 border-collapse">
                         <thead>
@@ -376,7 +355,6 @@
                             </tr>
                         </tbody>
                     </table>
-
                     <!-- Transaction Table -->
                     <div class="mb-2">
                         <h3 class="text-md font-bold text-blue-900 uppercase">TRANSACTION</h3>
@@ -403,7 +381,6 @@
                             </tr>
                         </tbody>
                     </table>
-
                     <!-- Footer / Note Section -->
                     <div class="mt-4 pt-4 border-t border-gray-300">
                         <div class="flex items-start mb-4">
@@ -423,9 +400,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
             <!-- CONTAINER PREVIEW ROUTER & LAYANAN LAINNYA -->
             <div id="router-preview-container" class="hidden flex-grow bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 relative p-6 items-center justify-center shadow-inner min-h-[500px]">
                 <img id="router-image-preview" src="" crossorigin="anonymous" alt="Panduan Gambar" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl transition-all duration-300" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0c2454/ffffff?text=Gagal+Memuat+Gambar';">
@@ -434,6 +409,25 @@
     </main>
 
     <script>
+        // Helper untuk memformat tanggal YYYY-MM-DD menjadi DD-MM-YYYY
+        function formatDateToDDMMYYYY(dateStr) {
+            if (!dateStr) return "";
+            if (dateStr.includes("-")) {
+                const parts = dateStr.split("-");
+                if (parts.length === 3 && parts[0].length === 4) {
+                    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+                }
+            }
+            const d = new Date(dateStr);
+            if (!isNaN(d.getTime())) {
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `${day}-${month}-${year}`;
+            }
+            return dateStr;
+        }
+
         const configTemplates = {
             "GANGGUAN ISP": {
                 "Jadwal Maintenance": {
@@ -492,7 +486,7 @@
                 },
                 "Update Perangkat/ Firmware": {
                     fields: [
-                        { key: "jadwal", label: "Jadwal Kegiatan", default: "Senin, 8 Januari 2026" }
+                        { key: "jadwal", label: "Jadwal Kegiatan", default: "08-01-2026" }
                     ],
                     statusSupport: true,
                     initial: `Kami informasikan akan dilakukan urgent maintenance/ perbaikan pada server lokal kami guna meningkatkan kualitas layanan dan kestabilan koneksi internet.\n\nDetail kegiatan:\nJadwal : *{jadwal}*\nProses : *Update perangkat/firmware server lokal*\nEstimasi : *± 1–2 jam atau hingga proses selesai*\n\nSelama proses berlangsung, koneksi internet akan mengalami terputus atau intermittent.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\n\nMohon maaf atas ketidaknyamanan yang terjadi.\nTerima kasih.`,
@@ -548,11 +542,11 @@
                     resolved: `Kami informasikan bahwa perbaikan *kabel putus* yang menuju ke rumah Bapak/ Ibu telah selesai.\n\nSaat ini koneksi sudah kembali normal dan dapat digunakan kembali.\n\nTerima kasih atas kesabaran dan pengertiannya.`
                 }
             },
-            "TAGIHAN PELANGGAN (BROADCAST)": {
+            "PENGINGAT TAGIHAN": {
                 "Informasi Tagihan": {
                     fields: [],
                     statusSupport: false,
-                    initial: `PEMBERITAHUAN TAGIHAN WI-FI\n\nYth. Pelanggan Wi-Fi\n\nKami mengingatkan bahwa batas akhir pembayaran tagihan adalah setiap *tanggal 5*.\n\nPembayaran dapat dilakukan melalui :\n\n*Via Transfer Bank*\n- BCA : *3340297287*\na.n. Mohamad Ilyasi\n- DANA : *085236378731*\na.n. Mohamad Ilyasi\n\nKirim bukti transfer ke Whatsapp Admin:\n*0852-3637-8731*\n\n*Datang langsung ke kantor kami*\n\n*Dijemput oleh petugas pada tanggal 1-5 setiap bulan*\n\n*Perhatian:*\nApabila terjadi keterlambatan pembayaran tanpa konfirmasi ke Admin, maka layanan internet di rumah Anda akan otomatis *terisolir/ dimatikan sementara* oleh sistem.\n\nBagi pelanggan yang sudah membayar, atau baru aktif bergabung bulan ini, silahkan abaikan pesan ini.\n\nTerima kasih atas kerja samanya.`
+                    initial: `PEMBERITAHUAN TAGIHAN WI-FI\n\nYth. Pelanggan Wi-Fi\n\nKami mengingatkan bahwa batas akhir pembayaran tagihan adalah setiap *tanggal 05*.\n\nPembayaran dapat dilakukan melalui :\n\n*Via Transfer Bank*\n- BCA : *3340297287*\na.n. Mohamad Ilyasi\n- DANA : *085236378731*\na.n. Mohamad Ilyasi\n\nKirim bukti transfer ke Whatsapp Admin:\n*0852-3637-8731*\n\n*Datang langsung ke kantor kami*\n\n*Dijemput oleh petugas pada tanggal 01-05 setiap bulan*\n\n*Perhatian:*\nApabila terjadi keterlambatan pembayaran tanpa konfirmasi ke Admin, maka layanan internet di rumah Anda akan otomatis *terisolir/ dimatikan sementara* oleh sistem.\n\nBagi pelanggan yang sudah membayar, atau baru aktif bergabung bulan ini, silahkan abaikan pesan ini.\n\nTerima kasih atas kerja samanya.`
                 },
                 "Konfirmasi Tagihan Pelanggan": {
                     fields: [],
@@ -562,21 +556,21 @@
                 "ISOLIR Pelanggan": {
                     fields: [],
                     statusSupport: false,
-                    initial: `Kami informasikan bahwa Layanan Wi-Fi Anda saat ini *terisolir atau di matikan sementara* secara otomatis oleh sistem kami.\n\nMohon untuk melakukan Pembayaran Tagihan agar Wi-Fi Anda Kembali normal.\n\nUntuk menghindari ketidanyamanan ini dikemudian hari, mohon untuk melakukan Pembayaran tepat waktu *sebelum tanggal 5* setiap bulannya.\n\nMohon kerja samanya,\nTerima kasih.\n\nHormat kami,\n*Admin Layanan Wi-Fi*\n\nJika Anda sudah melakukan pembayaran, kirim bukti transfer ke WhatsApp Admin: *0852-3637-8731*.`
+                    initial: `Kami informasikan bahwa Layanan Wi-Fi Anda saat ini *terisolir atau di matikan sementara* secara otomatis oleh sistem kami.\n\nMohon untuk melakukan Pembayaran Tagihan agar Wi-Fi Anda Kembali normal.\n\nUntuk menghindari ketidanyamanan ini dikemudian hari, mohon untuk melakukan Pembayaran tepat waktu *sebelum tanggal 05* setiap bulannya.\n\nMohon kerja samanya,\nTerima kasih.\n\nHormat kami,\n*Admin Layanan Wi-Fi*\n\nJika Anda sudah melakukan pembayaran, kirim bukti transfer ke WhatsApp Admin: *0852-3637-8731*.`
                 },
                 "Khusus Pelanggan Melewati Jatuh Tempo (Diantar)": {
                     fields: [],
                     statusSupport: false,
-                    initial: `Bagi Bapak/Ibu yang melakukan pembayaran tagihan Wi-Fi *melewati batas jatuh tempo ( setelah tanggal 5 )*, kami mohon kesediaannya untuk mengantarkan pembayaran langsung ke kantor kami.\n\n📍 *Alamat Kantor*\nDesa Ajung, masuk gang barat jalan sebelah utara minimarket Delma Mart atau depan SDN Ajung 04.\n🗺️ *Lokasi Maps:* https://maps.app.goo.gl/UDYpbpaGhuPNYNMo7\n\nApabila tidak dapat datang ke kantor, pembayaran juga dapat dilakukan melalui transfer ke rekening berikut:\n🏦 *BCA*\nNo. Rekening: *3340297287*\na.n. *Mohamad Ilyasi*\n💳 *DANA*\nNo. *085236378731*\na.n. *Mohamad Ilyasi*\n📲 Setelah melakukan transfer, mohon kirimkan bukti pembayaran ke Admin:\n*0852-3637-8731*\n\nTerima kasih atas perhatian dan kerja samanya.`
+                    initial: `Bagi Bapak/Ibu yang melakukan pembayaran tagihan Wi-Fi *melewati batas jatuh tempo ( setelah tanggal 05 )*, kami mohon kesediaannya untuk mengantarkan pembayaran langsung ke kantor kami.\n\n📍 *Alamat Kantor*\nDesa Ajung, masuk gang barat jalan sebelah utara minimarket Delma Mart atau depan SDN Ajung 04.\n🗺️ *Lokasi Maps:* https://maps.app.goo.gl/UDYpbpaGhuPNYNMo7\n\nApabila tidak dapat datang ke kantor, pembayaran juga dapat dilakukan melalui transfer ke rekening berikut:\n🏦 *BCA*\nNo. Rekening: *3340297287*\na.n. *Mohamad Ilyasi*\n💳 *DANA*\nNo. *085236378731*\na.n. *Mohamad Ilyasi*\n📲 Setelah melakukan transfer, mohon kirimkan bukti pembayaran ke Admin:\n*0852-3637-8731*\n\nTerima kasih atas perhatian dan kerja samanya.`
                 },
                 "Konfirmasi Tetap Berlangganan atau Berhenti? (ISOLIR)": {
                     fields: [],
                     statusSupport: false,
-                    initial: `Assalamuk'alaikum,\nSaat ini layanan WiFi Anda terisolir sementara karena *Tagihan Belum dibayar.*\n\n*Mohon konfirmasi, apakah ingin melanjutkan Berlangganan atau Berhenti?*,\n\nJika tidak ingin melanjutkan,\nperangkat modem dirumah Anda akan kami tarik kembali dan akan dilakukan pemutusan kabel oleh Teknisi sebagai prosedur penghentian layanan.\n\n_Kami tunggu informasi secepatnya_\n\nTerima kasih atas perhatian dan kerja samanya.`
+                    initial: `Assalamu'alaikum,\nSaat ini layanan WiFi Anda terisolir sementara karena *Tagihan Belum dibayar.*\n\n*Mohon konfirmasi, apakah ingin melanjutkan Berlangganan atau Berhenti?*,\n\nJika tidak ingin melanjutkan,\nperangkat modem dirumah Anda akan kami tarik kembali dan akan dilakukan pemutusan kabel oleh Teknisi sebagai prosedur penghentian layanan.\n\n_Kami tunggu informasi secepatnya_\n\nTerima kasih atas perhatian dan kerja samanya.`
                 },
                 "Pengingat Tagihan Khusus Pelanggan Sebelum Jatuh Tempo": {
                     fields: [
-                        { key: "tanggal", label: "Pilih Tanggal Jatuh Tempo", type: "date", default: "" }
+                        { key: "tanggal", label: "Pilih Tanggal Jatuh Tempo", type: "date", default: new Date().toISOString().split('T')[0] }
                     ],
                     statusSupport: false,
                     initial: `🔔 PENGINGAT TAGIHAN WI-FI\n\nMohon diperhatikan, *Tagihan Wi-Fi Anda akan jatuh tempo pada tanggal {tanggal}.*\n\nKami mengingatkan agar pembayaran dapat dilakukan sebelum atau paling lambat pada tanggal jatuh tempo, sehingga layanan Wi-Fi di rumah Anda tetap berjalan dengan lancar dan terhindar dari *sistem isolir (penonaktifan sementara) secara otomatis* akibat keterlambatan pembayaran.\n\n💰 *Pembayaran dapat dilakukan melalui:*\n\n💳 *TRANSFER BANK BCA*\nNo. Rekening: 3340297287\na.n. Mohamad Ilyasi\n\n📱 *DANA*\nNo. DANA: 085236378731\na.n. Mohamad Ilyasi\n\n_Setelah melakukan pembayaran, mohon kirimkan bukti pembayaran ke WhatsApp Admin:_\n\n📞 0852-3637-8731\n\n*Mohon kerja sama dan perhatiannya.*\nTerima kasih telah menggunakan layanan Wi-Fi kami. 🙏`
@@ -611,18 +605,18 @@
                         { key: "tanggal_mulai", label: "Pilih Tanggal Mulai Tagihan", type: "date", default: new Date().toISOString().split('T')[0] }
                     ],
                     statusSupport: false,
-                    initial: `Terima kasih atas kepercayaan Anda menggunakan layanan WiFi kami.\n\nKami informasikan bahwa tanggal mulai tagihan Anda terhitung mulai tanggal *{tanggal_mulai}*, dengan periode pembayaran tagihan pertama pada tanggal 1 sampai 5 *{bulan_tagihan_upper}* sebagai batas waktu pembayaran.\n\nJika ada pertanyaan, silakan hubungi kami kapan saja.\nTerima kasih. 🙏`
+                    initial: `Terima kasih atas kepercayaan Anda menggunakan layanan WiFi kami.\n\nKami informasikan bahwa tanggal mulai tagihan Anda terhitung mulai tanggal *{tanggal_mulai}*, dengan periode pembayaran tagihan pertama pada tanggal 01 sampai 05 *{bulan_tagihan_upper}* sebagai batas waktu pembayaran.\n\nJika ada pertanyaan, silakan hubungi kami kapan saja.\nTerima kasih. 🙏`
                 },
                 "Informasi Layanan Lainnya": {
                     fields: [],
                     statusSupport: false,
-                    initial: `Terima kasih telah bergabung menjadi pelanggan Wi-Fi kami🙏\n\nPerkenalkan, ini adalah nomor Admin Wi-Fi yang Anda gunakan.\nNomor ini digunakan untuk menyampaikan informasi penting terkait *tagihan, dan bantuan layanan pelanggan.*\n\nBerikut informasi penting terkait layanan :\n\n📅 *TAGIHAN WI-FI*\nJatuh tempo setiap tanggal 5 setiap bulannya.\n\nPembayaran dapat dilakukan dengan tiga cara:\n1️⃣ Diantar langsung ke kantor.\n2️⃣ Dijemput oleh tim setiap tanggal 1 - 5.\n3️⃣ Transfer ke rekening\n- BCA: *3340297287* (a.n. Mohamad Ilyasi)\n- DANA: *085236378731* (a.n. Mohamad Ilyas)\n(Mohon sertakan bukti transfer).\n\n\n🛠️ *JAM OPERASIONAL TEKNISI*\n🕗 *Senin – Jum'at : 08.00 – 21.00 WIB*\n🕗 *Sabtu – Minggu : 08.00 – 16.00 WIB*\nApabila terdapat gangguan atau kendala yang memerlukan kunjungan teknisi di luar jam operasional, maka penanganan akan diproses pada hari berikutnya saat jam kerja teknisi berlangsung.\n\n⚙️ *INFORMASI TEKNIS*\nServer lokal akan restart otomatis setiap hari pukul *03.45 atau 04.00 WIB* (setiap wilayah berbeda), sehingga koneksi akan terputus sementara selama *± 1–5 menit*.\n\n👥 *GRUP PELANGGAN WI-FI*\nUntuk mendapatkan informasi terkait:\n✅ Gangguan jaringan\n✅ Maintenance jaringan\n✅ Informasi tagihan\n✅ Promo pelanggan\n✅ Pengumuman penting lainnya\n\nSilakan gabung grup melalui tautan berikut = https://chat.whatsapp.com/DICILJoNgPSAUE0CPoNqd9\n\n📞 *Hubungi kami jika ada kendala atau gangguan:*\n\nADMIN/ NOC : *0852-3637-8731*\n\nTeknisi :\n- *0896-9647-0957*\n- *0897-0515-671*\n- *0896-8079-9615*\n\nℹ️ Kami juga sering membagikan update gangguan dan pengumuman penting melalui *STATUS WHATSAPP.*\nAgar selalu mendapatkan informasi terbaru, *harap simpan nomor admin ini di kontak Anda.*\n\nTerima kasih atas kepercayaannya menggunakan layanan Wi-Fi kami🙏\nSemoga koneksi internet Anda selalu lancar dan bermanfaat untuk aktivitas sehari-hari.\n\n_Admin LIKENET By PT. JAVA DIGITAL NUSANTARA_`
+                    initial: `Terima kasih telah bergabung menjadi pelanggan Wi-Fi kami🙏\n\nPerkenalkan, ini adalah nomor Admin Wi-Fi yang Anda gunakan.\nNomor ini digunakan untuk menyampaikan informasi penting terkait *tagihan, dan bantuan layanan pelanggan.*\n\nBerikut informasi penting terkait layanan :\n\n📅 *TAGIHAN WI-FI*\nJatuh tempo setiap tanggal 05 setiap bulannya.\n\nPembayaran dapat dilakukan dengan tiga cara:\n1️⃣ Diantar langsung ke kantor.\n2️⃣ Dijemput oleh tim setiap tanggal 01 - 05.\n3️⃣ Transfer ke rekening\n- BCA: *3340297287* (a.n. Mohamad Ilyasi)\n- DANA: *085236378731* (a.n. Mohamad Ilyas)\n(Mohon sertakan bukti transfer).\n\n\n🛠️ *JAM OPERASIONAL TEKNISI*\n🕗 *Senin – Jum'at : 08.00 – 21.00 WIB*\n🕗 *Sabtu – Minggu : 08.00 – 16.00 WIB*\nApabila terdapat gangguan atau kendala yang memerlukan kunjungan teknisi di luar jam operasional, maka penanganan akan diproses pada hari berikutnya saat jam kerja teknisi berlangsung.\n\n⚙️ *INFORMASI TEKNIS*\nServer lokal akan restart otomatis setiap hari pukul *03.45 atau 04.00 WIB* (setiap wilayah berbeda), sehingga koneksi akan terputus sementara selama *± 1–5 menit*.\n\n👥 *GRUP PELANGGAN WI-FI*\nUntuk mendapatkan informasi terkait:\n✅ Gangguan jaringan\n✅ Maintenance jaringan\n✅ Informasi tagihan\n✅ Promo pelanggan\n✅ Pengumuman penting lainnya\n\nSilakan gabung grup melalui tautan berikut = https://chat.whatsapp.com/DICILJoNgPSAUE0CPoNqd9\n\n📞 *Hubungi kami jika ada kendala atau gangguan:*\n\nADMIN/ NOC : *0852-3637-8731*\n\nTeknisi :\n- *0896-9647-0957*\n- *0897-0515-671*\n- *0896-8079-9615*\n\nℹ️ Kami juga sering membagikan update gangguan dan pengumuman penting melalui *STATUS WHATSAPP.*\nAgar selalu mendapatkan informasi terbaru, *harap simpan nomor admin ini di kontak Anda.*\n\nTerima kasih atas kepercayaannya menggunakan layanan Wi-Fi kami🙏\nSemoga koneksi internet Anda selalu lancar dan bermanfaat untuk aktivitas sehari-hari.\n\n_Admin LIKENET By PT. JAVA DIGITAL NUSANTARA_`
                 },
                 "Syarat & Ketentuan Berlangganan": {
                     fields: [],
                     statusSupport: false,
                     isCustomDoc: true,
-                    initial: `<div class="text-center mb-6"><img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" alt="Logo PT Java Digital Nusantara" class="h-20 mx-auto object-contain mb-3" onerror="this.onerror=null;this.src='https://placehold.co/200x80/002060/ffffff?text=JDN+Logo';"></div>📜 <span class="highlight-bold">SYARAT DAN KETENTUAN BERLANGGANAN LAYANAN WI-FI</span>\nNIB: *1506220048174*\n\nDengan berlangganan layanan Wi-Fi Kami, pelanggan dianggap telah membaca, memahami, dan menyetujui syarat dan ketentuan berikut:\n\n📌 *PASAL 1 — BIAYA PEMASANGAN DAN INSTALASI*\n1️⃣ Biaya pemasangan awal sudah mencakup sewa modem Wi-Fi, kabel jaringan, perangkat pendukung, serta proses instalasi oleh tim teknisi kami.\n2️⃣ Setelah proses instalasi selesai, layanan internet akan diaktifkan dan dapat langsung digunakan.\n\n📌 *PASAL 2 — KETENTUAN PEMBAYARAN TAGIHAN*\n1️⃣ Pembayaran tagihan berlangganan wajib dilakukan setiap bulan pada tanggal *1 s.d. 5*, sesuai harga paket layanan yang telah disepakati.\n2️⃣ Pembayaran dapat dilakukan melalui:\n   • Pembayaran langsung di kantor kami\n   • Transfer ke rekening bank resmi (BCA / DANA)\n   • Layanan jemput tagihan oleh tim kami pada tanggal *3, 4 dan 5*\n3️⃣ Pelanggan wajib memastikan pembayaran dilakukan tepat waktu demi kelancaran layanan.\n\n📌 *PASAL 3 — KETERLAMBATAN PEMBAYARAN*\n1️⃣ Apabila pelanggan belum melakukan pembayaran hingga tanggal 5, layanan internet akan *terisolir/dinonaktifkan secara otomatis* oleh sistem pada pukul *21.00 WIB*.\n2️⃣ Khusus pelanggan yang telah berlangganan aktif lebih dari 6 bulan, layanan dapat tetap aktif apabila telah menyampaikan konfirmasi keterlambatan pembayaran sesuai ketentuan.\n3️⃣ Apabila hingga tanggal 10 pembayaran belum diterima dan tanpa konfirmasi, petugas berhak melakukan pemutusan kabel jaringan serta penarikan modem & seluruh perangkat pinjaman.\n\n📌 *PASAL 4 — PENANGGUHAN DAN PENGHENTIAN*\n1️⃣ Pengecualian penarikan perangkat dapat diberikan kepada pelanggan aktif (> 6 bulan) dengan mengonfirmasi penangguhan selama max *1 bulan*.\n2️⃣ Masa nonaktif sementara diberikan maksimal *30 hari kalender*.\n3️⃣ Apabila melebihi 30 hari, Kami berhak melakukan penarikan perangkat jaringan.\n\n📌 *PASAL 5 — PENGGANTIAN PERANGKAT*\n1️⃣ Penggantian modem Wi-Fi gratis diberikan apabila terjadi kerusakan alami (bukan kelalaian/kesengajaan) selama status berlangganan aktif.\n2️⃣ Penggantian tidak berlaku apabila kerusakan disebabkan oleh tindakan sengaja atau kelalaian penggunaan.\n\n📌 *PASAL 6 — LAYANAN GANGGUAN DAN PENGADUAN*\nApabila mengalami gangguan teknis atau kendala koneksi, pelanggan dapat langsung menghubungi Admin / NOC Pusat untuk bantuan penanganan.\n\n📌 *PASAL 7 — PERSETUJUAN PELANGGAN*\nDengan mendaftar dan menggunakan layanan internet Kami, pelanggan menyatakan telah memahami dan menyetujui seluruh ketentuan di atas.\n\n────────────────────────\n📞 *INFORMASI & CUSTOMER SERVICE*\n• WhatsApp Admin: *0852-3637-8731*\n\n_Terima kasih telah memilih Layanan WiFi Kami sebagai penyedia internet kepercayaan Anda._\n*Koneksi Andal, Layanan Terpercaya.*`
+                    initial: `<div class="text-center mb-6"><img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" alt="Logo PT Java Digital Nusantara" class="h-20 mx-auto object-contain mb-3" onerror="this.onerror=null;this.src='https://placehold.co/200x80/002060/ffffff?text=JDN+Logo';"></div>📜 <span class="highlight-bold">SYARAT DAN KETENTUAN BERLANGGANAN LAYANAN WI-FI</span>\nNIB: *1506220048174*\n\nDengan berlangganan layanan Wi-Fi Kami, pelanggan dianggap telah membaca, memahami, dan menyetujui syarat dan ketentuan berikut:\n\n📌 *PASAL 1 — BIAYA PEMASANGAN DAN INSTALASI*\n1️⃣ Biaya pemasangan awal sudah mencakup sewa modem Wi-Fi, kabel jaringan, perangkat pendukung, serta proses instalasi oleh tim teknisi kami.\n2️⃣ Setelah proses instalasi selesai, layanan internet akan diaktifkan dan dapat langsung digunakan.\n\n📌 *PASAL 2 — KETENTUAN PEMBAYARAN TAGIHAN*\n1️⃣ Pembayaran tagihan berlangganan wajib dilakukan setiap bulan pada tanggal *01 s.d. 05*, sesuai harga paket layanan yang telah disepakati.\n2️⃣ Pembayaran dapat dilakukan melalui:\n   • Pembayaran langsung di kantor kami\n   • Transfer ke rekening bank resmi (BCA / DANA)\n   • Layanan jemput tagihan oleh tim kami pada tanggal *03, 04 dan 05*\n3️⃣ Pelanggan wajib memastikan pembayaran dilakukan tepat waktu demi kelancaran layanan.\n\n📌 *PASAL 3 — KETERLAMBATAN PEMBAYARAN*\n1️⃣ Apabila pelanggan belum melakukan pembayaran hingga tanggal 05, layanan internet akan *terisolir/dinonaktifkan secara otomatis* oleh sistem pada pukul *21.00 WIB*.\n2️⃣ Khusus pelanggan yang telah berlangganan aktif lebih dari 6 bulan, layanan dapat tetap aktif apabila telah menyampaikan konfirmasi keterlambatan pembayaran sesuai ketentuan.\n3️⃣ Apabila hingga tanggal 10 pembayaran belum diterima dan tanpa konfirmasi, petugas berhak melakukan pemutusan kabel jaringan serta penarikan modem & seluruh perangkat pinjaman.\n\n📌 *PASAL 4 — PENANGGUHAN DAN PENGHENTIAN*\n1️⃣ Pengecualian penarikan perangkat dapat diberikan kepada pelanggan aktif (> 6 bulan) dengan mengonfirmasi penangguhan selama max *1 bulan*.\n2️⃣ Masa nonaktif sementara diberikan maksimal *30 hari kalender*.\n3️⃣ Apabila melebihi 30 hari, Kami berhak melakukan penarikan perangkat jaringan.\n\n📌 *PASAL 5 — PENGGANTIAN PERANGKAT*\n1️⃣ Penggantian modem Wi-Fi gratis diberikan apabila terjadi kerusakan alami (bukan kelalaian/kesengajaan) selama status berlangganan aktif.\n2️⃣ Penggantian tidak berlaku apabila kerusakan disebabkan oleh tindakan sengaja atau kelalaian penggunaan.\n\n📌 *PASAL 6 — LAYANAN GANGGUAN DAN PENGADUAN*\nApabila mengalami gangguan teknis atau kendala koneksi, pelanggan dapat langsung menghubungi Admin / NOC Pusat untuk bantuan penanganan.\n\n📌 *PASAL 7 — PERSETUJUAN PELANGGAN*\nDengan mendaftar dan menggunakan layanan internet Kami, pelanggan menyatakan telah memahami dan menyetujui seluruh ketentuan di atas.\n\n────────────────────────\n📞 *INFORMASI & CUSTOMER SERVICE*\n• WhatsApp Admin: *0852-3637-8731*\n\n_Terima kasih telah memilih Layanan WiFi Kami sebagai penyedia internet kepercayaan Anda._\n*Koneksi Andal, Layanan Terpercaya.*`
                 }
             },
             "LAPORAN TAGIHAN PELANGGAN": {
@@ -681,6 +675,27 @@
                     initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Bayar Double."
                 }
             },
+            "BUAT FORMAT EXCEL TAGIHAN": {
+                "Generate Format Tagihan Excel": {
+                    fields: [
+                        { key: "excel_file_export", label: "Upload File Excel Tagihan (Asli)", type: "file_export" },
+                        { 
+                            key: "petugas_filter", 
+                            label: "Pilih Filter Petugas / Wilayah Penagihan", 
+                            type: "petugas_select",
+                            options: [{ value: "ALL", label: "-- Tampilkan Semua Petugas --" }] 
+                        },
+                        {
+                            key: "status_filter",
+                            label: "Pilih Filter Status Tagihan",
+                            type: "status_filter_select"
+                        }
+                    ],
+                    statusSupport: false,
+                    isExcelExport: true,
+                    initial: "Silakan upload file Excel tagihan Anda di panel sebelah kiri untuk memproses dan mengunduh Format Excel Tagihan yang terstruktur."
+                }
+            },
             "BUAT INVOICE PELANGGAN": {
                 "Formulir Invoice": {
                     fields: [],
@@ -705,21 +720,16 @@
         let currentAction = "Jadwal Maintenance";
         let currentStatus = "initial";
         let dynamicValues = {};
+        let processedExcelRows = [];
+        let rawExcelExportRows = [];
+        let availablePetugasList = [];
+        let globalExcelData = [];
 
-        // Inisialisasi awal saat halaman dimuat
         window.onload = function() {
             initCategoryDropdown();
             updateActionDropdown();
             generateInvoiceNumber();
             setDefaultDates();
-
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js')
-                        .then(reg => console.log('Service Worker registered successfully. Scope:', reg.scope))
-                        .catch(err => console.log('Service Worker registration failed:', err));
-                });
-            }
         };
 
         function initCategoryDropdown() {
@@ -732,7 +742,6 @@
                 if (cat === currentCategory) opt.selected = true;
                 catSelect.appendChild(opt);
             });
-
             catSelect.addEventListener("change", function(e) {
                 currentCategory = e.target.value;
                 const actions = Object.keys(configTemplates[currentCategory]);
@@ -745,7 +754,7 @@
         function updateActionDropdown() {
             const isInvoice = currentCategory === "BUAT INVOICE PELANGGAN";
             const isRouterOrOther = currentCategory === "SETTING ROUTER" || currentCategory === "LAYANAN LAINNYA";
-            const isExcelReport = currentCategory === "LAPORAN TAGIHAN PELANGGAN";
+            const isExcelReport = currentCategory === "LAPORAN TAGIHAN PELANGGAN" || currentCategory === "BUAT FORMAT EXCEL TAGIHAN";
             const isWA = !isInvoice && !isRouterOrOther && !isExcelReport;
             
             document.getElementById('wa-action-container').classList.toggle('hidden', isInvoice);
@@ -761,17 +770,16 @@
             
             document.getElementById('invoice-preview-container').classList.toggle('hidden', !isInvoice);
             document.getElementById('invoice-preview-container').classList.toggle('flex', isInvoice);
-
             document.getElementById('router-preview-container').classList.toggle('hidden', !isRouterOrOther);
             document.getElementById('router-preview-container').classList.toggle('flex', isRouterOrOther);
-
+            
             const actionLabel = document.querySelector('#wa-action-container label');
             if (currentCategory === "SETTING ROUTER") {
                 actionLabel.innerText = "PILIH JENIS ROUTER";
             } else if (currentCategory === "LAYANAN LAINNYA") {
                 actionLabel.innerText = "PILIH LAYANAN LAINNYA";
-            } else if (currentCategory === "LAPORAN TAGIHAN PELANGGAN") {
-                actionLabel.innerText = "PILIH LAPORAN TAGIHAN";
+            } else if (currentCategory === "LAPORAN TAGIHAN PELANGGAN" || currentCategory === "BUAT FORMAT EXCEL TAGIHAN") {
+                actionLabel.innerText = "PILIH OPSI TAGIHAN";
             } else {
                 actionLabel.innerText = "PILIH DETAIL KEJADIAN / AKSI";
             }
@@ -805,9 +813,7 @@
 
             if (isRouterOrOther) {
                 updateRouterPreview();
-            } else if (isInvoice) {
-                // Invoice view initialized
-            } else {
+            } else if (!isInvoice) {
                 renderDynamicInputs();
                 if (isExcelReport) {
                     renderExcelInitialPrompt();
@@ -817,13 +823,12 @@
             }
         }
 
-        // Mapping gambar router dan layanan lainnya
         const routerImages = {
             "Router China Mobile F663": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20F663%20China%20Mobile.jpeg",
             "Router F477": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20F477.jpeg",
             "Router F609": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20F609.jpeg",
             "Router Zimmlink ZL-2113X": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Router%20Zimmlink.jpeg",
-            "Layanan Teknisi": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Layanan%20Teknisi.png",
+            "Layanan Teknisi": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Layanan%20Teknisi%20New.jpeg",
             "Layanan WiFi Tidak Bisa Akses/ Lemot": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Wifi%20Tidak%20bisa%20di%20Akses%20atau%20Lemot.jpeg",
             "Daftar Rekening": "https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Daftar%20Nomor%20Rekening.jpeg"
         };
@@ -849,38 +854,16 @@
                 link.click();
                 showNotification("Gambar panduan berhasil diunduh!", "success");
             }).catch(err => {
-                const imgUrl = routerImages[currentAction];
-                if (!imgUrl) {
-                    showNotification("Gambar tidak ditemukan!", "error");
-                    return;
-                }
-                fetch(imgUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const blobUrl = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = blobUrl;
-                        a.download = currentAction.replace(/\s+/g, '_') + '.jpeg';
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        window.URL.revokeObjectURL(blobUrl);
-                        showNotification("Gambar berhasil diunduh!", "success");
-                    })
-                    .catch(e => {
-                        showNotification("Gagal mengunduh gambar", "error");
-                    });
+                showNotification("Gagal mengunduh gambar", "error");
             });
         }
 
         function renderDynamicInputs() {
             const container = document.getElementById("dynamic-inputs-container");
             container.innerHTML = "";
-
             const actionConfig = configTemplates[currentCategory]?.[currentAction];
             if (!actionConfig) return;
 
-            // Status toggle check
             const statusContainer = document.getElementById("status-toggle-container");
             if (actionConfig.statusSupport) {
                 statusContainer.classList.remove("hidden");
@@ -893,32 +876,66 @@
             fields.forEach(field => {
                 const wrapper = document.createElement("div");
                 wrapper.className = "glow-border rounded-xl";
-
                 const label = document.createElement("label");
                 label.className = "text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5";
                 label.innerText = field.label;
                 wrapper.appendChild(label);
 
-                if (field.type === "file") {
+                if (field.type === "file_export") {
                     const input = document.createElement("input");
                     input.type = "file";
                     input.accept = ".xlsx, .xls, .csv";
                     input.className = "w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-750 hover:file:bg-blue-100 cursor-pointer";
                     input.onchange = function(e) {
                         const file = e.target.files[0];
-                        if (file) {
-                            parseAndDisplayExcelReport(file, actionConfig.reportType);
-                        }
+                        if (file) processExcelForExport(file);
                     };
                     wrapper.appendChild(input);
+
+                    const btnExport = document.createElement("button");
+                    btnExport.id = "btn-export-excel";
+                    btnExport.onclick = downloadFormattedExcel;
+                    btnExport.className = "w-full mt-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all duration-200 text-xs flex items-center justify-center gap-2 hidden";
+                    btnExport.innerHTML = '<i class="fa-solid fa-file-excel text-base"></i> Download Format Excel Tagihan (.xlsx)';
+                    wrapper.appendChild(btnExport);
+
+                } else if (field.type === "petugas_select") {
+                    const select = document.createElement("select");
+                    select.id = "petugas-select-export";
+                    select.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer";
+                    select.innerHTML = '<option value="ALL">-- Tampilkan Semua Petugas --</option>';
+                    select.onchange = function() {
+                        applyExcelExportFilters();
+                    };
+                    wrapper.appendChild(select);
+
+                } else if (field.type === "status_filter_select") {
+                    const select = document.createElement("select");
+                    select.id = "status-select-export";
+                    select.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer";
+                    select.innerHTML = `
+                        <option value="ALL">-- Tampilkan Semua Tagihan --</option>
+                        <option value="EXCLUDE_LUNAS_BARU">Tampilkan Selain Lunas & Pelanggan Baru</option>
+                    `;
+                    select.onchange = function() {
+                        applyExcelExportFilters();
+                    };
+                    wrapper.appendChild(select);
+
+                } else if (field.type === "file") {
+                    const input = document.createElement("input");
+                    input.type = "file";
+                    input.accept = ".xlsx, .xls, .csv";
+                    input.className = "w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-750 hover:file:bg-blue-100 cursor-pointer";
+                    input.onchange = function(e) {
+                        const file = e.target.files[0];
+                        if (file) parseAndDisplayExcelReport(file, actionConfig.reportType);
+                    };
+                    wrapper.appendChild(input);
+
                 } else if (field.type === "select") {
                     const select = document.createElement("select");
                     select.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer";
-                    
-                    if (dynamicValues[field.key] === undefined) {
-                        dynamicValues[field.key] = field.default;
-                    }
-
                     field.options.forEach(opt => {
                         const optEl = document.createElement("option");
                         optEl.value = opt.value;
@@ -926,12 +943,12 @@
                         if (opt.value === dynamicValues[field.key]) optEl.selected = true;
                         select.appendChild(optEl);
                     });
-
                     select.onchange = function(e) {
                         dynamicValues[field.key] = e.target.value;
                         renderWhatsAppText();
                     };
                     wrapper.appendChild(select);
+
                 } else if (field.type === "textarea") {
                     const textarea = document.createElement("textarea");
                     textarea.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500";
@@ -945,6 +962,7 @@
                         renderWhatsAppText();
                     };
                     wrapper.appendChild(textarea);
+
                 } else {
                     const input = document.createElement("input");
                     input.type = field.type || "text";
@@ -959,12 +977,192 @@
                     };
                     wrapper.appendChild(input);
                 }
-
                 container.appendChild(wrapper);
             });
         }
 
-        let globalExcelData = [];
+        function processExcelForExport(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    let sheetName = workbook.SheetNames.includes("TAGIHAN PELANGGAN") ? "TAGIHAN PELANGGAN" : workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                    if (!json || json.length === 0) {
+                        showNotification("File Excel kosong!", "error");
+                        return;
+                    }
+
+                    function findKey(sampleObj, keywords) {
+                        const keys = Object.keys(sampleObj);
+                        for (let kw of keywords) {
+                            let found = keys.find(k => k.toLowerCase().includes(kw));
+                            if (found) return found;
+                        }
+                        return null;
+                    }
+
+                    const sample = json[0];
+                    const nameKey = findKey(sample, ["nama", "customer", "pelanggan"]) || Object.keys(sample)[0];
+                    const alamatKey = findKey(sample, ["alamat", "add", "lokasi", "rt", "rw"]) || "";
+                    const totalKey = findKey(sample, ["total", "tagihan", "paket", "harga", "amount", "layanan"]) || "";
+                    const telpKey = findKey(sample, ["telp", "hp", "whatsapp", "wa", "kontak", "phone"]) || "";
+                    const ketKey = findKey(sample, ["keterangan", "status", "ket", "note", "catatan", "bayar"]) || "";
+                    const statusKey = findKey(sample, ["status", "keterangan_status", "ket_status", "bayar"]) || ketKey;
+                    const petugasKey = findKey(sample, ["petugas", "admin", "penagih", "nama_petugas", "wilayah"]) || "";
+
+                    let mappedRows = json.map((row) => {
+                        let rawTotal = totalKey && row[totalKey] !== undefined ? row[totalKey] : 0;
+                        let numTotal = parseFloat(String(rawTotal).replace(/[^0-9.-]/g, '')) || 0;
+                        let formattedTotal = numTotal >= 1000 ? Math.round(numTotal / 1000) : numTotal;
+
+                        let rawKet = ketKey && row[ketKey] !== undefined ? String(row[ketKey]).trim() : "-";
+                        let rawStatus = statusKey && row[statusKey] !== undefined ? String(row[statusKey]).trim() : "";
+
+                        return {
+                            "Nama Pelanggan": row[nameKey] !== undefined ? String(row[nameKey]).trim() : "",
+                            "Alamat": alamatKey && row[alamatKey] !== undefined ? String(row[alamatKey]).trim() : "-",
+                            "Total": formattedTotal,
+                            "Nomor Hp": telpKey && row[telpKey] !== undefined ? String(row[telpKey]).trim() : "-",
+                            "Keterangan": rawKet,
+                            "_Status": rawStatus,
+                            "_Petugas": petugasKey && row[petugasKey] !== undefined ? String(row[petugasKey]).trim() : "Tanpa Petugas"
+                        };
+                    });
+
+                    mappedRows.sort((a, b) => {
+                        let compAlamat = a["Alamat"].localeCompare(b["Alamat"], 'id', { sensitivity: 'base' });
+                        if (compAlamat !== 0) return compAlamat;
+                        return a["Nama Pelanggan"].localeCompare(b["Nama Pelanggan"], 'id', { sensitivity: 'base' });
+                    });
+
+                    rawExcelExportRows = mappedRows;
+
+                    let petugasSet = new Set();
+                    rawExcelExportRows.forEach(r => {
+                        if (r["_Petugas"] && r["_Petugas"] !== "-" && r["_Petugas"] !== "Tanpa Petugas") {
+                            petugasSet.add(r["_Petugas"]);
+                        }
+                    });
+                    availablePetugasList = Array.from(petugasSet);
+
+                    const petugasSelect = document.getElementById("petugas-select-export");
+                    if (petugasSelect) {
+                        petugasSelect.innerHTML = '<option value="ALL">-- Tampilkan Semua Petugas --</option>';
+                        availablePetugasList.forEach(p => {
+                            const opt = document.createElement("option");
+                            opt.value = p;
+                            opt.innerText = `Petugas: ${p}`;
+                            petugasSelect.appendChild(opt);
+                        });
+                    }
+                    applyExcelExportFilters();
+                    const btnExport = document.getElementById("btn-export-excel");
+                    if (btnExport) btnExport.classList.remove("hidden");
+                    showNotification("Data Excel berhasil diproses & disortir!", "success");
+                } catch (err) {
+                    console.error(err);
+                    showNotification("Gagal memproses file Excel.", "error");
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function applyExcelExportFilters() {
+            if (!rawExcelExportRows || rawExcelExportRows.length === 0) return;
+            
+            const selectedPetugas = document.getElementById("petugas-select-export")?.value || "ALL";
+            const selectedStatusFilter = document.getElementById("status-select-export")?.value || "ALL";
+
+            let filtered = [...rawExcelExportRows];
+
+            if (selectedPetugas !== "ALL") {
+                filtered = filtered.filter(r => r["_Petugas"] === selectedPetugas);
+            }
+
+            if (selectedStatusFilter === "EXCLUDE_LUNAS_BARU") {
+                filtered = filtered.filter(r => {
+                    let st = (r["_Status"] || "").toUpperCase();
+                    let ket = (r["Keterangan"] || "").toUpperCase();
+                    return st !== "LUNAS" && st !== "BARU" && !ket.includes("LUNAS") && !ket.includes("BARU");
+                });
+            }
+
+            processedExcelRows = filtered.map((item, index) => {
+                let rowObj = {
+                    "No": index + 1,
+                    "Nama Pelanggan": item["Nama Pelanggan"],
+                    "Alamat": item["Alamat"],
+                    "Total": item["Total"],
+                    "Nomor Hp": item["Nomor Hp"],
+                    "Keterangan": item["Keterangan"]
+                };
+                if (item["_Petugas"] && item["_Petugas"] !== "Tanpa Petugas") {
+                    rowObj["Petugas"] = item["_Petugas"];
+                }
+                return rowObj;
+            });
+
+            let petugasTitle = (selectedPetugas === "ALL") ? "Semua Petugas" : selectedPetugas;
+            let statusFilterTitle = (selectedStatusFilter === "EXCLUDE_LUNAS_BARU") ? "Selain Lunas & Pelanggan Baru" : "Semua Tagihan";
+
+            let previewOutput = `📊 *PREVIEW FORMAT EXCEL TAGIHAN*\n`;
+            previewOutput += `Petugas / Filter: *${petugasTitle}*\n`;
+            previewOutput += `Filter Status: *${statusFilterTitle}*\n`;
+            previewOutput += `Total Data Diproses: *${processedExcelRows.length} Pelanggan*\n`;
+            previewOutput += `Sortir: *Berdasarkan Alamat & Nama Pelanggan*\n`;
+            previewOutput += `────────────────────────\n\n`;
+
+            processedExcelRows.slice(0, 10).forEach((item) => {
+                previewOutput += `${item["No"]}. *${item["Nama Pelanggan"]}*\n`;
+                previewOutput += `   • Alamat: ${item["Alamat"]}\n`;
+                previewOutput += `   • Total: ${item["Total"]}\n`;
+                previewOutput += `   • No. HP: ${item["Nomor Hp"]}\n`;
+                if (item["Petugas"]) previewOutput += `   • Petugas: ${item["Petugas"]}\n`;
+                previewOutput += `   • Ket: <span class="highlight-bold">${item["Keterangan"]}</span>\n\n`;
+            });
+
+            if (processedExcelRows.length > 10) {
+                previewOutput += `_...dan ${processedExcelRows.length - 10} data lainnya._\n\n`;
+            }
+            previewOutput += `────────────────────────\n_Klik tombol "Download Format Excel Tagihan (.xlsx)" untuk menyimpan file_`;
+
+            let formattedDisplay = previewOutput.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
+            document.getElementById("whatsapp-text-output").innerHTML = formattedDisplay;
+        }
+
+        function filterExportByPetugas(selectedPetugas) {
+            applyExcelExportFilters();
+        }
+
+        function downloadFormattedExcel() {
+            if (!processedExcelRows || processedExcelRows.length === 0) {
+                showNotification("Belum ada data file Excel yang diunggah!", "error");
+                return;
+            }
+            const worksheet = XLSX.utils.json_to_sheet(processedExcelRows);
+
+            const range = XLSX.utils.decode_range(worksheet['!ref']);
+            for (let R = range.s.r; R <= range.e.r; ++R) {
+                ['C', 'D', 'E'].forEach(col => {
+                    let cellRef = col + (R + 1);
+                    if (worksheet[cellRef]) {
+                        if (!worksheet[cellRef].s) worksheet[cellRef].s = {};
+                        worksheet[cellRef].s.alignment = { horizontal: "center", vertical: "center" };
+                    }
+                });
+            }
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Format Tagihan");
+            const selectedPetugas = document.getElementById("petugas-select-export")?.value || "ALL";
+            const filePetugasSuffix = (selectedPetugas !== "ALL" && selectedPetugas !== "NONE") ? `_${selectedPetugas.replace(/\s+/g, '_')}` : '';
+            XLSX.writeFile(workbook, `Format_Tagihan_Pelanggan${filePetugasSuffix}_${Date.now()}.xlsx`);
+            showNotification("File Format Excel berhasil diunduh!", "success");
+        }
 
         function renderExcelInitialPrompt() {
             const outputDiv = document.getElementById("whatsapp-text-output");
@@ -987,7 +1185,7 @@
                     showNotification("File Excel berhasil diunggah & diproses!", "success");
                 } catch (err) {
                     console.error(err);
-                    showNotification("Gagal membaca file Excel. Pastikan format file valid.", "error");
+                    showNotification("Gagal membaca file Excel.", "error");
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -999,7 +1197,6 @@
                 return;
             }
 
-            // Fungsi pembantu untuk mendeteksi key kolom secara fleksibel (case-insensitive)
             function findKey(sampleObj, keywords) {
                 const keys = Object.keys(sampleObj);
                 for (let kw of keywords) {
@@ -1009,15 +1206,12 @@
                 return null;
             }
 
-            // Fungsi untuk format nominal angka/paket dengan titik (.)
             function formatPackageValue(val) {
                 if (!val && val !== 0) return "";
                 let str = String(val);
                 return str.replace(/\b\d+\b/g, (match) => {
                     let num = parseInt(match, 10);
-                    if (num > 999) {
-                        return num.toLocaleString('id-ID');
-                    }
+                    if (num > 999) return num.toLocaleString('id-ID');
                     return match;
                 });
             }
@@ -1025,7 +1219,6 @@
             const sample = rows[0];
             const nameKey = findKey(sample, ["nama", "customer", "pelanggan"]) || Object.keys(sample)[0];
             const statusKey = findKey(sample, ["status", "keterangan_status", "ket_status", "bayar"]) || Object.keys(sample)[1];
-            // Mengutamakan pencarian kolom TOTAL untuk paket/nominal layanan
             const paketKey = findKey(sample, ["total", "paket", "layanan", "detail"]) || null;
             const telpKey = findKey(sample, ["telp", "hp", "whatsapp", "wa", "kontak"]) || null;
             const alamatKey = findKey(sample, ["alamat", "add", "lokasi", "rt", "rw"]) || null;
@@ -1034,48 +1227,32 @@
 
             let filteredRows = [];
             let titleText = "";
-
             if (reportType === "lunas") {
                 titleText = "🟢 LAPORAN PELANGGAN LUNAS";
-                filteredRows = rows.filter(r => {
-                    let val = String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase();
-                    return val === "LUNAS";
-                });
+                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "LUNAS");
             } else if (reportType === "belum_lunas") {
                 titleText = "🔴 LAPORAN PELANGGAN BELUM LUNAS";
                 filteredRows = rows.filter(r => {
-                    let rawVal = r[statusKey];
-                    let val = String(rawVal !== undefined ? rawVal : "").trim().toUpperCase();
-                    return val === "0" || rawVal === 0 || val === "BELUM LUNAS" || val.includes("BELUM");
+                    let val = String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase();
+                    return val === "0" || r[statusKey] === 0 || val === "BELUM LUNAS" || val.includes("BELUM");
                 });
             } else if (reportType === "isolir") {
                 titleText = "⚠️ LAPORAN PELANGGAN ISOLIR";
-                filteredRows = rows.filter(r => {
-                    let val = String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase();
-                    return val === "ISOLIR";
-                });
+                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "ISOLIR");
             } else if (reportType === "baru") {
                 titleText = "✨ LAPORAN PELANGGAN BARU";
-                filteredRows = rows.filter(r => {
-                    let val = String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase();
-                    return val === "BARU";
-                });
+                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "BARU");
             } else if (reportType === "off") {
                 titleText = "⚪ LAPORAN PELANGGAN OFF";
-                filteredRows = rows.filter(r => {
-                    let val = String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase();
-                    return val === "OFF";
-                });
+                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "OFF");
             } else if (reportType === "double") {
                 titleText = "🔵 LAPORAN PELANGGAN BAYAR DOUBLE";
-                filteredRows = rows.filter(r => {
-                    let val = String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase();
-                    return val === "DOUBLE";
-                });
+                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "DOUBLE");
             }
 
+            const todayFormatted = formatDateToDDMMYYYY(new Date().toISOString().split('T')[0]);
             let reportOutput = `📋 *${titleText}*\n`;
-            reportOutput += `📅 Tanggal: *${new Date().toLocaleDateString('id-ID')}*\n`;
+            reportOutput += `📅 Tanggal: *${todayFormatted}*\n`;
             reportOutput += `📊 Total Data Ditemukan: *${filteredRows.length} Pelanggan*\n`;
             reportOutput += `────────────────────────\n\n`;
 
@@ -1086,16 +1263,12 @@
                     let name = row[nameKey] || `Pelanggan ${idx + 1}`;
                     let alamat = alamatKey && row[alamatKey] !== undefined && row[alamatKey] !== "" ? ` | ${row[alamatKey]}` : "";
                     let petugas = petugasKey && row[petugasKey] !== undefined && row[petugasKey] !== "" ? ` | ${row[petugasKey]}` : "";
-                    
                     let rawStatus = row[statusKey];
                     let status = rawStatus !== undefined && rawStatus !== "" ? rawStatus : "-";
-                    
                     let paketVal = paketKey && row[paketKey] !== undefined ? formatPackageValue(row[paketKey]) : "";
                     let paketInfo = paketVal ? ` | Paket: ${paketVal}` : "";
-                    
                     let telpVal = telpKey && row[telpKey] !== undefined ? row[telpKey] : "";
                     let telpInfo = telpVal ? ` | No. HP: ${telpVal}` : "";
-                    
                     let ketVal = keteranganKey && row[keteranganKey] !== undefined && row[keteranganKey] !== "" ? row[keteranganKey] : "";
                     let ketInfo = ketVal ? ` | ${ketVal}` : "";
 
@@ -1103,7 +1276,6 @@
                     reportOutput += `   Status: <span class="highlight-red">${status}</span>${paketInfo}${telpInfo}${ketInfo}\n\n`;
                 });
             }
-
             reportOutput += `────────────────────────\n_Laporan otomatis digenerate oleh LIKENET Broadcast_`;
 
             let formattedDisplay = reportOutput.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
@@ -1142,43 +1314,40 @@
                 template = actionConfig.initial;
             }
 
-            // Replace dynamic placeholders
             if (actionConfig.fields) {
                 actionConfig.fields.forEach(field => {
                     let val = dynamicValues[field.key] !== undefined ? dynamicValues[field.key] : field.default;
                     
+                    if (field.type === "date" || field.key === "tanggal" || field.key === "tanggal_mulai") {
+                        val = formatDateToDDMMYYYY(val);
+                    }
+
                     if (field.key === "jumlah_user") {
                         let countNum = parseInt(val) || 1;
                         let bonusTotal = countNum * 25000;
                         template = template.replace(/{jumlah_user}/g, countNum);
                         template = template.replace(/{total_bonus}/g, formatIDR(bonusTotal));
                     }
-
                     if (field.key === "data_user") {
                         let rawList = val.split(/,|\n/).map(s => s.trim()).filter(s => s.length > 0);
                         let formattedList = rawList.map((item, idx) => `${idx + 1}. *${item}*`).join('\n');
                         template = template.replace(/{list_pelanggan}/g, formattedList);
                     }
-
                     if (field.key === "tanggal_mulai" && val) {
                         let monthName = getMonthNameUpperFromDate(val);
                         template = template.replace(/{bulan_tagihan_upper}/g, monthName);
                     }
-
                     template = template.replace(new RegExp(`{${field.key}}`, 'g'), val);
                 });
             }
 
-            // Fallback jika placeholder bulan_tagihan_upper masih ada
             if (template.includes("{bulan_tagihan_upper}")) {
                 let defaultDate = dynamicValues["tanggal_mulai"] || new Date().toISOString().split('T')[0];
                 let monthName = getMonthNameUpperFromDate(defaultDate);
                 template = template.replace(/{bulan_tagihan_upper}/g, monthName);
             }
 
-            // Mengonversi format asterisk *teks* menjadi <span class="highlight-bold">teks</span> agar bintang tidak muncul di layar preview
             let formattedDisplay = template.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
-
             const outputDiv = document.getElementById("whatsapp-text-output");
             outputDiv.innerHTML = formattedDisplay;
         }
@@ -1186,8 +1355,18 @@
         function getMonthNameUpperFromDate(dateStr) {
             const months = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
             if (!dateStr) return "";
-            let d = new Date(dateStr);
-            if (isNaN(d.getTime())) return "";
+            let d;
+            if (dateStr.includes("-")) {
+                const parts = dateStr.split("-");
+                if (parts[0].length === 4) {
+                    d = new Date(parts[0], parseInt(parts[1])-1, parts[2]);
+                } else if (parts[2].length === 4) {
+                    d = new Date(parts[2], parseInt(parts[1])-1, parts[0]);
+                }
+            } else {
+                d = new Date(dateStr);
+            }
+            if (!d || isNaN(d.getTime())) return "";
             return months[d.getMonth()];
         }
 
@@ -1197,27 +1376,21 @@
 
         function copyToClipboard() {
             const outputDiv = document.getElementById("whatsapp-text-output");
-            
-            // Konversi HTML span tebal kembali ke format *teks* WhatsApp saat disalin ke clipboard
-            let htmlContent = outputDiv.innerHTML;
             let tempDiv = document.createElement("div");
-            tempDiv.innerHTML = htmlContent;
+            tempDiv.innerHTML = outputDiv.innerHTML;
             
-            // Ubah tag span highlight-bold menjadi format *teks*
             tempDiv.querySelectorAll('.highlight-bold').forEach(el => {
                 el.outerHTML = `*${el.innerText}*`;
             });
-
             let textToCopy = tempDiv.innerText;
 
-            // Menggunakan document.execCommand untuk kompatibilitas iFrame
             const textArea = document.createElement("textarea");
             textArea.value = textToCopy;
             document.body.appendChild(textArea);
             textArea.select();
             try {
                 document.execCommand('copy');
-                showNotification("Teks berhasil disalin ke clipboard (format WhatsApp *bold* tetap dipertahankan)!", "success");
+                showNotification("Teks berhasil disalin ke clipboard!", "success");
             } catch (err) {
                 showNotification("Gagal menyalin teks", "error");
             }
@@ -1228,30 +1401,23 @@
             const captureTarget = document.getElementById("capture-target");
             const textOutput = document.getElementById("whatsapp-text-output");
             
-            // Simpan style lama
             const oldMaxH = textOutput.style.maxHeight;
             const oldOverflow = textOutput.style.overflowY;
             
-            // Buka batasan tinggi agar seluruh teks render penuh tanpa terpotong
             textOutput.style.maxHeight = 'none';
             textOutput.style.overflowY = 'visible';
-
             html2canvas(captureTarget, {
                 scale: 2,
                 useCORS: true,
-                backgroundColor: null,
-                windowWidth: captureTarget.scrollWidth,
-                windowHeight: captureTarget.scrollHeight
+                backgroundColor: null
             }).then(canvas => {
-                // Kembalikan style lama
                 textOutput.style.maxHeight = oldMaxH;
                 textOutput.style.overflowY = oldOverflow;
-
                 const link = document.createElement('a');
                 link.download = 'LIKENET_Broadcast_' + Date.now() + '.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                showNotification("Gambar berhasil disimpan secara penuh!", "success");
+                showNotification("Gambar berhasil disimpan!", "success");
             }).catch(err => {
                 textOutput.style.maxHeight = oldMaxH;
                 textOutput.style.overflowY = oldOverflow;
@@ -1270,9 +1436,6 @@
             }, 3000);
         }
 
-        // ==========================================
-        // LOGIKA INVOICE
-        // ==========================================
         function generateInvoiceNumber() {
             const now = new Date();
             const d = String(now.getDate()).padStart(2, '0');
@@ -1296,16 +1459,10 @@
         function updateDates() {
             const val = document.getElementById("globalDateInput").value;
             if (!val) return;
-            const formatted = formatDateNice(val);
+            const formatted = formatDateToDDMMYYYY(val);
             document.getElementById("previewInvoiceDate").innerText = formatted;
             document.getElementById("previewDueDate").innerText = formatted;
             document.getElementById("previewPaymentDate").innerText = formatted;
-        }
-
-        function formatDateNice(dateStr) {
-            const d = new Date(dateStr);
-            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
-            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
         }
 
         function updateCustomerName() {
@@ -1316,41 +1473,44 @@
         function updatePackageDetails() {
             const sel = document.getElementById("packageSelect");
             const opt = sel.options[sel.selectedIndex];
-            const price = opt.getAttribute("data-price");
+            const price = parseInt(opt.getAttribute("data-price") || "0");
             const text = opt.text;
 
             document.getElementById("detailInput").value = text;
-            document.getElementById("amountInput.value") || (document.getElementById("amountInput").value = price);
-            
-            updatePreviewFromManual();
+            document.getElementById("amountInput").value = price.toLocaleString('id-ID');
+
+            document.getElementById("previewDetail").innerText = text;
+            document.getElementById("previewAmount1").innerText = "Rp " + price.toLocaleString('id-ID');
+            document.getElementById("previewTotal1").innerText = "Rp " + price.toLocaleString('id-ID');
+            document.getElementById("previewAmount2").innerText = "Rp " + price.toLocaleString('id-ID');
+            document.getElementById("previewTotal2").innerText = "Rp " + price.toLocaleString('id-ID');
         }
 
         function updatePreviewFromManual() {
             const detail = document.getElementById("detailInput").value || "Pilih paket...";
-            let amountRaw = document.getElementById("amountInput").value.replace(/[^0-9]/g, '');
-            let amount = parseInt(amountRaw) || 0;
-            let formattedAmount = formatIDR(amount);
+            const amountRaw = document.getElementById("amountInput").value.replace(/[^0-9]/g, '');
+            const amount = parseInt(amountRaw || "0");
 
             document.getElementById("previewDetail").innerText = detail;
-            document.getElementById("previewAmount1").innerText = formattedAmount;
-            document.getElementById("previewTotal1").innerText = formattedAmount;
-            document.getElementById("previewAmount2").innerText = formattedAmount;
-            document.getElementById("previewTotal2").innerText = formattedAmount;
+            document.getElementById("previewAmount1").innerText = "Rp " + amount.toLocaleString('id-ID');
+            document.getElementById("previewTotal1").innerText = "Rp " + amount.toLocaleString('id-ID');
+            document.getElementById("previewAmount2").innerText = "Rp " + amount.toLocaleString('id-ID');
+            document.getElementById("previewTotal2").innerText = "Rp " + amount.toLocaleString('id-ID');
         }
 
         function downloadInvoice() {
-            const invCanvas = document.getElementById("invoiceCanvas");
-            html2canvas(invCanvas, {
+            const invoiceNode = document.getElementById("invoiceCanvas");
+            html2canvas(invoiceNode, {
                 scale: 2,
                 useCORS: true,
                 backgroundColor: "#ffffff"
             }).then(canvas => {
-                const link = document.createElement('a');
                 const invNum = document.getElementById("invoiceNumberInput").value || "Invoice";
-                link.download = invNum.replace(/#/g, '') + '.jpg';
+                const link = document.createElement('a');
+                link.download = `Invoice_${invNum}.jpg`;
                 link.href = canvas.toDataURL('image/jpeg', 0.95);
                 link.click();
-                showNotification("Invoice berhasil diunduh (JPG)!", "success");
+                showNotification("Invoice berhasil diunduh!", "success");
             }).catch(err => {
                 showNotification("Gagal mengunduh invoice", "error");
             });
