@@ -97,6 +97,7 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
+    <!-- HEADER -->
     <header class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white shadow-lg border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3.5">
@@ -116,6 +117,7 @@
         </div>
     </header>
 
+    <!-- MAIN CONTENT -->
     <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         
         <!-- PANEL KONFIGURASI (KIRI) -->
@@ -211,7 +213,7 @@
                                 <div class="relative">
                                     <select id="packageSelect" onchange="updatePackageDetails()" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer">
                                         <option value="" disabled selected>-- Pilih Paket --</option>
-										<option value="0" data-price="0">Paket Free 50Mbps/ Bulan - Rp 0</option>
+                                        <option value="0" data-price="0">Paket Free 50Mbps/ Bulan - Rp 0</option>
                                         <option value="4" data-price="75000">Paket 4Mbps/ Bulan - Rp 75.000</option>
                                         <option value="25" data-price="100000">Paket 25Mbps/ Bulan - Rp 100.000</option>
                                         <option value="35" data-price="150000">Paket 35Mbps/ Bulan - Rp 150.000</option>
@@ -409,6 +411,7 @@
         </section>
     </main>
 
+    <!-- LOGIC SCRIPT -->
     <script>
         // Helper untuk memformat tanggal YYYY-MM-DD menjadi DD-MM-YYYY
         function formatDateToDDMMYYYY(dateStr) {
@@ -1063,7 +1066,7 @@
                     applyExcelExportFilters();
                     const btnExport = document.getElementById("btn-export-excel");
                     if (btnExport) btnExport.classList.remove("hidden");
-                    showNotification("Data Excel berhasil diproses & disortir!", "success");
+                    showNotification("Data Excel berhasil dipproses & disortir!", "success");
                 } catch (err) {
                     console.error(err);
                     showNotification("Gagal memproses file Excel.", "error");
@@ -1313,6 +1316,11 @@
                 template = actionConfig.resolved;
             } else {
                 template = actionConfig.initial;
+            }
+
+            // Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan
+            if (currentCategory === "GANGGUAN PELANGGAN" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
+                template = `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`;
             }
 
             if (actionConfig.fields) {
