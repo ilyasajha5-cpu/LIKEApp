@@ -278,8 +278,8 @@
                 <i class="fa-solid fa-lightbulb text-blue-600 mt-0.5"></i>
                 <span><strong>Tips:</strong> Anda dapat mengubah atau menambahkan detail teks secara langsung pada kotak putih di bawah ini sebelum menyalin atau menyimpannya.</span>
             </div>
-            <!-- Container Capture dengan background gelap elegan -->
-            <div id="capture-target" class="bg-gradient-to-br from-[#0c2454] to-[#061430] rounded-3xl p-6 lg:p-8 shadow-xl flex-grow flex items-center justify-center border border-slate-800">
+            <!-- Container Capture dengan background gelap elegan GRADIENT MERAH PUTIH -->
+            <div id="capture-target" class="bg-gradient-to-br from-[#8a1212] to-[#ffffff] rounded-3xl p-6 lg:p-8 shadow-xl flex-grow flex items-center justify-center border border-slate-800">
                 <!-- Kotak Pesan WA Putih Bersih -->
                 <div class="bg-white rounded-2xl p-6 lg:p-8 w-full border border-slate-200/50 shadow-lg leading-relaxed whitespace-pre-wrap font-medium text-slate-950 text-sm overflow-y-auto max-h-[580px] custom-scrollbar focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" 
                      id="whatsapp-text-output" 
@@ -490,7 +490,7 @@
                 },
                 "Update Perangkat/ Firmware": {
                     fields: [
-                        { key: "jadwal", label: "Jadwal Kegiatan", default: "08-01-2026" }
+                        { key: "jadwal", label: "Jadwal Kegiatan", default: "10 November 2026, Pukul 23.00 WIB" }
                     ],
                     statusSupport: true,
                     initial: `Kami informasikan akan dilakukan urgent maintenance/ perbaikan pada server lokal kami guna meningkatkan kualitas layanan dan kestabilan koneksi internet.\n\nDetail kegiatan:\nJadwal : *{jadwal}*\nProses : *Update perangkat/firmware server lokal*\nEstimasi : *± 1–2 jam atau hingga proses selesai*\n\nSelama proses berlangsung, koneksi internet akan mengalami terputus atau intermittent.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\n\nMohon maaf atas ketidaknyamanan yang terjadi.\nTerima kasih.`,
@@ -583,7 +583,7 @@
             "USER GET USER": {
                 "Informasi Bonus": {
                     fields: [
-                        { key: "nama_penerima", label: "Input User Dapat Bonus", default: "Maikel Hoplahop" },
+                        { key: "nama_penerima", label: "Input User Dapat Bonus", default: "BUSTOMI KARANGPAITON" },
                         { 
                             key: "jumlah_user", 
                             label: "Input Jumlah Get User", 
@@ -595,9 +595,9 @@
                                 }
                                 return opts;
                             })(),
-                            default: "3" 
+                            default: "1" 
                         },
-                        { key: "data_user", label: "Input Data User Yang Diperoleh (Pisahkan dgn koma/baris baru)", type: "textarea", default: "Mak Laep, Pak Laep, Buk Laep" }
+                        { key: "data_user", label: "Input Data User Yang Diperoleh (Pisahkan dgn koma/baris baru)", type: "textarea", default: "Ilyas Ajung, Arep Ajung, Rendi Ajung" }
                     ],
                     statusSupport: false,
                     initial: `📢 INFORMASI BONUS REFERAL USER GET USER\n\nKepada Yth.\n*{nama_penerima}*\n\nTerima kasih telah merekomendasikan layanan WiFi kami kepada pelanggan baru.\nBerdasarkan Program User Get User, Anda berhak memperoleh Bonus Referal sebesar *{total_bonus}*, dengan rincian sebagai berikut:\n\nPelanggan yang berhasil direferensikan:\n{list_pelanggan}\n\n💰 Perhitungan Bonus:\n*{jumlah_user} Pelanggan × Rp 25.000 = {total_bonus}*\n\n📝 Ketentuan Pemberian Bonus:\nBonus referal akan dikreditkan sebagai potongan tagihan WiFi pada bulan ini, sehingga jumlah tagihan Anda akan otomatis berkurang sesuai total bonus yang diperoleh.\n\nTerima kasih atas kepercayaan dan dukungan Anda terhadap layanan WiFi kami. 🙏\n\n🎉 Ajak keluarga, teman, atau tetangga untuk berlangganan WiFi kami, dan dapatkan Bonus Referal Rp25.000 untuk setiap pelanggan baru yang berhasil melakukan pemasangan.`
