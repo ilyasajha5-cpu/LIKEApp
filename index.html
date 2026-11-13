@@ -405,7 +405,7 @@
                 </div>
             </div>
             <!-- CONTAINER PREVIEW ROUTER & LAYANAN LAINNYA -->
-            <div id="router-preview-container" class="hidden flex-grow bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 relative p-6 items-center justify-center shadow-inner min-h-[500px]">
+            <div id="router-preview-container" class="hidden flex-grow bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 relative p-0 items-center justify-center shadow-inner min-h-[500px]">
                 <img id="router-image-preview" src="" crossorigin="anonymous" alt="Panduan Gambar" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl transition-all duration-300" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0c2454/ffffff?text=Gagal+Memuat+Gambar';">
             </div>
         </section>
@@ -450,7 +450,7 @@
                 },
                 "Fo cut/ kabel putus": {
                     fields: [
-                        { key: "lokasi", label: "Input Lokasi Titik Putus", default: "Mayang – Kalisat" }
+                        { key: "lokasi", label: "Input Lokasi Titik Putus", default: "JEMBER - KALISAT", uppercase: true }
                     ],
                     statusSupport: true,
                     initial: `Kami informasikan bahwa telah terjadi gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}*, berdasarkan informasi dari pusat ISP.\n\nSaat ini pihak terkait sedang melakukan penanganan untuk perbaikan jaringan tersebut.\n\nKami akan menyampaikan update kembali setelah proses perbaikan selesai atau terdapat informasi terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
@@ -500,10 +500,10 @@
             "GANGGUAN PELANGGAN": {
                 "Fo cut/ putus Jalur Utama": {
                     fields: [
-                        { key: "wilayah", label: "Input Wilayah", default: "Sumbermalang, Karangpaton" },
+                        { key: "wilayah", label: "Input Wilayah", default: "SUMBERMALANG, KARANGPAITON", uppercase: true },
                         { 
                             key: "eksekusi", 
-                            label: "EKSEKUSI PROGRES/ AKSI", 
+                            label: "PILIH EKSEKUSI PROGRES/ AKSI", 
                             type: "select", 
                             options: [
                                 { value: "sekarang", label: "Progres sekarang" },
@@ -518,10 +518,10 @@
                 },
                 "Fo cut/ putus Jalur Sebagian": {
                     fields: [
-                        { key: "wilayah", label: "Input Wilayah", default: "Karangpaton" },
+                        { key: "wilayah", label: "Input Wilayah", default: "KARANGPAITON", uppercase: true },
                         { 
                             key: "eksekusi", 
-                            label: "EKSEKUSI PROGRES/ AKSI", 
+                            label: "PILIH EKSEKUSI PROGRES/ AKSI", 
                             type: "select", 
                             options: [
                                 { value: "sekarang", label: "Progres sekarang" },
@@ -534,6 +534,24 @@
                     initial: `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
                     resolved: `Kami informasikan bahwa perbaikan *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}* telah selesai dilakukan.\n\nSaat ini layanan internet untuk *beberapa Pelanggan Aktif* yang sebelumnya terdampak telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
                 },
+				"Server POP - Backup Battery": {
+                    fields: [
+                        { key: "wilayah", label: "Input Wilayah", default: "KARANGPAITON, SUMBERANGET, SUKOREJO", uppercase: true },
+                        { 
+                            key: "eksekusi", 
+                            label: "PILIH EKSEKUSI PROGRES/ AKSI", 
+                            type: "select", 
+                            options: [
+                                { value: "sekarang", label: "Progres sekarang" },
+                                { value: "besok", label: "Progres besok" }
+                            ],
+                            default: "sekarang" 
+                        }
+                    ],
+                    statusSupport: true,
+                    initial: `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\n\Beberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
+                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                },
                 "Pelanggan Terdeteksi Offline": {
                     fields: [],
                     statusSupport: false,
@@ -544,8 +562,8 @@
                     statusSupport: true,
                     initial: `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nProses perbaikan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul *08.30 – 16.00 WIB*.\n\nJika di luar jam tersebut, maka perbaikan akan dilakukan keesokan harinya saat jam kerja teknisi.\n\nMohon menunggu, tim kami akan segera menangani.\n\nTerima kasih atas pengertiannya.`,
                     resolved: `Kami informasikan bahwa perbaikan *kabel putus* yang menuju ke rumah Bapak/ Ibu telah selesai.\n\nSaat ini koneksi sudah kembali normal dan dapat digunakan kembali.\n\nTerima kasih atas kesabaran dan pengertiannya.`
-                }
-            },
+                },
+				            },
             "PENGINGAT TAGIHAN": {
                 "Informasi Tagihan": {
                     fields: [],
@@ -976,9 +994,16 @@
                     }
                     input.value = dynamicValues[field.key];
                     input.oninput = function(e) {
-                        dynamicValues[field.key] = e.target.value;
-                        renderWhatsAppText();
-                    };
+						let value = e.target.value;
+
+						if (field.uppercase === true) {
+							value = value.toUpperCase();
+							e.target.value = value;
+						}
+
+						dynamicValues[field.key] = value;
+						renderWhatsAppText();
+					};
                     wrapper.appendChild(input);
                 }
                 container.appendChild(wrapper);
@@ -1318,11 +1343,21 @@
                 template = actionConfig.initial;
             }
 
-            // Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan
-            if (currentCategory === "GANGGUAN PELANGGAN" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
+            // Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Fo cut/ putus Jalur Utama
+            if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Fo cut/ putus Jalur Utama" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
                 template = `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`;
             }
-
+			
+			// Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Fo cut/ putus Jalur Sebagian
+            if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Fo cut/ putus Jalur Sebagian" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
+                template = `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`;
+            }
+			
+			// Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Server POP - Backup Battery
+            if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Server POP - Backup Battery" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
+                template = `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\n\Beberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`;
+            }
+			       
             if (actionConfig.fields) {
                 actionConfig.fields.forEach(field => {
                     let val = dynamicValues[field.key] !== undefined ? dynamicValues[field.key] : field.default;
