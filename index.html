@@ -776,15 +776,15 @@
                 "Formulir Invoice": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" }
             },
             "SETTING ROUTER": {
-                "Router China Mobile F663": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
-                "Router F477": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
-                "Router F609": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
-                "Router Zimmlink ZL-2113X": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" }
+                "Router China Mobile F663": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" },
+                "Router F477": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" },
+                "Router F609": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" },
+                "Router Zimmlink ZL-2113X": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" }
             },
             "LAYANAN LAINNYA": {
-                "Layanan Teknisi": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
-                "Layanan WiFi Tidak Bisa Akses/ Lemot": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
-                "Daftar Rekening": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" }
+                "Layanan Teknisi": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" },
+                "Layanan WiFi Tidak Bisa Akses/ Lemot": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" },
+                "Daftar Rekening": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" }
             }
         };
 
@@ -1253,18 +1253,10 @@
             const imgUrl = routerImages[currentAction] || "https://placehold.co/600x400/0c2454/ffffff?text=Panduan+Tidak+Tersedia";
             imgEl.src = imgUrl;
 
-            // Pastikan panel pemilih kontak muncul untuk Setting Router & Layanan Lainnya
-            const actionConfig = configTemplates[currentCategory]?.[currentAction];
+            // Sembunyikan pemilih kontak untuk Setting Router & Layanan Lainnya
             const pickerContainer = document.getElementById("offline-customer-picker-container");
-            if (actionConfig && actionConfig.hasCustomerPicker) {
-                pickerContainer.classList.remove("hidden");
-                pickerContainer.classList.add("flex");
-                renderContactList();
-                updateSelectedContactsUI();
-            } else {
-                pickerContainer.classList.add("hidden");
-                pickerContainer.classList.remove("flex");
-            }
+            pickerContainer.classList.add("hidden");
+            pickerContainer.classList.remove("flex");
         }
 
         function downloadRouterImage() {
