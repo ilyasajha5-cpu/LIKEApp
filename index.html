@@ -15,23 +15,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- SheetJS (xlsx) Library for parsing Excel files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Google Identity Services (GIS) untuk Auto-Sync Google Contacts -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: #f8fafc; 
         }
-        /* Style khusus untuk highlight teks tebal biasa di preview (Biru Premium) */
         .highlight-bold {
             color: #2563eb; 
             font-weight: 800; 
         }
-        /* Style khusus untuk highlight teks Wilayah/Lokasi di preview (Merah Terang) */
         .highlight-red {
             color: #e11d48; 
             font-weight: 800; 
         }
-        /* Kustom scrollbar untuk estetika preview box */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
@@ -42,7 +41,6 @@
             background-color: rgba(156, 163, 175, 0.5);
             border-radius: 20px;
         }
-        /* Desain efek glassmorphic tipis pada border */
         .glow-border:focus-within {
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
@@ -109,15 +107,20 @@
                     <p class="text-[11px] text-slate-400 font-semibold uppercase tracking-widest mt-0.5">WhatsApp Customer Message Generator</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2.5 bg-slate-800/50 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/50">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping absolute"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 relative"></span>
-                <span class="text-xs font-bold text-slate-200">Sistem Siap Kirim</span>
+            <div class="flex items-center gap-3 flex-wrap justify-center">
+                <!-- Tombol Status Google Contacts -->
+                <button onclick="openContactSyncModal()" id="header-sync-btn" class="bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-200 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all">
+                    <i class="fa-brands fa-google text-blue-400"></i>
+                    <span id="contact-count-badge">Kontak Gmail (0)</span>
+                </button>
+                <div class="flex items-center gap-2.5 bg-slate-800/50 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/50">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping absolute"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 relative"></span>
+                    <span class="text-xs font-bold text-slate-200">Sistem Siap Kirim</span>
+                </div>
             </div>
         </div>
     </header>
-
-	<div class="absolute -right-12 -top-24 w-72 h-72 rounded-full border border-white/15" style="box-shadow:0 0 0 35px rgba(255,255,255,.045),0 0 0 75px rgba(255,255,255,.035)"></div>
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
@@ -141,7 +144,6 @@
                             <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Kategori Utama</label>
                             <div class="relative">
                                 <select id="category-select" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white appearance-none cursor-pointer transition-all duration-200">
-                                    <!-- Diisi dinamis oleh JS -->
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
                                     <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -153,13 +155,49 @@
                             <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Pilih Detail Kejadian / Aksi</label>
                             <div class="relative">
                                 <select id="action-select" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white appearance-none cursor-pointer transition-all duration-200">
-                                    <!-- Diisi dinamis oleh JS -->
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
                                     <i class="fa-solid fa-chevron-down text-xs"></i>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- PANEL KHUSUS PILIH PELANGGAN (MUNCUL DI PELANGGAN TERDETEKSI OFFLINE) -->
+                        <div id="offline-customer-picker-container" class="hidden flex-col gap-3 bg-blue-50/70 border border-blue-200/80 rounded-2xl p-4">
+                            <div class="flex items-center justify-between">
+                                <label class="text-[10px] font-extrabold text-blue-900 uppercase tracking-widest flex items-center gap-1.5">
+                                    <i class="fa-solid fa-address-book text-blue-600"></i> Pilih Pelanggan Tujuan
+                                </label>
+                                <button onclick="openContactSyncModal()" class="text-[11px] font-bold text-blue-600 hover:text-blue-800 underline flex items-center gap-1">
+                                    <i class="fa-solid fa-rotate"></i> Sinkron Kontak
+                                </button>
+                            </div>
+
+                            <!-- Pencarian Kontak -->
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                                <input type="text" id="contact-search-input" oninput="filterContactList()" placeholder="Cari nama atau nomor pelanggan..." class="w-full pl-9 pr-3 py-2.5 bg-white border border-blue-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <!-- Daftar Kontak Pilihan -->
+                            <div id="contact-list-box" class="bg-white border border-blue-100 rounded-xl max-h-48 overflow-y-auto custom-scrollbar divide-y divide-slate-100">
+                                <div class="p-4 text-center text-xs text-slate-400">
+                                    Belum ada kontak dimuat. Klik <b>Sinkron Kontak</b> untuk menghubungkan <b>ilyasajha5@gmail.com</b> atau impor kontak.
+                                </div>
+                            </div>
+
+                            <!-- Info Pelanggan Terpilih & Tombol Kirim Langsung -->
+                            <div id="selected-customers-summary" class="hidden flex-col gap-2 pt-2 border-t border-blue-200/60">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="font-bold text-slate-700">Terpilih: <span id="selected-count-label" class="text-blue-700 font-extrabold">0</span> pelanggan</span>
+                                    <button onclick="clearSelectedContacts()" class="text-[11px] text-rose-600 hover:underline font-bold">Reset Pilihan</button>
+                                </div>
+                                <div id="selected-send-buttons" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto custom-scrollbar">
+                                    <!-- Tombol kirim WA per pelanggan terpilih akan muncul di sini -->
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- TEXTBOX INPUT DINAMIS -->
                         <div id="dynamic-inputs-container" class="flex flex-col gap-4"></div>
                         <!-- PILIHAN STATUS -->
@@ -188,7 +226,6 @@
                         </div>
                         <!-- INVOICE FORM CONTAINER -->
                         <div id="invoice-form-container" class="hidden flex-col gap-5 mt-2">
-                            <!-- Nomor Invoice -->
                             <div class="glow-border rounded-xl">
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Nomor Invoice</label>
                                 <div class="flex gap-2">
@@ -199,17 +236,14 @@
                                 </div>
                                 <p class="text-[10px] text-slate-400 mt-1">Format: #LKJDN + DDMMYYYYHHMMSS</p>
                             </div>
-                            <!-- Tanggal -->
                             <div class="glow-border rounded-xl">
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Tanggal (Invoice, Due, Payment)</label>
                                 <input type="date" id="globalDateInput" onchange="updateDates()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            <!-- Nama Pelanggan -->
                             <div class="glow-border rounded-xl">
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Nama Pelanggan (TO)</label>
                                 <input type="text" id="customerNameInput" oninput="updateCustomerName()" placeholder="Masukkan Nama Pelanggan" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase">
                             </div>
-                            <!-- Pilih Paket -->
                             <div class="glow-border rounded-xl">
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Pilih Paket Layanan</label>
                                 <div class="relative">
@@ -227,7 +261,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Override Manual -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="glow-border rounded-xl">
                                     <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Detail (Manual)</label>
@@ -238,7 +271,6 @@
                                     <input type="text" id="amountInput" oninput="updatePreviewFromManual()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-right" placeholder="0">
                                 </div>
                             </div>
-                            <!-- Tombol Download Invoice -->
                             <div class="mt-4 pt-4 border-t border-slate-100">
                                 <button onclick="downloadInvoice()" id="btn-download-invoice" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
                                     <i class="fas fa-download text-lg"></i> Download Invoice (JPG)
@@ -248,7 +280,7 @@
                     </div>
                 </div>
                 <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
-                    <span>LIKE Broadcast v1.5</span>
+                    <span>LIKE Broadcast v1.6</span>
                     <span class="flex items-center gap-1"><i class="fa-solid fa-code"></i> Developed for efficiency</span>
                 </div>
             </div>
@@ -256,7 +288,6 @@
 
         <!-- PANEL PREVIEW (KANAN) -->
         <section class="lg:col-span-7 flex flex-col overflow-hidden">
-            <!-- Header Aksi & Tooltip -->
             <div id="wa-preview-header" class="flex items-center justify-between mb-4 px-1 gap-2 flex-wrap">
                 <div class="flex items-center gap-2 text-slate-800 font-extrabold text-sm">
                     <div class="bg-emerald-50 text-emerald-600 p-1.5 rounded-lg">
@@ -265,39 +296,30 @@
                     <span>Pratinjau Format WhatsApp</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <!-- Tombol Simpan Gambar -->
                     <button id="btn-save-image" onclick="saveAsImage()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-xs flex items-center gap-2">
                         <i class="fa-solid fa-file-image text-sm"></i> Simpan Gambar
                     </button>
-                    <!-- Tombol Salin Teks -->
                     <button onclick="copyToClipboard()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-xs flex items-center gap-2">
                         <i class="fa-solid fa-copy text-sm"></i> Salin Teks
                     </button>
                 </div>
             </div>
-            <!-- Petunjuk Pengeditan Langsung -->
             <div id="wa-preview-tips" class="bg-blue-50 border border-blue-100 text-blue-800 rounded-2xl p-3 mb-3 text-xs flex items-start gap-2.5">
                 <i class="fa-solid fa-lightbulb text-blue-600 mt-0.5"></i>
-                <span><strong>Tips:</strong> Anda dapat mengubah atau menambahkan detail teks secara langsung pada kotak putih di bawah ini sebelum menyalin atau menyimpannya.</span>
+                <span><strong>Tips:</strong> Anda dapat mengubah atau menambahkan detail teks secara langsung pada kotak putih di bawah ini sebelum menyalin atau mengirimnya.</span>
             </div>
-            <!-- Container Capture dengan background gelap elegan GRADIENT MERAH PUTIH -->
             <div id="capture-target" class="bg-gradient-to-br from-[#FFFDFA] to-[#FFFDFA] rounded-3xl p-6 lg:p-8 shadow-xl flex-grow flex items-center justify-center border border-slate-800">
-                <!-- Kotak Pesan WA Putih Bersih -->
                 <div class="bg-white rounded-2xl p-6 lg:p-8 w-full border border-slate-200/50 shadow-lg leading-relaxed whitespace-pre-wrap font-medium text-slate-950 text-sm overflow-y-auto max-h-[580px] custom-scrollbar focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" 
                      id="whatsapp-text-output" 
                      contenteditable="true" 
                      spellcheck="false"
                      title="Klik di sini untuk mengedit teks pratinjau secara langsung.">
-                    <!-- Isi teks ter-render dinamis oleh script -->
                 </div>
             </div>
             <!-- CONTAINER PREVIEW INVOICE -->
             <div id="invoice-preview-container" class="hidden flex-grow bg-slate-200/50 rounded-3xl overflow-hidden border border-slate-300 inv-preview-wrapper relative p-4 items-start justify-center shadow-inner">
-                
                 <div id="invoiceCanvas" class="invoice-container flex flex-col p-8 font-sans">
-                    <!-- Paid Banner -->
                     <div class="paid-banner text-center shadow-md">PAID</div>
-                    <!-- Header Section -->
                     <div class="flex justify-between items-center mb-6 relative">
                         <div class="flex items-center z-10">
                             <img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" crossorigin="anonymous" alt="Java Digital Nusantara Logo" class="h-16 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/160x50/002060/ffffff?text=JDN+Logo';">
@@ -308,7 +330,6 @@
                             <p class="text-sm text-gray-800 font-medium">Jember-Kalisat</p>
                         </div>
                     </div>
-                    <!-- Invoice Info Box -->
                     <div class="border border-blue-900 rounded-sm p-4 mb-8 flex items-start bg-white">
                         <div class="mr-6 text-blue-900">
                             <i class="fas fa-file-invoice fa-4x relative">
@@ -332,12 +353,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Customer Info -->
                     <div class="mb-4">
                         <h2 class="text-xl font-bold text-black mb-1">TO</h2>
                         <div id="previewCustomerName" class="text-2xl font-bold text-blue-900 uppercase">NAMA PELANGGAN</div>
                     </div>
-                    <!-- Details Table -->
                     <table class="w-full mb-8 border-collapse">
                         <thead>
                             <tr class="table-header-inv">
@@ -360,7 +379,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- Transaction Table -->
                     <div class="mb-2">
                         <h3 class="text-md font-bold text-blue-900 uppercase">TRANSACTION</h3>
                     </div>
@@ -386,7 +404,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- Footer / Note Section -->
                     <div class="mt-4 pt-4 border-t border-gray-300">
                         <div class="flex items-start mb-4">
                             <div class="mr-4 text-blue-900 relative">
@@ -413,9 +430,65 @@
         </section>
     </main>
 
+    <!-- MODAL SINKRONISASI GOOGLE CONTACTS -->
+    <div id="contact-sync-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 animate-fade-in">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-100 text-blue-600 p-2.5 rounded-xl">
+                        <i class="fa-brands fa-google text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-800">Sinkronisasi Kontak Gmail</h3>
+                        <p class="text-[11px] text-slate-500">Target Akun: <b>ilyasajha5@gmail.com</b></p>
+                    </div>
+                </div>
+                <button onclick="closeContactSyncModal()" class="text-slate-400 hover:text-slate-600 p-2">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="flex flex-col gap-4 text-xs">
+                <!-- Opsi 1: Auto Sync API -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                    <div class="font-extrabold text-slate-800 mb-1 flex items-center gap-1.5">
+                        <span class="bg-blue-600 text-white w-5 h-5 rounded-full inline-flex items-center justify-center text-[10px]">1</span>
+                        Auto-Sync Langsung via Google People API
+                    </div>
+                    <p class="text-slate-500 mb-3 leading-relaxed">
+                        Google OAuth Client ID Anda sudah terpasang otomatis untuk menarik daftar kontak langsung dari <b>contacts.google.com</b>.
+                    </p>
+                    <div class="flex gap-2 mb-2">
+                        <input type="text" id="google-client-id-input" value="509251432098-7behmjbkoukslm2b4aea1qrbgplqsp6c.apps.googleusercontent.com" placeholder="Tempel Google Client ID (xxxx.apps.googleusercontent.com)" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button onclick="startGoogleContactsSync()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-google"></i> Login & Tarik Kontak (ilyasajha5@gmail.com)
+                    </button>
+                </div>
+
+                <!-- Opsi 2: Impor File Kontak (Tanpa Setup API) -->
+                <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4">
+                    <div class="font-extrabold text-emerald-900 mb-1 flex items-center gap-1.5">
+                        <span class="bg-emerald-600 text-white w-5 h-5 rounded-full inline-flex items-center justify-center text-[10px]">2</span>
+                        Impor Cepat dari Ekspor Google Contacts (.CSV / .VCF)
+                    </div>
+                    <p class="text-emerald-800/80 mb-3 leading-relaxed">
+                        Buka <a href="https://contacts.google.com/" target="_blank" class="underline font-bold text-emerald-700">contacts.google.com</a> &rarr; Klik <b>Ekspor</b> (Google CSV / vCard) &rarr; Unggah filenya di sini. Data otomatis tersimpan di browser Anda!
+                    </p>
+                    <input type="file" id="contact-file-upload" accept=".csv, .vcf" onchange="handleContactFileUpload(event)" class="w-full p-2 bg-white border border-emerald-200 rounded-xl text-xs font-bold text-slate-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-100 file:text-emerald-800 cursor-pointer">
+                </div>
+
+                <!-- Status Tersimpan -->
+                <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500">
+                    <span>Kontak tersimpan di memori: <b id="modal-saved-count" class="text-slate-800">0</b> kontak</span>
+                    <button onclick="clearSavedContacts()" class="text-rose-600 hover:underline font-bold">Hapus Semua Kontak</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- LOGIC SCRIPT -->
     <script>
-        // Helper untuk memformat tanggal YYYY-MM-DD menjadi DD-MM-YYYY
         function formatDateToDDMMYYYY(dateStr) {
             if (!dateStr) return "";
             if (dateStr.includes("-")) {
@@ -503,9 +576,10 @@
                 "Pelanggan Terdeteksi Offline": {
                     fields: [],
                     statusSupport: false,
-                    initial: `Kami mendeteksi bahwa *Perangkat Modem/ Router Wi-Fi* ditempat Anda saat ini dalam keadaan *Offline* atau tidak menyala.\n\nApakah ada kendala pada *Perangkat Modem/ Router-nya*, atau *memang sedang Anda matikan?*\n\nMohon konfirmasinya agar Teknisi kami dapat melakukan pengecekan lebih lanjut.\n\nTerima kasih.🙏`
+                    hasCustomerPicker: true,
+                    initial: `Halo *{nama_pelanggan}*,\n\nKami mendeteksi bahwa *Perangkat Modem/ Router Wi-Fi* ditempat Anda saat ini dalam keadaan *Offline* atau tidak menyala.\n\nApakah ada kendala pada *Perangkat Modem/ Router-nya*, atau *memang sedang Anda matikan?*\n\nMohon konfirmasinya agar Teknisi kami dapat melakukan pengecekan lebih lanjut.\n\nTerima kasih.🙏`
                 },
-				"Fo cut/ putus Jalur Utama": {
+                "Fo cut/ putus Jalur Utama": {
                     fields: [
                         { key: "wilayah", label: "Input Wilayah", default: "SUMBERMALANG, KARANGPAITON", uppercase: true },
                         { 
@@ -541,7 +615,7 @@
                     initial: `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa perbaikan *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}* telah selesai dilakukan.\n\nSaat ini layanan internet untuk *beberapa Pelanggan Aktif* yang sebelumnya terdampak telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
-				"Server POP - Backup Battery": {
+                "Server POP - Backup Battery": {
                     fields: [
                         { key: "wilayah", label: "Input Wilayah", default: "KARANGPAITON, SUMBERANGET, SUKOREJO", uppercase: true },
                         { 
@@ -556,7 +630,7 @@
                         }
                     ],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\n\Beberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    initial: `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\nBeberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },                
                 "Jalur Pelanggan Putus": {
@@ -575,8 +649,8 @@
                     statusSupport: true,
                     initial: `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa perbaikan *kabel putus* yang menuju ke rumah Bapak/ Ibu telah selesai.\n\nSaat ini koneksi sudah kembali normal dan dapat digunakan kembali.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
-                },
-				            },
+                }
+            },
             "PENGINGAT TAGIHAN": {
                 "Informasi Tagihan": {
                     fields: [],
@@ -656,57 +730,33 @@
             },
             "LAPORAN TAGIHAN PELANGGAN": {
                 "Laporan Pelanggan Lunas": {
-                    fields: [
-                        { key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }
-                    ],
-                    statusSupport: false,
-                    isExcelReport: true,
-                    reportType: "lunas",
+                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
+                    statusSupport: false, isExcelReport: true, reportType: "lunas",
                     initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Lunas."
                 },
                 "Laporan Pelanggan Belum Lunas": {
-                    fields: [
-                        { key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }
-                    ],
-                    statusSupport: false,
-                    isExcelReport: true,
-                    reportType: "belum_lunas",
+                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
+                    statusSupport: false, isExcelReport: true, reportType: "belum_lunas",
                     initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Belum Lunas."
                 },
                 "Laporan Pelanggan ISOLIR": {
-                    fields: [
-                        { key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }
-                    ],
-                    statusSupport: false,
-                    isExcelReport: true,
-                    reportType: "isolir",
+                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
+                    statusSupport: false, isExcelReport: true, reportType: "isolir",
                     initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan ISOLIR."
                 },
                 "Laporan Pelanggan Baru": {
-                    fields: [
-                        { key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }
-                    ],
-                    statusSupport: false,
-                    isExcelReport: true,
-                    reportType: "baru",
+                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
+                    statusSupport: false, isExcelReport: true, reportType: "baru",
                     initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Baru."
                 },
                 "Laporan Pelanggan OFF": {
-                    fields: [
-                        { key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }
-                    ],
-                    statusSupport: false,
-                    isExcelReport: true,
-                    reportType: "off",
+                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
+                    statusSupport: false, isExcelReport: true, reportType: "off",
                     initial: "Silakan upload file Excel tagihan pada panel sebelah kiri meampilkan Laporan Pelanggan OFF."
                 },
                 "Laporan Pelanggan Bayar Double": {
-                    fields: [
-                        { key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }
-                    ],
-                    statusSupport: false,
-                    isExcelReport: true,
-                    reportType: "double",
+                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
+                    statusSupport: false, isExcelReport: true, reportType: "double",
                     initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Bayar Double."
                 }
             },
@@ -714,29 +764,15 @@
                 "Generate Format Tagihan Excel": {
                     fields: [
                         { key: "excel_file_export", label: "Upload File Excel Tagihan (Asli)", type: "file_export" },
-                        { 
-                            key: "petugas_filter", 
-                            label: "Pilih Filter Petugas / Wilayah Penagihan", 
-                            type: "petugas_select",
-                            options: [{ value: "ALL", label: "-- Tampilkan Semua Petugas --" }] 
-                        },
-                        {
-                            key: "status_filter",
-                            label: "Pilih Filter Status Tagihan",
-                            type: "status_filter_select"
-                        }
+                        { key: "petugas_filter", label: "Pilih Filter Petugas / Wilayah Penagihan", type: "petugas_select", options: [{ value: "ALL", label: "-- Tampilkan Semua Petugas --" }] },
+                        { key: "status_filter", label: "Pilih Filter Status Tagihan", type: "status_filter_select" }
                     ],
-                    statusSupport: false,
-                    isExcelExport: true,
+                    statusSupport: false, isExcelExport: true,
                     initial: "Silakan upload file Excel tagihan Anda di panel sebelah kiri untuk memproses dan mengunduh Format Excel Tagihan yang terstruktur."
                 }
             },
             "BUAT INVOICE PELANGGAN": {
-                "Formulir Invoice": {
-                    fields: [],
-                    statusSupport: false,
-                    initial: ""
-                }
+                "Formulir Invoice": { fields: [], statusSupport: false, initial: "" }
             },
             "SETTING ROUTER": {
                 "Router China Mobile F663": { fields: [], statusSupport: false, initial: "" },
@@ -760,13 +796,338 @@
         let availablePetugasList = [];
         let globalExcelData = [];
 
+        // STATE KONTAK PELANGGAN
+        const DEFAULT_GOOGLE_CLIENT_ID = "509251432098-7behmjbkoukslm2b4aea1qrbgplqsp6c.apps.googleusercontent.com";
+        let customerContacts = []; // [{ id, name, phone }]
+        let selectedContacts = []; // [{ id, name, phone }]
+
         window.onload = function() {
+            loadSavedContacts();
             initCategoryDropdown();
             updateActionDropdown();
             generateInvoiceNumber();
             setDefaultDates();
         };
 
+        /* =========================================================
+           LOGIKA SINKRONISASI GOOGLE CONTACTS & PEMILIH PELANGGAN
+           ========================================================= */
+        function loadSavedContacts() {
+            try {
+                const saved = localStorage.getItem("like_broadcast_contacts");
+                const savedClientId = localStorage.getItem("like_broadcast_google_client_id");
+                document.getElementById("google-client-id-input").value = savedClientId || DEFAULT_GOOGLE_CLIENT_ID;
+                if (saved) {
+                    customerContacts = JSON.parse(saved);
+                }
+            } catch (e) {
+                customerContacts = [];
+            }
+            updateContactBadges();
+            renderContactList();
+        }
+
+        function saveContactsToStorage() {
+            localStorage.setItem("like_broadcast_contacts", JSON.stringify(customerContacts));
+            updateContactBadges();
+            renderContactList();
+        }
+
+        function updateContactBadges() {
+            const count = customerContacts.length;
+            const headerBadge = document.getElementById("contact-count-badge");
+            const modalCount = document.getElementById("modal-saved-count");
+            if (headerBadge) headerBadge.innerText = `Kontak Gmail (${count})`;
+            if (modalCount) modalCount.innerText = count;
+        }
+
+        function openContactSyncModal() {
+            const modal = document.getElementById("contact-sync-modal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeContactSyncModal() {
+            const modal = document.getElementById("contact-sync-modal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        function startGoogleContactsSync() {
+            const clientId = document.getElementById("google-client-id-input").value.trim();
+            if (!clientId) {
+                showNotification("Harap isi Google Client ID terlebih dahulu, atau gunakan Opsi 2 (Impor CSV/VCF).", "error");
+                return;
+            }
+            localStorage.setItem("like_broadcast_google_client_id", clientId);
+
+            if (typeof google === "undefined" || !google.accounts) {
+                showNotification("Library Google Identity belum siap. Periksa koneksi internet Anda.", "error");
+                return;
+            }
+
+            const tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: clientId,
+                scope: 'https://www.googleapis.com/auth/contacts.readonly',
+                hint: 'ilyasajha5@gmail.com',
+                callback: async (tokenResponse) => {
+                    if (tokenResponse && tokenResponse.access_token) {
+                        await fetchPeopleApiContacts(tokenResponse.access_token);
+                    }
+                },
+            });
+            tokenClient.requestAccessToken({ prompt: 'consent' });
+        }
+
+        async function fetchPeopleApiContacts(accessToken) {
+            try {
+                showNotification("Menarik kontak dari ilyasajha5@gmail.com...", "success");
+                let allConnections = [];
+                let nextPageToken = null;
+
+                do {
+                    let url = `https://people.googleapis.com/v1/people/me/connections?personFields=names,phoneNumbers&pageSize=1000`;
+                    if (nextPageToken) url += `&pageToken=${nextPageToken}`;
+
+                    const res = await fetch(url, {
+                        headers: { Authorization: `Bearer ${accessToken}` }
+                    });
+                    const data = await res.json();
+                    if (data.error) {
+                        throw new Error(data.error.message);
+                    }
+                    if (data.connections) {
+                        allConnections = allConnections.concat(data.connections);
+                    }
+                    nextPageToken = data.nextPageToken;
+                } while (nextPageToken);
+
+                const parsed = [];
+                allConnections.forEach((person, idx) => {
+                    const name = person.names?.[0]?.displayName || "Tanpa Nama";
+                    const phones = person.phoneNumbers || [];
+                    phones.forEach((p, pIdx) => {
+                        const cleanPhone = normalizePhoneNumber(p.value);
+                        if (cleanPhone.length >= 9) {
+                            parsed.push({
+                                id: `g_${idx}_${pIdx}_${Date.now()}`,
+                                name: name,
+                                phone: cleanPhone
+                            });
+                        }
+                    });
+                });
+
+                customerContacts = parsed;
+                saveContactsToStorage();
+                closeContactSyncModal();
+                showNotification(`Berhasil sinkron ${parsed.length} kontak dari Gmail!`, "success");
+            } catch (err) {
+                console.error(err);
+                showNotification("Gagal menarik kontak: " + err.message, "error");
+            }
+        }
+
+        function handleContactFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                let parsed = [];
+
+                if (file.name.toLowerCase().endsWith(".vcf")) {
+                    // Parse vCard (.vcf)
+                    const cards = content.split(/BEGIN:VCARD/i);
+                    cards.forEach((card, idx) => {
+                        const fnMatch = card.match(/FN(?:;[^:]*)?:(.+)/i);
+                        const telMatches = [...card.matchAll(/TEL(?:;[^:]*)?:(.+)/gi)];
+                        const name = fnMatch ? fnMatch[1].trim() : "";
+                        telMatches.forEach((m, tIdx) => {
+                            const phone = normalizePhoneNumber(m[1]);
+                            if (phone.length >= 9) {
+                                parsed.push({
+                                    id: `vcf_${idx}_${tIdx}`,
+                                    name: name || phone,
+                                    phone: phone
+                                });
+                            }
+                        });
+                    });
+                } else {
+                    // Parse Google Contacts CSV
+                    const workbook = XLSX.read(content, { type: 'string' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+                    rows.forEach((row, idx) => {
+                        const name = row["Name"] || row["Nama"] || `${row["First Name"] || ""} ${row["Last Name"] || ""}`.trim();
+                        const rawPhone = row["Phone 1 - Value"] || row["Mobile Phone"] || row["Nomor Hp"] || row["Phone"] || "";
+                        // Google CSV kadang memisahkan beberapa nomor dengan " ::: "
+                        String(rawPhone).split(":::").forEach((p, pIdx) => {
+                            const phone = normalizePhoneNumber(p);
+                            if (phone.length >= 9) {
+                                parsed.push({
+                                    id: `csv_${idx}_${pIdx}`,
+                                    name: name || phone,
+                                    phone: phone
+                                });
+                            }
+                        });
+                    });
+                }
+
+                if (parsed.length > 0) {
+                    // Urutkan berdasarkan nama
+                    parsed.sort((a, b) => a.name.localeCompare(b.name, 'id'));
+                    customerContacts = parsed;
+                    saveContactsToStorage();
+                    closeContactSyncModal();
+                    showNotification(`Berhasil memuat ${parsed.length} kontak pelanggan!`, "success");
+                } else {
+                    showNotification("Tidak ditemukan nomor telepon valid di dalam file.", "error");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearSavedContacts() {
+            customerContacts = [];
+            selectedContacts = [];
+            localStorage.removeItem("like_broadcast_contacts");
+            updateContactBadges();
+            renderContactList();
+            updateSelectedContactsUI();
+            showNotification("Daftar kontak lokal telah dihapus.", "success");
+        }
+
+        function normalizePhoneNumber(raw) {
+            let digits = String(raw || "").replace(/\D/g, "");
+            if (digits.startsWith("0")) {
+                digits = "62" + digits.slice(1);
+            } else if (digits.startsWith("8")) {
+                digits = "62" + digits;
+            }
+            return digits;
+        }
+
+        function renderContactList() {
+            const box = document.getElementById("contact-list-box");
+            if (!box) return;
+
+            const query = (document.getElementById("contact-search-input")?.value || "").toLowerCase();
+            const filtered = customerContacts.filter(c => 
+                c.name.toLowerCase().includes(query) || c.phone.includes(query)
+            );
+
+            if (customerContacts.length === 0) {
+                box.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">
+                    Belum ada kontak dimuat. Klik <b>Sinkron Kontak</b> untuk menghubungkan <b>ilyasajha5@gmail.com</b> atau impor file kontak.
+                </div>`;
+                return;
+            }
+
+            if (filtered.length === 0) {
+                box.innerHTML = `<div class="p-3 text-center text-xs text-slate-400">Kontak tidak ditemukan.</div>`;
+                return;
+            }
+
+            box.innerHTML = filtered.slice(0, 100).map(c => {
+                const isChecked = selectedContacts.some(s => s.id === c.id);
+                return `
+                    <label class="flex items-center justify-between px-3 py-2.5 hover:bg-blue-50/60 cursor-pointer transition-colors">
+                        <div class="flex items-center gap-2.5 overflow-hidden">
+                            <input type="checkbox" ${isChecked ? "checked" : ""} onchange="toggleSelectContact('${c.id}')" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer">
+                            <div class="truncate">
+                                <div class="text-xs font-bold text-slate-800 truncate">${c.name}</div>
+                                <div class="text-[11px] text-slate-500 font-mono">+${c.phone}</div>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${isChecked ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500'}">
+                            ${isChecked ? 'Dipilih' : 'Pilih'}
+                        </span>
+                    </label>
+                `;
+            }).join("");
+        }
+
+        function filterContactList() {
+            renderContactList();
+        }
+
+        function toggleSelectContact(contactId) {
+            const contact = customerContacts.find(c => c.id === contactId);
+            if (!contact) return;
+
+            const existsIdx = selectedContacts.findIndex(s => s.id === contactId);
+            if (existsIdx >= 0) {
+                selectedContacts.splice(existsIdx, 1);
+            } else {
+                selectedContacts.push(contact);
+            }
+            renderContactList();
+            updateSelectedContactsUI();
+            renderWhatsAppText();
+        }
+
+        function clearSelectedContacts() {
+            selectedContacts = [];
+            renderContactList();
+            updateSelectedContactsUI();
+            renderWhatsAppText();
+        }
+
+        function updateSelectedContactsUI() {
+            const summaryBox = document.getElementById("selected-customers-summary");
+            const countLabel = document.getElementById("selected-count-label");
+            const btnList = document.getElementById("selected-send-buttons");
+
+            if (selectedContacts.length === 0) {
+                summaryBox.classList.add("hidden");
+                summaryBox.classList.remove("flex");
+                return;
+            }
+
+            summaryBox.classList.remove("hidden");
+            summaryBox.classList.add("flex");
+            countLabel.innerText = selectedContacts.length;
+
+            btnList.innerHTML = selectedContacts.map(c => `
+                <button onclick="sendWhatsAppToCustomer('${c.id}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-between shadow-sm transition-all">
+                    <span class="truncate flex items-center gap-1.5">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Kirim ke ${c.name}
+                    </span>
+                    <span class="text-[10px] bg-emerald-800/60 px-2 py-0.5 rounded-lg">Buka WA &rarr;</span>
+                </button>
+            `).join("");
+        }
+
+        function sendWhatsAppToCustomer(contactId) {
+            const contact = selectedContacts.find(c => c.id === contactId);
+            if (!contact) return;
+
+            // Ambil teks pratinjau terbaru & personalisasikan nama pelanggan
+            const outputDiv = document.getElementById("whatsapp-text-output");
+            let tempDiv = document.createElement("div");
+            tempDiv.innerHTML = outputDiv.innerHTML;
+            tempDiv.querySelectorAll('.highlight-bold').forEach(el => {
+                el.outerHTML = `*${el.innerText}*`;
+            });
+            let messageText = tempDiv.innerText;
+
+            // Ganti nama pelanggan jika masih menggunakan placeholder/nama pelanggan pertama
+            const firstSelectedName = selectedContacts[0]?.name || "Pelanggan";
+            if (messageText.includes(`*${firstSelectedName}*`)) {
+                messageText = messageText.replace(`*${firstSelectedName}*`, `*${contact.name}*`);
+            }
+
+            const waUrl = `https://wa.me/${contact.phone}?text=${encodeURIComponent(messageText)}`;
+            window.open(waUrl, "_blank");
+        }
+
+        /* =========================================================
+           LOGIKA UTAMA APLIKASI
+           ========================================================= */
         function initCategoryDropdown() {
             const catSelect = document.getElementById("category-select");
             catSelect.innerHTML = "";
@@ -897,6 +1258,19 @@
             const container = document.getElementById("dynamic-inputs-container");
             container.innerHTML = "";
             const actionConfig = configTemplates[currentCategory]?.[currentAction];
+            
+            // Tampilkan/sembunyikan pemilih kontak pelanggan (khusus Pelanggan Terdeteksi Offline)
+            const pickerContainer = document.getElementById("offline-customer-picker-container");
+            if (actionConfig && actionConfig.hasCustomerPicker) {
+                pickerContainer.classList.remove("hidden");
+                pickerContainer.classList.add("flex");
+                renderContactList();
+                updateSelectedContactsUI();
+            } else {
+                pickerContainer.classList.add("hidden");
+                pickerContainer.classList.remove("flex");
+            }
+
             if (!actionConfig) return;
 
             const statusContainer = document.getElementById("status-toggle-container");
@@ -939,9 +1313,7 @@
                     select.id = "petugas-select-export";
                     select.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer";
                     select.innerHTML = '<option value="ALL">-- Tampilkan Semua Petugas --</option>';
-                    select.onchange = function() {
-                        applyExcelExportFilters();
-                    };
+                    select.onchange = function() { applyExcelExportFilters(); };
                     wrapper.appendChild(select);
 
                 } else if (field.type === "status_filter_select") {
@@ -952,9 +1324,7 @@
                         <option value="ALL">-- Tampilkan Semua Tagihan --</option>
                         <option value="EXCLUDE_LUNAS_BARU">Tampilkan Selain Lunas & Pelanggan Baru</option>
                     `;
-                    select.onchange = function() {
-                        applyExcelExportFilters();
-                    };
+                    select.onchange = function() { applyExcelExportFilters(); };
                     wrapper.appendChild(select);
 
                 } else if (field.type === "file") {
@@ -988,9 +1358,7 @@
                     const textarea = document.createElement("textarea");
                     textarea.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500";
                     textarea.rows = 3;
-                    if (dynamicValues[field.key] === undefined) {
-                        dynamicValues[field.key] = field.default;
-                    }
+                    if (dynamicValues[field.key] === undefined) dynamicValues[field.key] = field.default;
                     textarea.value = dynamicValues[field.key];
                     textarea.oninput = function(e) {
                         dynamicValues[field.key] = e.target.value;
@@ -1002,21 +1370,17 @@
                     const input = document.createElement("input");
                     input.type = field.type || "text";
                     input.className = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500";
-                    if (dynamicValues[field.key] === undefined) {
-                        dynamicValues[field.key] = field.default;
-                    }
+                    if (dynamicValues[field.key] === undefined) dynamicValues[field.key] = field.default;
                     input.value = dynamicValues[field.key];
                     input.oninput = function(e) {
-						let value = e.target.value;
-
-						if (field.uppercase === true) {
-							value = value.toUpperCase();
-							e.target.value = value;
-						}
-
-						dynamicValues[field.key] = value;
-						renderWhatsAppText();
-					};
+                        let value = e.target.value;
+                        if (field.uppercase === true) {
+                            value = value.toUpperCase();
+                            e.target.value = value;
+                        }
+                        dynamicValues[field.key] = value;
+                        renderWhatsAppText();
+                    };
                     wrapper.appendChild(input);
                 }
                 container.appendChild(wrapper);
@@ -1029,7 +1393,6 @@
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    
                     let sheetName = workbook.SheetNames.includes("TAGIHAN PELANGGAN") ? "TAGIHAN PELANGGAN" : workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
@@ -1037,7 +1400,6 @@
                         showNotification("File Excel kosong!", "error");
                         return;
                     }
-
                     function findKey(sampleObj, keywords) {
                         const keys = Object.keys(sampleObj);
                         for (let kw of keywords) {
@@ -1046,7 +1408,6 @@
                         }
                         return null;
                     }
-
                     const sample = json[0];
                     const nameKey = findKey(sample, ["nama", "customer", "pelanggan"]) || Object.keys(sample)[0];
                     const alamatKey = findKey(sample, ["alamat", "add", "lokasi", "rt", "rw"]) || "";
@@ -1060,7 +1421,6 @@
                         let rawTotal = totalKey && row[totalKey] !== undefined ? row[totalKey] : 0;
                         let numTotal = parseFloat(String(rawTotal).replace(/[^0-9.-]/g, '')) || 0;
                         let formattedTotal = numTotal >= 1000 ? Math.round(numTotal / 1000) : numTotal;
-
                         let rawKet = ketKey && row[ketKey] !== undefined ? String(row[ketKey]).trim() : "-";
                         let rawStatus = statusKey && row[statusKey] !== undefined ? String(row[statusKey]).trim() : "";
 
@@ -1082,7 +1442,6 @@
                     });
 
                     rawExcelExportRows = mappedRows;
-
                     let petugasSet = new Set();
                     rawExcelExportRows.forEach(r => {
                         if (r["_Petugas"] && r["_Petugas"] !== "-" && r["_Petugas"] !== "Tanpa Petugas") {
@@ -1115,16 +1474,10 @@
 
         function applyExcelExportFilters() {
             if (!rawExcelExportRows || rawExcelExportRows.length === 0) return;
-            
             const selectedPetugas = document.getElementById("petugas-select-export")?.value || "ALL";
             const selectedStatusFilter = document.getElementById("status-select-export")?.value || "ALL";
-
             let filtered = [...rawExcelExportRows];
-
-            if (selectedPetugas !== "ALL") {
-                filtered = filtered.filter(r => r["_Petugas"] === selectedPetugas);
-            }
-
+            if (selectedPetugas !== "ALL") filtered = filtered.filter(r => r["_Petugas"] === selectedPetugas);
             if (selectedStatusFilter === "EXCLUDE_LUNAS_BARU") {
                 filtered = filtered.filter(r => {
                     let st = (r["_Status"] || "").toUpperCase();
@@ -1132,7 +1485,6 @@
                     return st !== "LUNAS" && st !== "BARU" && !ket.includes("LUNAS") && !ket.includes("BARU");
                 });
             }
-
             processedExcelRows = filtered.map((item, index) => {
                 let rowObj = {
                     "No": index + 1,
@@ -1142,42 +1494,20 @@
                     "Nomor Hp": item["Nomor Hp"],
                     "Keterangan": item["Keterangan"]
                 };
-                if (item["_Petugas"] && item["_Petugas"] !== "Tanpa Petugas") {
-                    rowObj["Petugas"] = item["_Petugas"];
-                }
+                if (item["_Petugas"] && item["_Petugas"] !== "Tanpa Petugas") rowObj["Petugas"] = item["_Petugas"];
                 return rowObj;
             });
-
             let petugasTitle = (selectedPetugas === "ALL") ? "Semua Petugas" : selectedPetugas;
             let statusFilterTitle = (selectedStatusFilter === "EXCLUDE_LUNAS_BARU") ? "Selain Lunas & Pelanggan Baru" : "Semua Tagihan";
-
-            let previewOutput = `📊 *PREVIEW FORMAT EXCEL TAGIHAN*\n`;
-            previewOutput += `Petugas / Filter: *${petugasTitle}*\n`;
-            previewOutput += `Filter Status: *${statusFilterTitle}*\n`;
-            previewOutput += `Total Data Diproses: *${processedExcelRows.length} Pelanggan*\n`;
-            previewOutput += `Sortir: *Berdasarkan Alamat & Nama Pelanggan*\n`;
-            previewOutput += `────────────────────────\n\n`;
-
+            let previewOutput = `📊 *PREVIEW FORMAT EXCEL TAGIHAN*\nPetugas / Filter: *${petugasTitle}*\nFilter Status: *${statusFilterTitle}*\nTotal Data Diproses: *${processedExcelRows.length} Pelanggan*\nSortir: *Berdasarkan Alamat & Nama Pelanggan*\n────────────────────────\n\n`;
             processedExcelRows.slice(0, 10).forEach((item) => {
-                previewOutput += `${item["No"]}. *${item["Nama Pelanggan"]}*\n`;
-                previewOutput += `   • Alamat: ${item["Alamat"]}\n`;
-                previewOutput += `   • Total: ${item["Total"]}\n`;
-                previewOutput += `   • No. HP: ${item["Nomor Hp"]}\n`;
+                previewOutput += `${item["No"]}. *${item["Nama Pelanggan"]}*\n   • Alamat: ${item["Alamat"]}\n   • Total: ${item["Total"]}\n   • No. HP: ${item["Nomor Hp"]}\n`;
                 if (item["Petugas"]) previewOutput += `   • Petugas: ${item["Petugas"]}\n`;
                 previewOutput += `   • Ket: <span class="highlight-bold">${item["Keterangan"]}</span>\n\n`;
             });
-
-            if (processedExcelRows.length > 10) {
-                previewOutput += `_...dan ${processedExcelRows.length - 10} data lainnya._\n\n`;
-            }
+            if (processedExcelRows.length > 10) previewOutput += `_...dan ${processedExcelRows.length - 10} data lainnya._\n\n`;
             previewOutput += `────────────────────────\n_Klik tombol "Download Format Excel Tagihan (.xlsx)" untuk menyimpan file_`;
-
-            let formattedDisplay = previewOutput.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
-            document.getElementById("whatsapp-text-output").innerHTML = formattedDisplay;
-        }
-
-        function filterExportByPetugas(selectedPetugas) {
-            applyExcelExportFilters();
+            document.getElementById("whatsapp-text-output").innerHTML = previewOutput.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
         }
 
         function downloadFormattedExcel() {
@@ -1186,18 +1516,6 @@
                 return;
             }
             const worksheet = XLSX.utils.json_to_sheet(processedExcelRows);
-
-            const range = XLSX.utils.decode_range(worksheet['!ref']);
-            for (let R = range.s.r; R <= range.e.r; ++R) {
-                ['C', 'D', 'E'].forEach(col => {
-                    let cellRef = col + (R + 1);
-                    if (worksheet[cellRef]) {
-                        if (!worksheet[cellRef].s) worksheet[cellRef].s = {};
-                        worksheet[cellRef].s.alignment = { horizontal: "center", vertical: "center" };
-                    }
-                });
-            }
-
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Format Tagihan");
             const selectedPetugas = document.getElementById("petugas-select-export")?.value || "ALL";
@@ -1207,8 +1525,7 @@
         }
 
         function renderExcelInitialPrompt() {
-            const outputDiv = document.getElementById("whatsapp-text-output");
-            outputDiv.innerHTML = `<span class="highlight-bold">📂 Silakan Upload Berkas File Excel (Sheet: TAGIHAN PELANGGAN)</span>\n\nPilih file Excel melalui tombol upload di panel sebelah kiri untuk menampilkan laporan <span class="highlight-red">${currentAction}</span> secara otomatis.`;
+            document.getElementById("whatsapp-text-output").innerHTML = `<span class="highlight-bold">📂 Silakan Upload Berkas File Excel (Sheet: TAGIHAN PELANGGAN)</span>\n\nPilih file Excel melalui tombol upload di panel sebelah kiri untuk menampilkan laporan <span class="highlight-red">${currentAction}</span> secara otomatis.`;
         }
 
         function parseAndDisplayExcelReport(file, reportType) {
@@ -1217,11 +1534,9 @@
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    
                     let sheetName = workbook.SheetNames.includes("TAGIHAN PELANGGAN") ? "TAGIHAN PELANGGAN" : workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-                    
                     globalExcelData = json;
                     formatAndRenderExcelReport(reportType, json);
                     showNotification("File Excel berhasil diunggah & diproses!", "success");
@@ -1238,7 +1553,6 @@
                 document.getElementById("whatsapp-text-output").innerHTML = "⚠️ File Excel kosong atau format sheet tidak sesuai.";
                 return;
             }
-
             function findKey(sampleObj, keywords) {
                 const keys = Object.keys(sampleObj);
                 for (let kw of keywords) {
@@ -1247,17 +1561,13 @@
                 }
                 return null;
             }
-
             function formatPackageValue(val) {
                 if (!val && val !== 0) return "";
-                let str = String(val);
-                return str.replace(/\b\d+\b/g, (match) => {
+                return String(val).replace(/\b\d+\b/g, (match) => {
                     let num = parseInt(match, 10);
-                    if (num > 999) return num.toLocaleString('id-ID');
-                    return match;
+                    return num > 999 ? num.toLocaleString('id-ID') : match;
                 });
             }
-
             const sample = rows[0];
             const nameKey = findKey(sample, ["nama", "customer", "pelanggan"]) || Object.keys(sample)[0];
             const statusKey = findKey(sample, ["status", "keterangan_status", "ket_status", "bayar"]) || Object.keys(sample)[1];
@@ -1271,57 +1581,49 @@
             let titleText = "";
             if (reportType === "lunas") {
                 titleText = "🟢 LAPORAN PELANGGAN LUNAS";
-                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "LUNAS");
+                filteredRows = rows.filter(r => String(r[statusKey] ?? "").trim().toUpperCase() === "LUNAS");
             } else if (reportType === "belum_lunas") {
                 titleText = "🔴 LAPORAN PELANGGAN BELUM LUNAS";
                 filteredRows = rows.filter(r => {
-                    let val = String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase();
+                    let val = String(r[statusKey] ?? "").trim().toUpperCase();
                     return val === "0" || r[statusKey] === 0 || val === "BELUM LUNAS" || val.includes("BELUM");
                 });
             } else if (reportType === "isolir") {
                 titleText = "⚠️ LAPORAN PELANGGAN ISOLIR";
-                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "ISOLIR");
+                filteredRows = rows.filter(r => String(r[statusKey] ?? "").trim().toUpperCase() === "ISOLIR");
             } else if (reportType === "baru") {
                 titleText = "✨ LAPORAN PELANGGAN BARU";
-                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "BARU");
+                filteredRows = rows.filter(r => String(r[statusKey] ?? "").trim().toUpperCase() === "BARU");
             } else if (reportType === "off") {
                 titleText = "⚪ LAPORAN PELANGGAN OFF";
-                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "OFF");
+                filteredRows = rows.filter(r => String(r[statusKey] ?? "").trim().toUpperCase() === "OFF");
             } else if (reportType === "double") {
                 titleText = "🔵 LAPORAN PELANGGAN BAYAR DOUBLE";
-                filteredRows = rows.filter(r => String(r[statusKey] !== undefined ? r[statusKey] : "").trim().toUpperCase() === "DOUBLE");
+                filteredRows = rows.filter(r => String(r[statusKey] ?? "").trim().toUpperCase() === "DOUBLE");
             }
 
             const todayFormatted = formatDateToDDMMYYYY(new Date().toISOString().split('T')[0]);
-            let reportOutput = `📋 *${titleText}*\n`;
-            reportOutput += `📅 Tanggal: *${todayFormatted}*\n`;
-            reportOutput += `📊 Total Data Ditemukan: *${filteredRows.length} Pelanggan*\n`;
-            reportOutput += `────────────────────────\n\n`;
-
+            let reportOutput = `📋 *${titleText}*\n📅 Tanggal: *${todayFormatted}*\n📊 Total Data Ditemukan: *${filteredRows.length} Pelanggan*\n────────────────────────\n\n`;
             if (filteredRows.length === 0) {
                 reportOutput += `_Tidak ada data pelanggan dengan status ini._\n\n`;
             } else {
                 filteredRows.forEach((row, idx) => {
                     let name = row[nameKey] || `Pelanggan ${idx + 1}`;
-                    let alamat = alamatKey && row[alamatKey] !== undefined && row[alamatKey] !== "" ? ` | ${row[alamatKey]}` : "";
-                    let petugas = petugasKey && row[petugasKey] !== undefined && row[petugasKey] !== "" ? ` | ${row[petugasKey]}` : "";
-                    let rawStatus = row[statusKey];
-                    let status = rawStatus !== undefined && rawStatus !== "" ? rawStatus : "-";
+                    let alamat = alamatKey && row[alamatKey] ? ` | ${row[alamatKey]}` : "";
+                    let petugas = petugasKey && row[petugasKey] ? ` | ${row[petugasKey]}` : "";
+                    let status = row[statusKey] ?? "-";
                     let paketVal = paketKey && row[paketKey] !== undefined ? formatPackageValue(row[paketKey]) : "";
                     let paketInfo = paketVal ? ` | Paket: ${paketVal}` : "";
-                    let telpVal = telpKey && row[telpKey] !== undefined ? row[telpKey] : "";
+                    let telpVal = telpKey && row[telpKey] ? row[telpKey] : "";
                     let telpInfo = telpVal ? ` | No. HP: ${telpVal}` : "";
-                    let ketVal = keteranganKey && row[keteranganKey] !== undefined && row[keteranganKey] !== "" ? row[keteranganKey] : "";
+                    let ketVal = keteranganKey && row[keteranganKey] ? row[keteranganKey] : "";
                     let ketInfo = ketVal ? ` | ${ketVal}` : "";
 
-                    reportOutput += `${idx + 1}. *${name}*${alamat}${petugas}\n`;
-                    reportOutput += `   Status: <span class="highlight-red">${status}</span>${paketInfo}${telpInfo}${ketInfo}\n\n`;
+                    reportOutput += `${idx + 1}. *${name}*${alamat}${petugas}\n   Status: <span class="highlight-red">${status}</span>${paketInfo}${telpInfo}${ketInfo}\n\n`;
                 });
             }
             reportOutput += `────────────────────────\n_Laporan otomatis digenerate oleh LIKE Broadcast_`;
-
-            let formattedDisplay = reportOutput.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
-            document.getElementById("whatsapp-text-output").innerHTML = formattedDisplay;
+            document.getElementById("whatsapp-text-output").innerHTML = reportOutput.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
         }
 
         function setStatus(status) {
@@ -1333,7 +1635,6 @@
         function updateStatusButtonsUI() {
             const btnInit = document.getElementById("btn-status-initial");
             const btnRes = document.getElementById("btn-status-resolved");
-            
             if (currentStatus === "initial") {
                 btnInit.className = "py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 bg-amber-500 text-white shadow-md";
                 btnRes.className = "py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300";
@@ -1356,34 +1657,31 @@
                 template = actionConfig.initial;
             }
 
-            // Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Fo cut/ putus Jalur Utama
             if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Fo cut/ putus Jalur Utama" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
                 template = `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
             }
-			
-			// Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Fo cut/ putus Jalur Sebagian
             if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Fo cut/ putus Jalur Sebagian" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
                 template = `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
             }
-			
-			// Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Server POP - Backup Battery
             if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Server POP - Backup Battery" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
-                template = `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\n\Beberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
+                template = `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\nBeberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
             }
-			
-			// Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Jalur Pelanggan Putus
             if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Jalur Pelanggan Putus" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
                 template = `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
             }
-									       
+
+            // Personalisasi Nama Pelanggan jika dipilih di Pelanggan Terdeteksi Offline
+            if (template.includes("{nama_pelanggan}")) {
+                const targetName = selectedContacts.length > 0 ? selectedContacts[0].name : "Pelanggan";
+                template = template.replace(/{nama_pelanggan}/g, targetName);
+            }
+                                       
             if (actionConfig.fields) {
                 actionConfig.fields.forEach(field => {
                     let val = dynamicValues[field.key] !== undefined ? dynamicValues[field.key] : field.default;
-                    
                     if (field.type === "date" || field.key === "tanggal" || field.key === "tanggal_mulai") {
                         val = formatDateToDDMMYYYY(val);
                     }
-
                     if (field.key === "jumlah_user") {
                         let countNum = parseInt(val) || 1;
                         let bonusTotal = countNum * 25000;
@@ -1440,7 +1738,6 @@
             const outputDiv = document.getElementById("whatsapp-text-output");
             let tempDiv = document.createElement("div");
             tempDiv.innerHTML = outputDiv.innerHTML;
-            
             tempDiv.querySelectorAll('.highlight-bold').forEach(el => {
                 el.outerHTML = `*${el.innerText}*`;
             });
@@ -1462,10 +1759,8 @@
         function saveAsImage() {
             const captureTarget = document.getElementById("capture-target");
             const textOutput = document.getElementById("whatsapp-text-output");
-            
             const oldMaxH = textOutput.style.maxHeight;
             const oldOverflow = textOutput.style.overflowY;
-            
             textOutput.style.maxHeight = 'none';
             textOutput.style.overflowY = 'visible';
             html2canvas(captureTarget, {
@@ -1506,7 +1801,6 @@
             const h = String(now.getHours()).padStart(2, '0');
             const min = String(now.getMinutes()).padStart(2, '0');
             const s = String(now.getSeconds()).padStart(2, '0');
-            
             const invNum = `#LKJDN${d}${m}${y}${h}${min}${s}`;
             document.getElementById("invoiceNumberInput").value = invNum;
             document.getElementById("previewInvoiceNumber").innerText = invNum;
