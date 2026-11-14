@@ -1092,33 +1092,43 @@
                     <span class="truncate flex items-center gap-1.5">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Kirim ke ${c.name}
                     </span>
-                    <span class="text-[10px] bg-emerald-800/60 px-2 py-0.5 rounded-lg">${isRouterOrOther ? 'Download Gambar & WA &rarr;' : 'Buka WA Desktop &rarr;'}</span>
+                    <span class="text-[10px] bg-emerald-800/60 px-2 py-0.5 rounded-lg">${isRouterOrOther ? 'Salin Gambar & Buka WA &rarr;' : 'Buka WA Desktop &rarr;'}</span>
                 </button>
             `).join("");
         }
 
-        function sendWhatsAppToCustomer(contactId) {
+        async function sendWhatsAppToCustomer(contactId) {
             const contact = selectedContacts.find(c => c.id === contactId);
             if (!contact) return;
 
             const isRouterOrOther = currentCategory === "SETTING ROUTER" || currentCategory === "LAYANAN LAINNYA";
 
+            let messageText = "";
+
             if (isRouterOrOther) {
-                // Otomatis download gambar panduan terlebih dahulu agar dapat langsung dikirim
+                // Salin gambar panduan ke clipboard agar bisa langsung di-Paste (Ctrl+V) di WhatsApp
                 const imgEl = document.getElementById("router-image-preview");
                 if (imgEl && imgEl.src) {
-                    const link = document.createElement('a');
-                    link.download = currentAction.replace(/\s+/g, '_') + '.jpg';
-                    link.href = imgEl.src;
-                    link.click();
+                    try {
+                        const response = await fetch(imgEl.src);
+                        const blob = await response.blob();
+                        await navigator.clipboard.write([
+                            new ClipboardItem({ [blob.type]: blob })
+                        ]);
+                        showNotification("Gambar berhasil disalin! Tekan Ctrl+V di WhatsApp untuk melampirkan.", "success");
+                    } catch (err) {
+                        console.error(err);
+                        // Fallback download jika clipboard diblokir browser
+                        const link = document.createElement('a');
+                        link.download = currentAction.replace(/\s+/g, '_') + '.jpg';
+                        link.href = imgEl.src;
+                        link.click();
+                        showNotification("Gambar diunduh karena izin clipboard dibatasi.", "success");
+                    }
                 }
-            }
-
-            const outputDiv = document.getElementById("whatsapp-text-output");
-            let messageText = "";
-            if (isRouterOrOther) {
-                messageText = `Halo, berikut adalah panduan ${currentAction} untuk Anda. Silakan lampirkan gambar panduan yang telah diunduh.`;
+                messageText = ""; // Tanpa teks keterangan agar bersih, tinggal Paste gambar
             } else {
+                let outputDiv = document.getElementById("whatsapp-text-output");
                 let tempDiv = document.createElement("div");
                 tempDiv.innerHTML = outputDiv.innerHTML;
                 tempDiv.querySelectorAll('.highlight-bold').forEach(el => {
@@ -1128,7 +1138,7 @@
             }
 
             // Membuka WhatsApp Desktop
-            const waUrl = `whatsapp://send?phone=${contact.phone}&text=${encodeURIComponent(messageText)}`;
+            const waUrl = `whatsapp://send?phone=${contact.phone}${messageText ? '&text=' + encodeURIComponent(messageText) : ''}`;
             window.location.href = waUrl;
         }
 
