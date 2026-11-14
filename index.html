@@ -577,7 +577,7 @@
                     fields: [],
                     statusSupport: false,
                     hasCustomerPicker: true,
-                    initial: `Halo *{nama_pelanggan}*,\n\nKami mendeteksi bahwa *Perangkat Modem/ Router Wi-Fi* ditempat Anda saat ini dalam keadaan *Offline* atau tidak menyala.\n\nApakah ada kendala pada *Perangkat Modem/ Router-nya*, atau *memang sedang Anda matikan?*\n\nMohon konfirmasinya agar Teknisi kami dapat melakukan pengecekan lebih lanjut.\n\nTerima kasih.🙏`
+                    initial: `Kami mendeteksi bahwa *Perangkat Modem/ Router Wi-Fi* ditempat Anda saat ini dalam keadaan *Offline* atau tidak menyala.\n\nApakah ada kendala pada *Perangkat Modem/ Router-nya*, atau *memang sedang Anda matikan?*\n\nMohon konfirmasinya agar Teknisi kami dapat melakukan pengecekan lebih lanjut.\n\nTerima kasih.🙏`
                 },
                 "Fo cut/ putus Jalur Utama": {
                     fields: [
@@ -1106,7 +1106,6 @@
             const contact = selectedContacts.find(c => c.id === contactId);
             if (!contact) return;
 
-            // Ambil teks pratinjau terbaru & personalisasikan nama pelanggan
             const outputDiv = document.getElementById("whatsapp-text-output");
             let tempDiv = document.createElement("div");
             tempDiv.innerHTML = outputDiv.innerHTML;
@@ -1115,14 +1114,9 @@
             });
             let messageText = tempDiv.innerText;
 
-            // Ganti nama pelanggan jika masih menggunakan placeholder/nama pelanggan pertama
-            const firstSelectedName = selectedContacts[0]?.name || "Pelanggan";
-            if (messageText.includes(`*${firstSelectedName}*`)) {
-                messageText = messageText.replace(`*${firstSelectedName}*`, `*${contact.name}*`);
-            }
-
-            const waUrl = `https://wa.me/${contact.phone}?text=${encodeURIComponent(messageText)}`;
-            window.open(waUrl, "_blank");
+            // Menggunakan protokol whatsapp://send agar langsung membuka Aplikasi WhatsApp Desktop
+            const waUrl = `whatsapp://send?phone=${contact.phone}&text=${encodeURIComponent(messageText)}`;
+            window.location.href = waUrl;
         }
 
         /* =========================================================
@@ -1668,12 +1662,6 @@
             }
             if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Jalur Pelanggan Putus" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
                 template = `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
-            }
-
-            // Personalisasi Nama Pelanggan jika dipilih di Pelanggan Terdeteksi Offline
-            if (template.includes("{nama_pelanggan}")) {
-                const targetName = selectedContacts.length > 0 ? selectedContacts[0].name : "Pelanggan";
-                template = template.replace(/{nama_pelanggan}/g, targetName);
             }
                                        
             if (actionConfig.fields) {
