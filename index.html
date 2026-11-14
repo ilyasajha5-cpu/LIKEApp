@@ -162,8 +162,24 @@
                             </div>
                         </div>
 
-                        <!-- PANEL KHUSUS PILIH PELANGGAN (MUNCUL DI PELANGGAN TERDETEKSI OFFLINE) -->
-                        <div id="offline-customer-picker-container" class="hidden flex-col gap-3 bg-blue-50/70 border border-blue-200/80 rounded-2xl p-4">
+                        <!-- TEXTBOX INPUT DINAMIS -->
+                        <div id="dynamic-inputs-container" class="flex flex-col gap-4"></div>
+                        
+                        <!-- PILIHAN STATUS -->
+                        <div id="status-toggle-container" class="hidden">
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Status Laporan Jaringan</label>
+                            <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200/50">
+                                <button id="btn-status-initial" onclick="setStatus('initial')" class="py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2">
+                                    ⚠️ Gangguan Baru
+                                </button>
+                                <button id="btn-status-resolved" onclick="setStatus('resolved')" class="py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2">
+                                    ✅ Selesai / Pulih
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- PANEL PEMILIH PELANGGAR / KONTAK (UNIVERSAL) - POSISI PALING BAWAH -->
+                        <div id="offline-customer-picker-container" class="hidden flex-col gap-3 bg-blue-50/70 border border-blue-200/80 rounded-2xl p-4 mt-2">
                             <div class="flex items-center justify-between">
                                 <label class="text-[10px] font-extrabold text-blue-900 uppercase tracking-widest flex items-center gap-1.5">
                                     <i class="fa-solid fa-address-book text-blue-600"></i> Pilih Pelanggan Tujuan
@@ -193,25 +209,11 @@
                                     <button onclick="clearSelectedContacts()" class="text-[11px] text-rose-600 hover:underline font-bold">Reset Pilihan</button>
                                 </div>
                                 <div id="selected-send-buttons" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto custom-scrollbar">
-                                    <!-- Tombol kirim WA per pelanggan terpilih akan muncul di sini -->
+                                    <!-- Tombol kirim WA desktop per pelanggan terpilih akan muncul di sini -->
                                 </div>
                             </div>
                         </div>
 
-                        <!-- TEXTBOX INPUT DINAMIS -->
-                        <div id="dynamic-inputs-container" class="flex flex-col gap-4"></div>
-                        <!-- PILIHAN STATUS -->
-                        <div id="status-toggle-container" class="hidden">
-                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1.5">Status Laporan Jaringan</label>
-                            <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200/50">
-                                <button id="btn-status-initial" onclick="setStatus('initial')" class="py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2">
-                                    ⚠️ Gangguan Baru
-                                </button>
-                                <button id="btn-status-resolved" onclick="setStatus('resolved')" class="py-2.5 rounded-lg text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2">
-                                    ✅ Selesai / Pulih
-                                </button>
-                            </div>
-                        </div>
                         <!-- ROUTER & LAYANAN LAINNYA FORM CONTAINER -->
                         <div id="router-form-container" class="hidden flex-col gap-5 mt-2">
                             <div class="bg-blue-50 border border-blue-100 text-blue-800 rounded-2xl p-4 text-xs leading-relaxed">
@@ -280,7 +282,7 @@
                     </div>
                 </div>
                 <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
-                    <span>LIKE Broadcast v1.6</span>
+                    <span>LIKE Broadcast v1.7</span>
                     <span class="flex items-center gap-1"><i class="fa-solid fa-code"></i> Developed for efficiency</span>
                 </div>
             </div>
@@ -515,11 +517,13 @@
                         { key: "jam", label: "Input Jam Maintenance", default: "08:50" }
                     ],
                     statusSupport: false,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan pada tanggal *{tanggal}* pukul *{jam} WIB*, koneksi internet akan mengalami *ketidakstabilan (intermittent)* dari penyedia layanan pusat (ISP) kami, karena ada Progres Penambahan Hardware dan Konfigurasi pada Server.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`
                 },
                 "Koneksi tidak stabil/ intermittent": {
                     fields: [],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa saat ini koneksi internet sedang mengalami *ketidakstabilan (intermittent)* yang berasal dari penyedia layanan pusat (ISP).\n\nTim terkait saat ini sedang melakukan pengecekan lebih lanjut untuk mengidentifikasi penyebab kendala tersebut.\n\nKami akan menyampaikan pembaruan informasi setelah menerima update dari pihak penyedia layanan pusat.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan koneksi internet sebelumnya *(intermittent)* telah teratasi dan saat ini layanan sudah kembali normal/stabil.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
@@ -528,18 +532,21 @@
                         { key: "lokasi", label: "Input Lokasi Titik Putus", default: "JEMBER - KALISAT", uppercase: true }
                     ],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa telah terjadi gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}*, berdasarkan informasi dari pusat ISP.\n\nSaat ini pihak terkait sedang melakukan penanganan untuk perbaikan jaringan tersebut.\n\nKami akan menyampaikan update kembali setelah proses perbaikan selesai atau terdapat informasi terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}* telah selesai diperbaiki oleh tim terkait.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nKami mengucapkan terima kasih atas kesabaran dan pengertian Anda selama proses penanganan berlangsung.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`
                 },
                 "Koneksi Link Backup": {
                     fields: [],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa untuk sementara koneksi internet saat ini sudah kembali normal menggunakan koneksi via *Backup Link* dari Pusat ISP kami.\n\nSaat ini tim terkait masih melalukan pengecekan lebih lanjut terkait kendala yang terjadi.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa perbaikan pada jalur utama dari Pusat ISP telah selesai dilakukan.\n\nSaat ini koneksi internet telah sepenuhnya kembali normal dan stabil menggunakan jalur utama.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
                 "Koneksi Terputus dari Pusat ISP": {
                     fields: [],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa saat ini layanan internet sedang mengalami *koneksi terputus dari pusat ISP* kami secara tiba-tiba.\n\nUntuk saat ini, kami masih menanyakan ke bagian *NOC Pusat* terkait kendala yang terjadi saat ini.\n\nKami akan menyampaikan pembaruan informasi setelah menerima update lebih lanjut.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa kendala *koneksi terputus dari pusat ISP* telah selesai ditangani dan koneksi saat ini sudah kembali normal.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 }
@@ -548,18 +555,21 @@
                 "Fo cut/ kabel putus": {
                     fields: [],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa terjadi gangguan layanan internet akibat *kabel fiber optic (FO) putus* pada jalur yang menuju server lokal kami.\n\nSaat ini penanganan sedang dilakukan oleh tim teknisi kami untuk proses perbaikan.\n\nUpdate informasi akan kami sampaikan kembali setelah perbaikan selesai.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* telah selesai diperbaiki oleh teknisi kami.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nKami mengucapkan terima kasih atas kesabaran dan pengertian Anda selama proses penanganan berlangsung.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`
                 },
                 "Gangguan kelistrikan": {
                     fields: [],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa saat ini terjadi gangguan pada server lokal kami yang disebabkan oleh *kendala kelistrikan*.\n\nTim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *kendala kelistrikan* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
                 "Backup Battery": {
                     fields: [],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa terjadi gangguan pada server lokal kami yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
@@ -568,6 +578,7 @@
                         { key: "jadwal", label: "Jadwal Kegiatan", default: "10 November 2026, Pukul 23.00 WIB" }
                     ],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan akan dilakukan urgent maintenance/ perbaikan pada server lokal kami guna meningkatkan kualitas layanan dan kestabilan koneksi internet.\n\nDetail kegiatan:\nJadwal : *{jadwal}*\nProses : *Update perangkat/firmware server lokal*\nEstimasi : *± 1–2 jam atau hingga proses selesai*\n\nSelama proses berlangsung, koneksi internet akan mengalami terputus atau intermittent.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\n\nMohon maaf atas ketidaknyamanan yang terjadi.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa kegiatan maintenance/perbaikan pada server lokal telah selesai dilaksanakan.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.\n\nMohon maaf atas ketidaknyamanan yang terjadi.🙏`
                 }
@@ -594,6 +605,7 @@
                         }
                     ],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan layanan internet di wilayah *{wilayah}* dan sekitarnya akibat *kabel fiber optic (FO) putus* telah selesai diperbaiki.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
@@ -612,6 +624,7 @@
                         }
                     ],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa perbaikan *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}* telah selesai dilakukan.\n\nSaat ini layanan internet untuk *beberapa Pelanggan Aktif* yang sebelumnya terdampak telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
@@ -630,6 +643,7 @@
                         }
                     ],
                     statusSupport: true,
+                    hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\nBeberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },                
@@ -647,6 +661,7 @@
                         }
                     ],
                     statusSupport: true,
+                    hasCustomerPicker: true,
                     initial: `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa perbaikan *kabel putus* yang menuju ke rumah Bapak/ Ibu telah selesai.\n\nSaat ini koneksi sudah kembali normal dan dapat digunakan kembali.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 }
@@ -655,26 +670,31 @@
                 "Informasi Tagihan": {
                     fields: [],
                     statusSupport: false,
+                    hasCustomerPicker: false,
                     initial: `PEMBERITAHUAN TAGIHAN WI-FI\n\nYth. Pelanggan Wi-Fi\n\nKami mengingatkan bahwa batas akhir pembayaran tagihan adalah setiap *tanggal 05*.\n\nPembayaran dapat dilakukan melalui :\n\n*Via Transfer Bank*\n- BCA : *3340297287*\na.n. Mohamad Ilyasi\n- DANA : *085236378731*\na.n. Mohamad Ilyasi\n\nKirim bukti transfer ke Whatsapp Admin:\n*0852-3637-8731*\n\n*Datang langsung ke kantor kami*\n\n*Dijemput oleh petugas pada tanggal 01-05 setiap bulan*\n\n*Perhatian:*\nApabila terjadi keterlambatan pembayaran tanpa konfirmasi ke Admin, maka layanan internet di rumah Anda akan otomatis *terisolir/ dimatikan sementara* oleh sistem.\n\nBagi pelanggan yang sudah membayar, atau baru aktif bergabung bulan ini, silahkan abaikan pesan ini.\n\nTerima kasih atas kerja samanya.`
                 },
                 "Konfirmasi Tagihan Pelanggan": {
                     fields: [],
                     statusSupport: false,
+                    hasCustomerPicker: true,
                     initial: `Mohon konfirmasinya, karena hingga saat ini pembayaran tagihan Wi-Fi Anda *belum kami terima*.\nMohon segera melakukan pembayaran dan mengirimkan konfirmasi pembayaran agar layanan Wi-Fi di rumah Anda tetap berjalan dengan lancar serta *terhindar dari sistem isolir (penonaktifan sementara) secara otomatis* akibat keterlambatan pembayaran.\n\nPembayaran dapat dilakukan melalui:\n💳 *Transfer Bank BCA*\nNo. Rekening: *3340297287*\na.n. Mohamad Ilyasi\n📱 *DANA*\nNo. DANA: *085236378731*\na.n. Mohamad Ilyasi\n\nSetelah melakukan pembayaran, mohon kirimkan bukti transfer ke WhatsApp Admin:\n📞 *0852-3637-8731*\n\nTerima kasih atas perhatian dan kerja samanya.`
                 },
                 "ISOLIR Pelanggan": {
                     fields: [],
                     statusSupport: false,
+                    hasCustomerPicker: true,
                     initial: `Kami informasikan bahwa Layanan Wi-Fi Anda saat ini *terisolir atau di matikan sementara* secara otomatis oleh sistem kami.\n\nMohon untuk melakukan Pembayaran Tagihan agar Wi-Fi Anda Kembali normal.\n\nUntuk menghindari ketidanyamanan ini dikemudian hari, mohon untuk melakukan Pembayaran tepat waktu *sebelum tanggal 05* setiap bulannya.\n\nMohon kerja samanya,\nTerima kasih.\n\nHormat kami,\n*Admin Layanan Wi-Fi*\n\nJika Anda sudah melakukan pembayaran, kirim bukti transfer ke WhatsApp Admin: *0852-3637-8731*.`
                 },
                 "Khusus Pelanggan Melewati Jatuh Tempo (Diantar)": {
                     fields: [],
                     statusSupport: false,
+                    hasCustomerPicker: false,
                     initial: `Bagi Bapak/Ibu yang melakukan pembayaran tagihan Wi-Fi *melewati batas jatuh tempo ( setelah tanggal 05 )*, kami mohon kesediaannya untuk mengantarkan pembayaran langsung ke kantor kami.\n\n📍 *Alamat Kantor*\nDesa Ajung, masuk gang barat jalan sebelah utara minimarket Delma Mart atau depan SDN Ajung 04.\n🗺️ *Lokasi Maps:* https://maps.app.goo.gl/UDYpbpaGhuPNYNMo7\n\nApabila tidak dapat datang ke kantor, pembayaran juga dapat dilakukan melalui transfer ke rekening berikut:\n🏦 *BCA*\nNo. Rekening: *3340297287*\na.n. *Mohamad Ilyasi*\n💳 *DANA*\nNo. *085236378731*\na.n. *Mohamad Ilyasi*\n📲 Setelah melakukan transfer, mohon kirimkan bukti pembayaran ke Admin:\n*0852-3637-8731*\n\nTerima kasih atas perhatian dan kerja samanya.`
                 },
                 "Konfirmasi Tetap Berlangganan atau Berhenti? (ISOLIR)": {
                     fields: [],
                     statusSupport: false,
+                    hasCustomerPicker: true,
                     initial: `Saat ini layanan WiFi Anda terisolir atau di matikan sementara secara otomatis oleh sistem kami, karena *Tagihan Bulan ini Belum dibayar.*\n\n*Mohon konfirmasi, apakah ingin melanjutkan Berlangganan atau Berhenti?*,\n\nJika tidak ingin melanjutkan,\nperangkat modem dirumah Anda akan kami tarik kembali dan akan dilakukan pemutusan kabel oleh Teknisi sebagai prosedur penghentian layanan.\n\n_Kami tunggu informasi secepatnya_\n\nTerima kasih atas perhatian dan kerja samanya.`
                 },
                 "Pengingat Tagihan Khusus Pelanggan Sebelum Jatuh Tempo": {
@@ -682,6 +702,7 @@
                         { key: "tanggal", label: "Pilih Tanggal Jatuh Tempo", type: "date", default: new Date().toISOString().split('T')[0] }
                     ],
                     statusSupport: false,
+                    hasCustomerPicker: true,
                     initial: `🔔 PENGINGAT TAGIHAN WI-FI\n\nMohon diperhatikan, *Tagihan Wi-Fi Anda akan jatuh tempo pada tanggal {tanggal}.*\n\nKami mengingatkan agar pembayaran dapat dilakukan sebelum atau paling lambat pada tanggal jatuh tempo, sehingga layanan Wi-Fi di rumah Anda tetap berjalan dengan lancar dan terhindar dari *sistem isolir (penonaktifan sementara) secara otomatis* akibat keterlambatan pembayaran.\n\n💰 *Pembayaran dapat dilakukan melalui:*\n\n💳 *TRANSFER BANK BCA*\nNo. Rekening: 3340297287\na.n. Mohamad Ilyasi\n\n📱 *DANA*\nNo. DANA: 085236378731\na.n. Mohamad Ilyasi\n\n_Setelah melakukan pembayaran, mohon kirimkan bukti pembayaran ke WhatsApp Admin:_\n\n📞 0852-3637-8731\n\n*Mohon kerja sama dan perhatiannya.*\nTerima kasih telah menggunakan layanan Wi-Fi kami. 🙏`
                 }
             },
@@ -705,6 +726,7 @@
                         { key: "data_user", label: "Input Data User Yang Diperoleh (Pisahkan dgn koma/baris baru)", type: "textarea", default: "Ilyas Ajung, Arep Ajung, Rendi Ajung" }
                     ],
                     statusSupport: false,
+                    hasCustomerPicker: true,
                     initial: `📢 INFORMASI BONUS REFERAL USER GET USER\n\nKepada Yth.\n*{nama_penerima}*\n\nTerima kasih telah merekomendasikan layanan WiFi kami kepada pelanggan baru.\nBerdasarkan Program User Get User, Anda berhak memperoleh Bonus Referal sebesar *{total_bonus}*, dengan rincian sebagai berikut:\n\nPelanggan yang berhasil direferensikan:\n{list_pelanggan}\n\n💰 Perhitungan Bonus:\n*{jumlah_user} Pelanggan × Rp 25.000 = {total_bonus}*\n\n📝 Ketentuan Pemberian Bonus:\nBonus referal akan dikreditkan sebagai potongan tagihan WiFi pada bulan ini, sehingga jumlah tagihan Anda akan otomatis berkurang sesuai total bonus yang diperoleh.\n\nTerima kasih atas kepercayaan dan dukungan Anda terhadap layanan WiFi kami. 🙏\n\n🎉 Ajak keluarga, teman, atau tetangga untuk berlangganan WiFi kami, dan dapatkan Bonus Referal Rp25.000 untuk setiap pelanggan baru yang berhasil melakukan pemasangan.`
                 }
             },
@@ -714,51 +736,30 @@
                         { key: "tanggal_mulai", label: "Pilih Tanggal Mulai Tagihan", type: "date", default: new Date().toISOString().split('T')[0] }
                     ],
                     statusSupport: false,
+                    hasCustomerPicker: true,
                     initial: `Terima kasih atas kepercayaan Anda menggunakan layanan WiFi kami.\n\nKami informasikan bahwa tanggal mulai tagihan Anda terhitung mulai tanggal *{tanggal_mulai}*, dengan periode pembayaran tagihan pertama pada tanggal 01 sampai 05 *{bulan_tagihan_upper}* sebagai batas waktu pembayaran.\n\nJika ada pertanyaan, silakan hubungi kami kapan saja.\nTerima kasih. 🙏`
                 },
                 "Informasi Layanan Lainnya": {
                     fields: [],
                     statusSupport: false,
+                    hasCustomerPicker: true,
                     initial: `Terima kasih telah bergabung menjadi pelanggan Wi-Fi kami🙏\n\nPerkenalkan, ini adalah nomor Admin Wi-Fi yang Anda gunakan.\nNomor ini digunakan untuk menyampaikan informasi penting terkait *Tagihan, dan Bantuan Layanan Pelanggan.*\n\nBerikut informasi penting terkait layanan :\n\n📅 *TAGIHAN WI-FI*\nJatuh tempo setiap tanggal 05 setiap bulannya.\n\nPembayaran dapat dilakukan dengan tiga cara:\n1️⃣ Diantar langsung ke kantor.\n2️⃣ Dijemput oleh tim setiap tanggal 01 - 05.\n3️⃣ Transfer ke rekening\n- BCA: *3340297287* (a.n. Mohamad Ilyasi)\n- DANA: *085236378731* (a.n. Mohamad Ilyas)\n(Mohon sertakan bukti transfer).\n\n\n🛠️ *JAM OPERASIONAL TEKNISI*\n🕗 *Senin – Jum'at : 08.00 – 21.00 WIB*\n🕗 *Sabtu – Minggu : 08.00 – 16.00 WIB*\nApabila terdapat gangguan atau kendala yang memerlukan kunjungan teknisi di luar jam operasional, maka penanganan akan diproses pada hari berikutnya saat jam kerja teknisi berlangsung.\n\n⚙️ *INFORMASI TEKNIS*\nServer lokal akan restart otomatis setiap hari pukul *03.30 atau 04.00 WIB* (setiap wilayah berbeda), sehingga koneksi akan terputus sementara selama *± 1–5 menit*.\n\n👥 *GRUP PELANGGAN WI-FI*\nUntuk mendapatkan informasi terkait:\n✅ Gangguan Jaringan\n✅ Maintenance Jaringan\n✅ Informasi Tagihan\n✅ Promo Pelanggan\n✅ Pengumuman penting lainnya\n\nSilakan gabung grup melalui tautan berikut = https://chat.whatsapp.com/DICILJoNgPSAUE0CPoNqd9\n\n📞 *Hubungi kami jika ada kendala atau gangguan:*\n\nADMIN/ NOC : *0852-3637-8731*\n\nTeknisi :\n- *0896-9647-0957*\n- *0897-0515-671*\n- *0896-8079-9615*\n\nℹ️ Kami juga sering membagikan update gangguan dan pengumuman penting melalui *STATUS WHATSAPP.*\nAgar selalu mendapatkan informasi terbaru, *harap simpan nomor admin ini di kontak Anda.*\n\nTerima kasih atas kepercayaannya menggunakan layanan Wi-Fi kami🙏\nSemoga koneksi internet Anda selalu lancar dan bermanfaat untuk aktivitas sehari-hari.\n\n_Admin LIKENET By PT. JAVA DIGITAL NUSANTARA_`
                 },
                 "Syarat & Ketentuan Berlangganan": {
                     fields: [],
                     statusSupport: false,
+                    hasCustomerPicker: true,
                     isCustomDoc: true,
                     initial: `<div class="text-center mb-6"><img src="https://raw.githubusercontent.com/ilyasajha5-cpu/LIKEApp/main/Java%20Digital%20Nusantara.png" alt="Logo PT Java Digital Nusantara" class="h-20 mx-auto object-contain mb-3" onerror="this.onerror=null;this.src='https://placehold.co/200x80/002060/ffffff?text=JDN+Logo';"></div>📜 <span class="highlight-bold">SYARAT DAN KETENTUAN BERLANGGANAN LAYANAN WI-FI</span>\nNIB: *1506220048174*\n\nDengan berlangganan layanan Wi-Fi Kami, pelanggan dianggap telah membaca, memahami, dan menyetujui syarat dan ketentuan berikut:\n\n📌 *PASAL 1 — BIAYA PEMASANGAN DAN INSTALASI*\n1️⃣ Biaya pemasangan awal sudah mencakup sewa modem Wi-Fi, kabel jaringan, perangkat pendukung, serta proses instalasi oleh tim teknisi kami.\n2️⃣ Setelah proses instalasi selesai, layanan internet akan diaktifkan dan dapat langsung digunakan.\n\n📌 *PASAL 2 — KETENTUAN PEMBAYARAN TAGIHAN*\n1️⃣ Pembayaran tagihan berlangganan wajib dilakukan setiap bulan pada tanggal *01 s.d. 05*, sesuai harga paket layanan yang telah disepakati.\n2️⃣ Pembayaran dapat dilakukan melalui:\n   • Pembayaran langsung di kantor kami\n   • Transfer ke rekening bank resmi (BCA / DANA)\n   • Layanan jemput tagihan oleh tim kami pada tanggal *03, 04 dan 05*\n3️⃣ Pelanggan wajib memastikan pembayaran dilakukan tepat waktu demi kelancaran layanan.\n\n📌 *PASAL 3 — KETERLAMBATAN PEMBAYARAN*\n1️⃣ Apabila pelanggan belum melakukan pembayaran hingga tanggal 05, layanan internet akan *terisolir/dinonaktifkan secara otomatis* oleh sistem pada pukul *21.00 WIB*.\n2️⃣ Khusus pelanggan yang telah berlangganan aktif lebih dari 6 bulan, layanan dapat tetap aktif apabila telah menyampaikan konfirmasi keterlambatan pembayaran sesuai ketentuan.\n3️⃣ Apabila hingga tanggal 10 pembayaran belum diterima dan tanpa konfirmasi, petugas berhak melakukan pemutusan kabel jaringan serta penarikan modem & seluruh perangkat pinjaman.\n\n📌 *PASAL 4 — PENANGGUHAN DAN PENGHENTIAN*\n1️⃣ Pengecualian penarikan perangkat dapat diberikan kepada pelanggan aktif (> 6 bulan) dengan mengonfirmasi penangguhan selama max *1 bulan*.\n2️⃣ Masa nonaktif sementara diberikan maksimal *30 hari kalender*.\n3️⃣ Apabila melebihi 30 hari, Kami berhak melakukan penarikan perangkat jaringan.\n\n📌 *PASAL 5 — PENGGANTIAN PERANGKAT*\n1️⃣ Penggantian modem Wi-Fi gratis diberikan apabila terjadi kerusakan alami (bukan kelalaian/kesengajaan) selama status berlangganan aktif.\n2️⃣ Penggantian tidak berlaku apabila kerusakan disebabkan oleh tindakan sengaja atau kelalaian penggunaan.\n\n📌 *PASAL 6 — LAYANAN GANGGUAN DAN PENGADUAN*\nApabila mengalami gangguan teknis atau kendala koneksi, pelanggan dapat langsung menghubungi Admin / NOC Pusat untuk bantuan penanganan.\n\n📌 *PASAL 7 — PERSETUJUAN PELANGGAN*\nDengan mendaftar dan menggunakan layanan internet Kami, pelanggan menyatakan telah memahami dan menyetujui seluruh ketentuan di atas.\n\n────────────────────────\n📞 *INFORMASI & CUSTOMER SERVICE*\n• WhatsApp Admin: *0852-3637-8731*\n\n_Terima kasih telah memilih Layanan WiFi Kami sebagai penyedia internet kepercayaan Anda._\n*Koneksi Andal, Layanan Terpercaya.*`
                 }
             },
             "LAPORAN TAGIHAN PELANGGAN": {
-                "Laporan Pelanggan Lunas": {
-                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
-                    statusSupport: false, isExcelReport: true, reportType: "lunas",
-                    initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Lunas."
-                },
-                "Laporan Pelanggan Belum Lunas": {
-                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
-                    statusSupport: false, isExcelReport: true, reportType: "belum_lunas",
-                    initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Belum Lunas."
-                },
-                "Laporan Pelanggan ISOLIR": {
-                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
-                    statusSupport: false, isExcelReport: true, reportType: "isolir",
-                    initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan ISOLIR."
-                },
-                "Laporan Pelanggan Baru": {
-                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
-                    statusSupport: false, isExcelReport: true, reportType: "baru",
-                    initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Baru."
-                },
-                "Laporan Pelanggan OFF": {
-                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
-                    statusSupport: false, isExcelReport: true, reportType: "off",
-                    initial: "Silakan upload file Excel tagihan pada panel sebelah kiri meampilkan Laporan Pelanggan OFF."
-                },
-                "Laporan Pelanggan Bayar Double": {
-                    fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }],
-                    statusSupport: false, isExcelReport: true, reportType: "double",
-                    initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Bayar Double."
-                }
+                "Laporan Pelanggan Lunas": { fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }], statusSupport: false, hasCustomerPicker: false, isExcelReport: true, reportType: "lunas", initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Lunas." },
+                "Laporan Pelanggan Belum Lunas": { fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }], statusSupport: false, hasCustomerPicker: false, isExcelReport: true, reportType: "belum_lunas", initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Belum Lunas." },
+                "Laporan Pelanggan ISOLIR": { fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }], statusSupport: false, hasCustomerPicker: false, isExcelReport: true, reportType: "isolir", initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan ISOLIR." },
+                "Laporan Pelanggan Baru": { fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }], statusSupport: false, hasCustomerPicker: false, isExcelReport: true, reportType: "baru", initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Baru." },
+                "Laporan Pelanggan OFF": { fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }], statusSupport: false, hasCustomerPicker: false, isExcelReport: true, reportType: "off", initial: "Silakan upload file Excel tagihan pada panel sebelah kiri meampilkan Laporan Pelanggan OFF." },
+                "Laporan Pelanggan Bayar Double": { fields: [{ key: "excel_file", label: "Upload File Excel (Sheet: TAGIHAN PELANGGAN)", type: "file" }], statusSupport: false, hasCustomerPicker: false, isExcelReport: true, reportType: "double", initial: "Silakan upload file Excel tagihan pada panel sebelah kiri untuk menampilkan Laporan Pelanggan Bayar Double." }
             },
             "BUAT FORMAT EXCEL TAGIHAN": {
                 "Generate Format Tagihan Excel": {
@@ -767,23 +768,23 @@
                         { key: "petugas_filter", label: "Pilih Filter Petugas / Wilayah Penagihan", type: "petugas_select", options: [{ value: "ALL", label: "-- Tampilkan Semua Petugas --" }] },
                         { key: "status_filter", label: "Pilih Filter Status Tagihan", type: "status_filter_select" }
                     ],
-                    statusSupport: false, isExcelExport: true,
+                    statusSupport: false, hasCustomerPicker: false, isExcelExport: true,
                     initial: "Silakan upload file Excel tagihan Anda di panel sebelah kiri untuk memproses dan mengunduh Format Excel Tagihan yang terstruktur."
                 }
             },
             "BUAT INVOICE PELANGGAN": {
-                "Formulir Invoice": { fields: [], statusSupport: false, initial: "" }
+                "Formulir Invoice": { fields: [], statusSupport: false, hasCustomerPicker: false, initial: "" }
             },
             "SETTING ROUTER": {
-                "Router China Mobile F663": { fields: [], statusSupport: false, initial: "" },
-                "Router F477": { fields: [], statusSupport: false, initial: "" },
-                "Router F609": { fields: [], statusSupport: false, initial: "" },
-                "Router Zimmlink ZL-2113X": { fields: [], statusSupport: false, initial: "" }
+                "Router China Mobile F663": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
+                "Router F477": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
+                "Router F609": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
+                "Router Zimmlink ZL-2113X": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" }
             },
             "LAYANAN LAINNYA": {
-                "Layanan Teknisi": { fields: [], statusSupport: false, initial: "" },
-                "Layanan WiFi Tidak Bisa Akses/ Lemot": { fields: [], statusSupport: false, initial: "" },
-                "Daftar Rekening": { fields: [], statusSupport: false, initial: "" }
+                "Layanan Teknisi": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
+                "Layanan WiFi Tidak Bisa Akses/ Lemot": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" },
+                "Daftar Rekening": { fields: [], statusSupport: false, hasCustomerPicker: true, initial: "" }
             }
         };
 
@@ -798,8 +799,8 @@
 
         // STATE KONTAK PELANGGAN
         const DEFAULT_GOOGLE_CLIENT_ID = "509251432098-7behmjbkoukslm2b4aea1qrbgplqsp6c.apps.googleusercontent.com";
-        let customerContacts = []; // [{ id, name, phone }]
-        let selectedContacts = []; // [{ id, name, phone }]
+        let customerContacts = []; 
+        let selectedContacts = []; 
 
         window.onload = function() {
             loadSavedContacts();
@@ -893,12 +894,8 @@
                         headers: { Authorization: `Bearer ${accessToken}` }
                     });
                     const data = await res.json();
-                    if (data.error) {
-                        throw new Error(data.error.message);
-                    }
-                    if (data.connections) {
-                        allConnections = allConnections.concat(data.connections);
-                    }
+                    if (data.error) throw new Error(data.error.message);
+                    if (data.connections) allConnections = allConnections.concat(data.connections);
                     nextPageToken = data.nextPageToken;
                 } while (nextPageToken);
 
@@ -938,7 +935,6 @@
                 let parsed = [];
 
                 if (file.name.toLowerCase().endsWith(".vcf")) {
-                    // Parse vCard (.vcf)
                     const cards = content.split(/BEGIN:VCARD/i);
                     cards.forEach((card, idx) => {
                         const fnMatch = card.match(/FN(?:;[^:]*)?:(.+)/i);
@@ -956,14 +952,12 @@
                         });
                     });
                 } else {
-                    // Parse Google Contacts CSV
                     const workbook = XLSX.read(content, { type: 'string' });
                     const sheet = workbook.Sheets[workbook.SheetNames[0]];
                     const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
                     rows.forEach((row, idx) => {
                         const name = row["Name"] || row["Nama"] || `${row["First Name"] || ""} ${row["Last Name"] || ""}`.trim();
                         const rawPhone = row["Phone 1 - Value"] || row["Mobile Phone"] || row["Nomor Hp"] || row["Phone"] || "";
-                        // Google CSV kadang memisahkan beberapa nomor dengan " ::: "
                         String(rawPhone).split(":::").forEach((p, pIdx) => {
                             const phone = normalizePhoneNumber(p);
                             if (phone.length >= 9) {
@@ -978,7 +972,6 @@
                 }
 
                 if (parsed.length > 0) {
-                    // Urutkan berdasarkan nama
                     parsed.sort((a, b) => a.name.localeCompare(b.name, 'id'));
                     customerContacts = parsed;
                     saveContactsToStorage();
@@ -1097,7 +1090,7 @@
                     <span class="truncate flex items-center gap-1.5">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Kirim ke ${c.name}
                     </span>
-                    <span class="text-[10px] bg-emerald-800/60 px-2 py-0.5 rounded-lg">Buka WA &rarr;</span>
+                    <span class="text-[10px] bg-emerald-800/60 px-2 py-0.5 rounded-lg">Buka WA Desktop &rarr;</span>
                 </button>
             `).join("");
         }
@@ -1114,7 +1107,7 @@
             });
             let messageText = tempDiv.innerText;
 
-            // Menggunakan protokol whatsapp://send agar langsung membuka Aplikasi WhatsApp Desktop
+            // Menggunakan protokol whatsapp://send untuk membuka aplikasi WhatsApp Desktop
             const waUrl = `whatsapp://send?phone=${contact.phone}&text=${encodeURIComponent(messageText)}`;
             window.location.href = waUrl;
         }
@@ -1229,6 +1222,19 @@
             labelEl.innerText = currentAction;
             const imgUrl = routerImages[currentAction] || "https://placehold.co/600x400/0c2454/ffffff?text=Panduan+Tidak+Tersedia";
             imgEl.src = imgUrl;
+
+            // Pastikan panel pemilih kontak muncul untuk Setting Router & Layanan Lainnya
+            const actionConfig = configTemplates[currentCategory]?.[currentAction];
+            const pickerContainer = document.getElementById("offline-customer-picker-container");
+            if (actionConfig && actionConfig.hasCustomerPicker) {
+                pickerContainer.classList.remove("hidden");
+                pickerContainer.classList.add("flex");
+                renderContactList();
+                updateSelectedContactsUI();
+            } else {
+                pickerContainer.classList.add("hidden");
+                pickerContainer.classList.remove("flex");
+            }
         }
 
         function downloadRouterImage() {
@@ -1253,7 +1259,6 @@
             container.innerHTML = "";
             const actionConfig = configTemplates[currentCategory]?.[currentAction];
             
-            // Tampilkan/sembunyikan pemilih kontak pelanggan (khusus Pelanggan Terdeteksi Offline)
             const pickerContainer = document.getElementById("offline-customer-picker-container");
             if (actionConfig && actionConfig.hasCustomerPicker) {
                 pickerContainer.classList.remove("hidden");
