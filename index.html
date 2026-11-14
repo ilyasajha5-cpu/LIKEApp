@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App LIKENET Broadcast - Generator Pesan & Layanan</title>
+    <title>App LIKE Broadcast - Generator Pesan & Layanan</title>
     <meta name="theme-color" content="#0c2454">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -105,7 +105,7 @@
                     <i class="fa-solid fa-tower-broadcast text-xl text-blue-400 animate-pulse"></i>
                 </div>
                 <div class="text-center sm:text-left">
-                    <h1 class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-blue-300">LIKENET Broadcast</h1>
+                    <h1 class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-blue-300">LIKE Broadcast</h1>
                     <p class="text-[11px] text-slate-400 font-semibold uppercase tracking-widest mt-0.5">WhatsApp Customer Message Generator</p>
                 </div>
             </div>
@@ -246,7 +246,7 @@
                     </div>
                 </div>
                 <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
-                    <span>LIKENET Broadcast v1.5</span>
+                    <span>LIKE Broadcast v1.5</span>
                     <span class="flex items-center gap-1"><i class="fa-solid fa-code"></i> Developed for efficiency</span>
                 </div>
             </div>
@@ -440,65 +440,70 @@
                         { key: "jam", label: "Input Jam Maintenance", default: "08:50" }
                     ],
                     statusSupport: false,
-                    initial: `Kami informasikan pada tanggal *{tanggal}* pukul *{jam} WIB*, koneksi internet akan mengalami *ketidakstabilan (intermittent)* dari penyedia layanan pusat (ISP) kami, karena ada Progres Penambahan Hardware dan Konfigurasi pada Server.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`
+                    initial: `Kami informasikan pada tanggal *{tanggal}* pukul *{jam} WIB*, koneksi internet akan mengalami *ketidakstabilan (intermittent)* dari penyedia layanan pusat (ISP) kami, karena ada Progres Penambahan Hardware dan Konfigurasi pada Server.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`
                 },
                 "Koneksi tidak stabil/ intermittent": {
                     fields: [],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa saat ini koneksi internet sedang mengalami *ketidakstabilan (intermittent)* yang berasal dari penyedia layanan pusat (ISP).\n\nTim terkait saat ini sedang melakukan pengecekan lebih lanjut untuk mengidentifikasi penyebab kendala tersebut.\n\nKami akan menyampaikan pembaruan informasi setelah menerima update dari pihak penyedia layanan pusat.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa gangguan koneksi internet sebelumnya *(intermittent)* telah teratasi dan saat ini layanan sudah kembali normal/stabil.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                    initial: `Kami informasikan bahwa saat ini koneksi internet sedang mengalami *ketidakstabilan (intermittent)* yang berasal dari penyedia layanan pusat (ISP).\n\nTim terkait saat ini sedang melakukan pengecekan lebih lanjut untuk mengidentifikasi penyebab kendala tersebut.\n\nKami akan menyampaikan pembaruan informasi setelah menerima update dari pihak penyedia layanan pusat.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa gangguan koneksi internet sebelumnya *(intermittent)* telah teratasi dan saat ini layanan sudah kembali normal/stabil.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
                 "Fo cut/ kabel putus": {
                     fields: [
                         { key: "lokasi", label: "Input Lokasi Titik Putus", default: "JEMBER - KALISAT", uppercase: true }
                     ],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa telah terjadi gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}*, berdasarkan informasi dari pusat ISP.\n\nSaat ini pihak terkait sedang melakukan penanganan untuk perbaikan jaringan tersebut.\n\nKami akan menyampaikan update kembali setelah proses perbaikan selesai atau terdapat informasi terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}* telah selesai diperbaiki oleh tim terkait.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nKami mengucapkan terima kasih atas kesabaran dan pengertian Anda selama proses penanganan berlangsung.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`
+                    initial: `Kami informasikan bahwa telah terjadi gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}*, berdasarkan informasi dari pusat ISP.\n\nSaat ini pihak terkait sedang melakukan penanganan untuk perbaikan jaringan tersebut.\n\nKami akan menyampaikan update kembali setelah proses perbaikan selesai atau terdapat informasi terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* di jalur *{lokasi}* telah selesai diperbaiki oleh tim terkait.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nKami mengucapkan terima kasih atas kesabaran dan pengertian Anda selama proses penanganan berlangsung.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`
                 },
                 "Koneksi Link Backup": {
                     fields: [],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa untuk sementara koneksi internet saat ini sudah kembali normal menggunakan koneksi via *Backup Link* dari Pusat ISP kami.\n\nSaat ini tim terkait masih melalukan pengecekan lebih lanjut terkait kendala yang terjadi.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa perbaikan pada jalur utama dari Pusat ISP telah selesai dilakukan.\n\nSaat ini koneksi internet telah sepenuhnya kembali normal dan stabil menggunakan jalur utama.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                    initial: `Kami informasikan bahwa untuk sementara koneksi internet saat ini sudah kembali normal menggunakan koneksi via *Backup Link* dari Pusat ISP kami.\n\nSaat ini tim terkait masih melalukan pengecekan lebih lanjut terkait kendala yang terjadi.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa perbaikan pada jalur utama dari Pusat ISP telah selesai dilakukan.\n\nSaat ini koneksi internet telah sepenuhnya kembali normal dan stabil menggunakan jalur utama.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
                 "Koneksi Terputus dari Pusat ISP": {
                     fields: [],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa saat ini layanan internet sedang mengalami *koneksi terputus dari pusat ISP* kami secara tiba-tiba.\n\nUntuk saat ini, kami masih menanyakan ke bagian *NOC Pusat* terkait kendala yang terjadi saat ini.\n\nKami akan menyampaikan pembaruan informasi setelah menerima update lebih lanjut.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa kendala *koneksi terputus dari pusat ISP* telah selesai ditangani dan koneksi saat ini sudah kembali normal.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                    initial: `Kami informasikan bahwa saat ini layanan internet sedang mengalami *koneksi terputus dari pusat ISP* kami secara tiba-tiba.\n\nUntuk saat ini, kami masih menanyakan ke bagian *NOC Pusat* terkait kendala yang terjadi saat ini.\n\nKami akan menyampaikan pembaruan informasi setelah menerima update lebih lanjut.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa kendala *koneksi terputus dari pusat ISP* telah selesai ditangani dan koneksi saat ini sudah kembali normal.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 }
             },
             "GANGGUAN SERVER LOKAL": {
                 "Fo cut/ kabel putus": {
                     fields: [],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa terjadi gangguan layanan internet akibat *kabel fiber optic (FO) putus* pada jalur yang menuju server lokal kami.\n\nSaat ini penanganan sedang dilakukan oleh tim teknisi kami untuk proses perbaikan.\n\nUpdate informasi akan kami sampaikan kembali setelah perbaikan selesai.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* telah selesai diperbaiki oleh teknisi kami.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nKami mengucapkan terima kasih atas kesabaran dan pengertian Anda selama proses penanganan berlangsung.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`
+                    initial: `Kami informasikan bahwa terjadi gangguan layanan internet akibat *kabel fiber optic (FO) putus* pada jalur yang menuju server lokal kami.\n\nSaat ini penanganan sedang dilakukan oleh tim teknisi kami untuk proses perbaikan.\n\nUpdate informasi akan kami sampaikan kembali setelah perbaikan selesai.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa gangguan layanan internet yang disebabkan oleh *kabel fiber optic (FO) putus* telah selesai diperbaiki oleh teknisi kami.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nKami mengucapkan terima kasih atas kesabaran dan pengertian Anda selama proses penanganan berlangsung.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`
                 },
                 "Gangguan kelistrikan": {
                     fields: [],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa saat ini terjadi gangguan pada server lokal kami yang disebabkan oleh *kendala kelistrikan*.\n\nTim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *kendala kelistrikan* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                    initial: `Kami informasikan bahwa saat ini terjadi gangguan pada server lokal kami yang disebabkan oleh *kendala kelistrikan*.\n\nTim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *kendala kelistrikan* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
                 "Backup Battery": {
                     fields: [],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa terjadi gangguan pada server lokal kami yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                    initial: `Kami informasikan bahwa terjadi gangguan pada server lokal kami yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
                 "Update Perangkat/ Firmware": {
                     fields: [
                         { key: "jadwal", label: "Jadwal Kegiatan", default: "10 November 2026, Pukul 23.00 WIB" }
                     ],
                     statusSupport: true,
-                    initial: `Kami informasikan akan dilakukan urgent maintenance/ perbaikan pada server lokal kami guna meningkatkan kualitas layanan dan kestabilan koneksi internet.\n\nDetail kegiatan:\nJadwal : *{jadwal}*\nProses : *Update perangkat/firmware server lokal*\nEstimasi : *± 1–2 jam atau hingga proses selesai*\n\nSelama proses berlangsung, koneksi internet akan mengalami terputus atau intermittent.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\n\nMohon maaf atas ketidaknyamanan yang terjadi.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa kegiatan maintenance/perbaikan pada server lokal telah selesai dilaksanakan.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.\n\nMohon maaf atas ketidaknyamanan yang terjadi.`
+                    initial: `Kami informasikan akan dilakukan urgent maintenance/ perbaikan pada server lokal kami guna meningkatkan kualitas layanan dan kestabilan koneksi internet.\n\nDetail kegiatan:\nJadwal : *{jadwal}*\nProses : *Update perangkat/firmware server lokal*\nEstimasi : *± 1–2 jam atau hingga proses selesai*\n\nSelama proses berlangsung, koneksi internet akan mengalami terputus atau intermittent.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\n\nMohon maaf atas ketidaknyamanan yang terjadi.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa kegiatan maintenance/perbaikan pada server lokal telah selesai dilaksanakan.\n\nSaat ini koneksi internet telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.\n\nMohon maaf atas ketidaknyamanan yang terjadi.🙏`
                 }
             },
             "GANGGUAN PELANGGAN": {
-                "Fo cut/ putus Jalur Utama": {
+                "Pelanggan Terdeteksi Offline": {
+                    fields: [],
+                    statusSupport: false,
+                    initial: `Kami mendeteksi bahwa perangkat *modem/router Wi-Fi* ditempat Anda saat ini dalam keadaan *Offline* atau tidak menyala.\n\nApakah ada kendala pada perangkat modem/ router-nya, atau memang sedang Anda matikan?\n\nMohon konfirmasinya agar Teknisi kami dapat melakukan pengecekan lebih lanjut.\n\nTerima kasih.🙏`
+                },
+				"Fo cut/ putus Jalur Utama": {
                     fields: [
                         { key: "wilayah", label: "Input Wilayah", default: "SUMBERMALANG, KARANGPAITON", uppercase: true },
                         { 
@@ -513,8 +518,8 @@
                         }
                     ],
                     statusSupport: true,
-                    initial: `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa gangguan layanan internet di wilayah *{wilayah}* dan sekitarnya akibat *kabel fiber optic (FO) putus* telah selesai diperbaiki.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                    initial: `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa gangguan layanan internet di wilayah *{wilayah}* dan sekitarnya akibat *kabel fiber optic (FO) putus* telah selesai diperbaiki.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
                 "Fo cut/ putus Jalur Sebagian": {
                     fields: [
@@ -531,8 +536,8 @@
                         }
                     ],
                     statusSupport: true,
-                    initial: `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa perbaikan *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}* telah selesai dilakukan.\n\nSaat ini layanan internet untuk *beberapa Pelanggan Aktif* yang sebelumnya terdampak telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                    initial: `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa perbaikan *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}* telah selesai dilakukan.\n\nSaat ini layanan internet untuk *beberapa Pelanggan Aktif* yang sebelumnya terdampak telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
 				"Server POP - Backup Battery": {
                     fields: [
@@ -549,19 +554,25 @@
                         }
                     ],
                     statusSupport: true,
-                    initial: `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\n\Beberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`,
-                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.`
-                },
-                "Pelanggan Terdeteksi Offline": {
-                    fields: [],
-                    statusSupport: false,
-                    initial: `Kami mendeteksi bahwa perangkat *modem/router Wi-Fi* ditempat Anda saat ini dalam keadaan *Offline* atau tidak menyala.\n\nApakah ada kendala pada perangkat modem/ router-nya, atau memang sedang Anda matikan?\n\nMohon konfirmasinya agar Teknisi kami dapat melakukan pengecekan lebih lanjut.\n\nTerima kasih.`
-                },
+                    initial: `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\n\Beberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
+                },                
                 "Jalur Pelanggan Putus": {
-                    fields: [],
+                    fields: [
+                        { 
+                            key: "eksekusi", 
+                            label: "PILIH EKSEKUSI PROGRES/ AKSI", 
+                            type: "select", 
+                            options: [
+                                { value: "sekarang", label: "Progres sekarang" },
+                                { value: "besok", label: "Progres besok" }
+                            ],
+                            default: "sekarang" 
+                        }
+                    ],
                     statusSupport: true,
-                    initial: `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nProses perbaikan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul *08.30 – 16.00 WIB*.\n\nJika di luar jam tersebut, maka perbaikan akan dilakukan keesokan harinya saat jam kerja teknisi.\n\nMohon menunggu, tim kami akan segera menangani.\n\nTerima kasih atas pengertiannya.`,
-                    resolved: `Kami informasikan bahwa perbaikan *kabel putus* yang menuju ke rumah Bapak/ Ibu telah selesai.\n\nSaat ini koneksi sudah kembali normal dan dapat digunakan kembali.\n\nTerima kasih atas kesabaran dan pengertiannya.`
+                    initial: `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nSaat ini teknisi kami sedang menuju ke lokasi untuk proses penanganan secepat mungkin.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa perbaikan *kabel putus* yang menuju ke rumah Bapak/ Ibu telah selesai.\n\nSaat ini koneksi sudah kembali normal dan dapat digunakan kembali.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
                 },
 				            },
             "PENGINGAT TAGIHAN": {
@@ -632,7 +643,7 @@
                 "Informasi Layanan Lainnya": {
                     fields: [],
                     statusSupport: false,
-                    initial: `Terima kasih telah bergabung menjadi pelanggan Wi-Fi kami🙏\n\nPerkenalkan, ini adalah nomor Admin Wi-Fi yang Anda gunakan.\nNomor ini digunakan untuk menyampaikan informasi penting terkait *tagihan, dan bantuan layanan pelanggan.*\n\nBerikut informasi penting terkait layanan :\n\n📅 *TAGIHAN WI-FI*\nJatuh tempo setiap tanggal 05 setiap bulannya.\n\nPembayaran dapat dilakukan dengan tiga cara:\n1️⃣ Diantar langsung ke kantor.\n2️⃣ Dijemput oleh tim setiap tanggal 01 - 05.\n3️⃣ Transfer ke rekening\n- BCA: *3340297287* (a.n. Mohamad Ilyasi)\n- DANA: *085236378731* (a.n. Mohamad Ilyas)\n(Mohon sertakan bukti transfer).\n\n\n🛠️ *JAM OPERASIONAL TEKNISI*\n🕗 *Senin – Jum'at : 08.00 – 21.00 WIB*\n🕗 *Sabtu – Minggu : 08.00 – 16.00 WIB*\nApabila terdapat gangguan atau kendala yang memerlukan kunjungan teknisi di luar jam operasional, maka penanganan akan diproses pada hari berikutnya saat jam kerja teknisi berlangsung.\n\n⚙️ *INFORMASI TEKNIS*\nServer lokal akan restart otomatis setiap hari pukul *03.45 atau 04.00 WIB* (setiap wilayah berbeda), sehingga koneksi akan terputus sementara selama *± 1–5 menit*.\n\n👥 *GRUP PELANGGAN WI-FI*\nUntuk mendapatkan informasi terkait:\n✅ Gangguan jaringan\n✅ Maintenance jaringan\n✅ Informasi tagihan\n✅ Promo pelanggan\n✅ Pengumuman penting lainnya\n\nSilakan gabung grup melalui tautan berikut = https://chat.whatsapp.com/DICILJoNgPSAUE0CPoNqd9\n\n📞 *Hubungi kami jika ada kendala atau gangguan:*\n\nADMIN/ NOC : *0852-3637-8731*\n\nTeknisi :\n- *0896-9647-0957*\n- *0897-0515-671*\n- *0896-8079-9615*\n\nℹ️ Kami juga sering membagikan update gangguan dan pengumuman penting melalui *STATUS WHATSAPP.*\nAgar selalu mendapatkan informasi terbaru, *harap simpan nomor admin ini di kontak Anda.*\n\nTerima kasih atas kepercayaannya menggunakan layanan Wi-Fi kami🙏\nSemoga koneksi internet Anda selalu lancar dan bermanfaat untuk aktivitas sehari-hari.\n\n_Admin LIKENET By PT. JAVA DIGITAL NUSANTARA_`
+                    initial: `Terima kasih telah bergabung menjadi pelanggan Wi-Fi kami🙏\n\nPerkenalkan, ini adalah nomor Admin Wi-Fi yang Anda gunakan.\nNomor ini digunakan untuk menyampaikan informasi penting terkait *Tagihan, dan Bantuan Layanan Pelanggan.*\n\nBerikut informasi penting terkait layanan :\n\n📅 *TAGIHAN WI-FI*\nJatuh tempo setiap tanggal 05 setiap bulannya.\n\nPembayaran dapat dilakukan dengan tiga cara:\n1️⃣ Diantar langsung ke kantor.\n2️⃣ Dijemput oleh tim setiap tanggal 01 - 05.\n3️⃣ Transfer ke rekening\n- BCA: *3340297287* (a.n. Mohamad Ilyasi)\n- DANA: *085236378731* (a.n. Mohamad Ilyas)\n(Mohon sertakan bukti transfer).\n\n\n🛠️ *JAM OPERASIONAL TEKNISI*\n🕗 *Senin – Jum'at : 08.00 – 21.00 WIB*\n🕗 *Sabtu – Minggu : 08.00 – 16.00 WIB*\nApabila terdapat gangguan atau kendala yang memerlukan kunjungan teknisi di luar jam operasional, maka penanganan akan diproses pada hari berikutnya saat jam kerja teknisi berlangsung.\n\n⚙️ *INFORMASI TEKNIS*\nServer lokal akan restart otomatis setiap hari pukul *03.30 atau 04.00 WIB* (setiap wilayah berbeda), sehingga koneksi akan terputus sementara selama *± 1–5 menit*.\n\n👥 *GRUP PELANGGAN WI-FI*\nUntuk mendapatkan informasi terkait:\n✅ Gangguan Jaringan\n✅ Maintenance Jaringan\n✅ Informasi Tagihan\n✅ Promo Pelanggan\n✅ Pengumuman penting lainnya\n\nSilakan gabung grup melalui tautan berikut = https://chat.whatsapp.com/DICILJoNgPSAUE0CPoNqd9\n\n📞 *Hubungi kami jika ada kendala atau gangguan:*\n\nADMIN/ NOC : *0852-3637-8731*\n\nTeknisi :\n- *0896-9647-0957*\n- *0897-0515-671*\n- *0896-8079-9615*\n\nℹ️ Kami juga sering membagikan update gangguan dan pengumuman penting melalui *STATUS WHATSAPP.*\nAgar selalu mendapatkan informasi terbaru, *harap simpan nomor admin ini di kontak Anda.*\n\nTerima kasih atas kepercayaannya menggunakan layanan Wi-Fi kami🙏\nSemoga koneksi internet Anda selalu lancar dan bermanfaat untuk aktivitas sehari-hari.\n\n_Admin LIKENET By PT. JAVA DIGITAL NUSANTARA_`
                 },
                 "Syarat & Ketentuan Berlangganan": {
                     fields: [],
@@ -1305,7 +1316,7 @@
                     reportOutput += `   Status: <span class="highlight-red">${status}</span>${paketInfo}${telpInfo}${ketInfo}\n\n`;
                 });
             }
-            reportOutput += `────────────────────────\n_Laporan otomatis digenerate oleh LIKENET Broadcast_`;
+            reportOutput += `────────────────────────\n_Laporan otomatis digenerate oleh LIKE Broadcast_`;
 
             let formattedDisplay = reportOutput.replace(/\*(.*?)\*/g, '<span class="highlight-bold">$1</span>');
             document.getElementById("whatsapp-text-output").innerHTML = formattedDisplay;
@@ -1345,19 +1356,24 @@
 
             // Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Fo cut/ putus Jalur Utama
             if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Fo cut/ putus Jalur Utama" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
-                template = `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`;
+                template = `Berdasarkan monitoring sistem kami, saat ini wilayah *{wilayah}* dan sekitarnya mengalami gangguan layanan internet.\n\nGangguan tersebut kemungkinan besar disebabkan oleh adanya *kabel fiber optic (FO) putus* pada jalur yang menuju wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
             }
 			
 			// Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Fo cut/ putus Jalur Sebagian
             if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Fo cut/ putus Jalur Sebagian" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
-                template = `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`;
+                template = `Berdasarkan monitoring sistem kami, saat ini terdapat *sebagian jalur kabel fiber optic (FO) yang terputus* di wilayah *{wilayah}*.\n\nHal ini menyebabkan kendala koneksi internet pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
             }
 			
 			// Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Server POP - Backup Battery
             if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Server POP - Backup Battery" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
-                template = `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\n\Beberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.`;
+                template = `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\n\Beberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
             }
-			       
+			
+			// Penanganan khusus untuk eksekusi progres besok pada Gangguan Pelanggan - Jalur Pelanggan Putus
+            if (currentCategory === "GANGGUAN PELANGGAN" && currentAction === "Jalur Pelanggan Putus" && currentStatus === "initial" && dynamicValues["eksekusi"] === "besok") {
+                template = `Berdasarkan Sistem Monitoring kami, bahwa *jalur kabel fiber optic (FO)* yang menuju ke rumah Anda mengalami *putus*.\n\nUntuk proses pengecekan dan sekaligus penanganan akan dikerjakan oleh teknisi kami secepatnya pada jam kerja, yaitu pukul 08.30 – 16.00 WIB.\n\nMohon menunggu, tim kami akan segera menangani.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`;
+            }
+									       
             if (actionConfig.fields) {
                 actionConfig.fields.forEach(field => {
                     let val = dynamicValues[field.key] !== undefined ? dynamicValues[field.key] : field.default;
