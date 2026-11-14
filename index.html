@@ -218,7 +218,7 @@
                         <div id="router-form-container" class="hidden flex-col gap-5 mt-2">
                             <div class="bg-blue-50 border border-blue-100 text-blue-800 rounded-2xl p-4 text-xs leading-relaxed">
                                 <i class="fa-solid fa-info-circle text-blue-600 mb-2 text-lg block"></i>
-                                Panduan/Informasi bergambar untuk <strong><span id="router-name-label">Panduan</span></strong>. Anda dapat melihat pratinjau di layar sebelah kanan atau mengunduh gambar aslinya.
+                                Panduan/Informasi bergambar untuk <strong><span id="router-name-label">Panduan</span></strong>. Saat Anda mengklik kirim ke pelanggan di bawah, gambar panduan akan otomatis didownload dan WhatsApp akan terbuka.
                             </div>
                             <div class="mt-2">
                                 <button onclick="downloadRouterImage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2">
@@ -1085,12 +1085,14 @@
             summaryBox.classList.add("flex");
             countLabel.innerText = selectedContacts.length;
 
+            const isRouterOrOther = currentCategory === "SETTING ROUTER" || currentCategory === "LAYANAN LAINNYA";
+
             btnList.innerHTML = selectedContacts.map(c => `
                 <button onclick="sendWhatsAppToCustomer('${c.id}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-between shadow-sm transition-all">
                     <span class="truncate flex items-center gap-1.5">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Kirim ke ${c.name}
                     </span>
-                    <span class="text-[10px] bg-emerald-800/60 px-2 py-0.5 rounded-lg">Buka WA Desktop &rarr;</span>
+                    <span class="text-[10px] bg-emerald-800/60 px-2 py-0.5 rounded-lg">${isRouterOrOther ? 'Download Gambar & WA &rarr;' : 'Buka WA Desktop &rarr;'}</span>
                 </button>
             `).join("");
         }
@@ -1099,15 +1101,33 @@
             const contact = selectedContacts.find(c => c.id === contactId);
             if (!contact) return;
 
-            const outputDiv = document.getElementById("whatsapp-text-output");
-            let tempDiv = document.createElement("div");
-            tempDiv.innerHTML = outputDiv.innerHTML;
-            tempDiv.querySelectorAll('.highlight-bold').forEach(el => {
-                el.outerHTML = `*${el.innerText}*`;
-            });
-            let messageText = tempDiv.innerText;
+            const isRouterOrOther = currentCategory === "SETTING ROUTER" || currentCategory === "LAYANAN LAINNYA";
 
-            // Menggunakan protokol whatsapp://send untuk membuka aplikasi WhatsApp Desktop
+            if (isRouterOrOther) {
+                // Otomatis download gambar panduan terlebih dahulu agar dapat langsung dikirim
+                const imgEl = document.getElementById("router-image-preview");
+                if (imgEl && imgEl.src) {
+                    const link = document.createElement('a');
+                    link.download = currentAction.replace(/\s+/g, '_') + '.jpg';
+                    link.href = imgEl.src;
+                    link.click();
+                }
+            }
+
+            const outputDiv = document.getElementById("whatsapp-text-output");
+            let messageText = "";
+            if (isRouterOrOther) {
+                messageText = `Halo, berikut adalah panduan ${currentAction} untuk Anda. Silakan lampirkan gambar panduan yang telah diunduh.`;
+            } else {
+                let tempDiv = document.createElement("div");
+                tempDiv.innerHTML = outputDiv.innerHTML;
+                tempDiv.querySelectorAll('.highlight-bold').forEach(el => {
+                    el.outerHTML = `*${el.innerText}*`;
+                });
+                messageText = tempDiv.innerText;
+            }
+
+            // Membuka WhatsApp Desktop
             const waUrl = `whatsapp://send?phone=${contact.phone}&text=${encodeURIComponent(messageText)}`;
             window.location.href = waUrl;
         }
