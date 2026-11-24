@@ -589,7 +589,7 @@
                     statusSupport: false,
                     hasCustomerPicker: true,
                     initial: `Kami mendeteksi bahwa *Perangkat Modem/ Router Wi-Fi* ditempat Anda saat ini dalam keadaan *Offline* atau tidak menyala.\n\nApakah ada kendala pada *Perangkat Modem/ Router-nya*, atau *memang sedang Anda matikan?*\n\nMohon konfirmasinya agar Teknisi kami dapat melakukan pengecekan lebih lanjut.\n\nTerima kasih.🙏`
-                },
+                },				
                 "Fo cut/ putus Jalur Utama": {
                     fields: [
                         { key: "wilayah", label: "Input Wilayah", default: "SUMBERMALANG, KARANGPAITON", uppercase: true },
@@ -646,7 +646,16 @@
                     hasCustomerPicker: false,
                     initial: `Kami informasikan bahwa terjadi gangguan pada *Server POP lokal kami di Karangpaiton* yang disebabkan oleh *habisnya daya backup battery* akibat pemadaman listrik yang berlangsung cukup lama.\n\n*IMPACT / TERDAMPAK:*\nBeberapa pelanggan di Wilayah *{wilayah}* & sekitarnya terkena dampak gangguan ini.\n\nSaat ini tim teknisi kami sedang melakukan penanganan untuk memulihkan layanan.\n\nUpdate informasi akan kami sampaikan kembali setelah kondisi normal.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
                     resolved: `Kami informasikan bahwa gangguan pada server lokal kami akibat *habisnya daya backup battery* telah berhasil ditangani.\n\nSaat ini layanan sudah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
-                },                
+                },
+				"Pergantian Kabel Fiber (JALUR)": {
+                    fields: [
+                        { key: "wilayah", label: "Input Wilayah", default: "KARANGPAITON", uppercase: true },                        
+                    ],
+                    statusSupport: true,
+                    hasCustomerPicker: false,
+                    initial: `Kami informasikan bahwa dalam waktu dekat tim teknisi kami akan melakukan urgent maintenance berupa *proses pergantian kabel jaringan yang mengalami kerusakan pada jalur distribusi* di wilayah *{wilayah}*.\n\Yang menyebabkan kendala koneksi tidak stabil pada *beberapa Pelanggan Aktif* di wilayah tersebut.\n\nSelama pekerjaan berlangsung, koneksi internet pelanggan di wilayah tersebut akan mengalami gangguan berupa *koneksi terputus sementara (disconnect) atau tidak stabil (intermittent)*.\n\nUpdate informasi akan kami sampaikan kembali setelah terdapat perkembangan terbaru.\n\nDemikian informasi yang dapat kami sampaikan.\nTerima kasih.🙏`,
+                    resolved: `Kami informasikan bahwa proses pergantian kabel jaringan jalur distribusi di wilayah *{wilayah}* telah selesai dilakukan.\n\nSaat ini layanan internet untuk *beberapa Pelanggan Aktif* yang sebelumnya terdampak telah kembali normal dan dapat digunakan seperti biasa.\n\nTerima kasih atas kesabaran dan pengertiannya.🙏`
+                },
                 "Jalur Pelanggan Putus": {
                     fields: [
                         { 
